@@ -42,4 +42,5 @@ public class BrandsController {
 	public FindBrandDto find(@RequestParam int brandId) throws BusinessException {
 		return this.brandService.findById(brandId);
 	}
+	
 }
