@@ -11,5 +11,8 @@ import com.turkcell.rentACarProject.entities.concretes.Color;
 @Repository
 public interface ColorDao extends JpaRepository<Color, Integer>{
 	
-	List<Brand> getAllByColorName(String colorName);
+	Color getColorById(int id);
+	
+	List<Brand> getColorByName(String name);
+
 }

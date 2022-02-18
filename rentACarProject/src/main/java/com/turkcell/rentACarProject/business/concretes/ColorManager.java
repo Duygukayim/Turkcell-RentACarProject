@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.ColorService;
-import com.turkcell.rentACarProject.business.dtos.FindColorDto;
+import com.turkcell.rentACarProject.business.dtos.GetColorDto;
 import com.turkcell.rentACarProject.business.dtos.ListColorDto;
-import com.turkcell.rentACarProject.business.requests.CreateColorRequest;
+import com.turkcell.rentACarProject.business.requests.color.CreateColorRequest;
+import com.turkcell.rentACarProject.business.requests.color.DeleteColorRequest;
+import com.turkcell.rentACarProject.business.requests.color.UpdateColorRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.dataAccess.abstracts.ColorDao;
@@ -28,7 +30,7 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public List<ListColorDto> listAll() {
+	public List<ListColorDto> getAll() {
 		var result = this.colorDao.findAll();
 		List<ListColorDto> response = result.stream()
 				.map(color -> this.modelMapperService.forDto().map(color, ListColorDto.class))
@@ -44,15 +46,29 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public FindColorDto findById(int colorId) {
-		Color result = this.colorDao.findById(colorId).get();
-		FindColorDto response = this.modelMapperService.forDto().map(result, FindColorDto.class);
+	public GetColorDto getById(int id) {
+		Color result = this.colorDao.getColorById(id);
+		GetColorDto response = this.modelMapperService.forDto().map(result, GetColorDto.class);
 		return response;
 	}
 
 	void checkIfColorExists(Color color) throws BusinessException {
-		if (this.colorDao.getAllByColorName(color.getColorName()).stream().count() != 0) {
+		if (this.colorDao.getColorByName(color.getName()).stream().count() != 0) {
 			throw new BusinessException("Color already exists.");
 		}
+	}
+
+	@Override
+	public void delete(DeleteColorRequest deleteColorRequest) {
+		Color color = this.modelMapperService.forRequest().map(deleteColorRequest, Color.class);
+		this.colorDao.delete(color);
+		
+	}
+
+	@Override
+	public void update(UpdateColorRequest updateColorRequest) {
+		Color color = this.modelMapperService.forRequest().map(updateColorRequest, Color.class);
+		this.colorDao.save(color);
+		
 	}
 }

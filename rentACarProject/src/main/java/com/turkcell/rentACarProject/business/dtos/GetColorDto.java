@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindColorDto {
+public class GetColorDto {
 
 	private int colorId;
 	private String colorName;

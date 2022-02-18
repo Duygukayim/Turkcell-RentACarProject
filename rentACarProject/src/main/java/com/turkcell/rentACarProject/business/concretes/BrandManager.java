@@ -10,9 +10,11 @@ import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.entities.concretes.Brand;
 import com.turkcell.rentACarProject.business.abstracts.BrandService;
-import com.turkcell.rentACarProject.business.dtos.FindBrandDto;
+import com.turkcell.rentACarProject.business.dtos.GetBrandDto;
 import com.turkcell.rentACarProject.business.dtos.ListBrandDto;
-import com.turkcell.rentACarProject.business.requests.CreateBrandRequest;
+import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
+import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
+import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
 import com.turkcell.rentACarProject.dataAccess.abstracts.BrandDao;
 
 @Service
@@ -28,7 +30,7 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public List<ListBrandDto> listAll() {
+	public List<ListBrandDto> getAll() {
 		var result = this.brandDao.findAll();
 		List<ListBrandDto> response = result.stream()
 				.map(brand -> this.modelMapperService.forDto().map(brand, ListBrandDto.class))
@@ -44,16 +46,30 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public FindBrandDto findById(int brandId) throws BusinessException {
-		Brand result = this.brandDao.findById(brandId).get();
-		FindBrandDto response = this.modelMapperService.forDto().map(result, FindBrandDto.class);
+	public GetBrandDto getById(int id) throws BusinessException {
+		Brand result = this.brandDao.getBrandById(id);
+		GetBrandDto response = this.modelMapperService.forDto().map(result, GetBrandDto.class);
 		return response;
 
 	}
 
 	public void checkIfBrandExists(Brand brand) throws BusinessException {
-		if (this.brandDao.getAllByBrandName(brand.getBrandName()).stream().count() != 0) {
+		if (this.brandDao.getBrandByName(brand.getName()).stream().count() != 0) {
 			throw new BusinessException("Brand already exists!");
 		}
+	}
+
+	@Override
+	public void delete(DeleteBrandRequest deleteBrandRequest){
+		Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
+		this.brandDao.delete(brand);
+		
+	}
+
+	@Override
+	public void update(UpdateBrandRequest updateBrandRequest) {
+		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+		this.brandDao.save(brand);
+		
 	}
 }

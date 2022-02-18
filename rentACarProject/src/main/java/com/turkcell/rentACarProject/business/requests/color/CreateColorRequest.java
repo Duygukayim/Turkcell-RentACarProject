@@ -1,4 +1,4 @@
-package com.turkcell.rentACarProject.business.requests;
+package com.turkcell.rentACarProject.business.requests.color;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateColorRequest {
 
-	private String colorName;
+	private String name;
+	
 
 }
