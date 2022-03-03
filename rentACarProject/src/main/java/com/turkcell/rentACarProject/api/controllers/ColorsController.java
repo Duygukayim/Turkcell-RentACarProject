@@ -19,41 +19,57 @@ import com.turkcell.rentACarProject.business.requests.color.CreateColorRequest;
 import com.turkcell.rentACarProject.business.requests.color.DeleteColorRequest;
 import com.turkcell.rentACarProject.business.requests.color.UpdateColorRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
+import com.turkcell.rentACarProject.core.utilities.results.DataResult;
+import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
+import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/colors")
 
 public class ColorsController {
-	
+
 	private ColorService colorService;
-	
+
 	@Autowired
 	public ColorsController(ColorService colorService) {
 		this.colorService = colorService;
 	}
-	
-	@GetMapping("/getall")
-	public List<ListColorDto> getAll(){
+
+	@GetMapping("/getAll")
+	public DataResult<List<ListColorDto>> getAll() {
 		return this.colorService.getAll();
 	}
-	
-	@PostMapping("/create")
-	public void add(@RequestBody CreateColorRequest createColorRequest) throws BusinessException{
-		this.colorService.create(createColorRequest);
-	}
-	
-	@DeleteMapping("/delete")
-	public void delete(@RequestBody DeleteColorRequest deleteColorRequest) {
-		this.colorService.delete(deleteColorRequest);
-	}
-	
-	@PutMapping("/update")
-	public void update(@RequestBody UpdateColorRequest updateColorRequest) {
-		this.colorService.update(updateColorRequest);
-	}
-	
-	@GetMapping("/get")
-	public GetColorDto get(@RequestParam int id) throws BusinessException {
+
+	@GetMapping("/getById")
+	public DataResult<GetColorDto> get(@RequestParam int id) throws BusinessException {
 		return this.colorService.getById(id);
 	}
+
+	@PostMapping("/add")
+	public Result add(@RequestBody CreateColorRequest createColorRequest) {
+		try {
+			return this.colorService.add(createColorRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/delete")
+	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
+		try {
+			return this.colorService.delete(deleteColorRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
+	@PutMapping("/update")
+	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
+		try {
+			return this.colorService.update(updateColorRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
 }

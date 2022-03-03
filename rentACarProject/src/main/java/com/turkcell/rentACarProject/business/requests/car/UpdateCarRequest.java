@@ -12,7 +12,7 @@ public class UpdateCarRequest {
 	private int id;
 	private double dailyPrice;
 	private double modelYear;
-	private double description;
+	private String description;
 	private int brandId;
 	private int colorId;
 }

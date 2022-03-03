@@ -19,6 +19,9 @@ import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
+import com.turkcell.rentACarProject.core.utilities.results.DataResult;
+import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
+import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/brands")
@@ -32,28 +35,41 @@ public class BrandsController {
 		this.brandService = brandService;
 	}
 
-	@GetMapping("/getall")
-	public List<ListBrandDto> getAll() {
+	@GetMapping("/getAll")
+	public DataResult<List<ListBrandDto>> getAll() {
 		return this.brandService.getAll();
 	}
 
-	@PostMapping("/create")
-	public void add(@RequestBody CreateBrandRequest createBrandRequest) throws BusinessException {
-		this.brandService.create(createBrandRequest);
-	}
-	
-	@DeleteMapping("/delete")
-	public void delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
-		this.brandService.delete(deleteBrandRequest);
-	}
-	
-	@PutMapping("/update")
-	public void update(@RequestBody UpdateBrandRequest updateBrandRequest) {
-		this.brandService.update(updateBrandRequest);
-	}
-
-	@GetMapping("/get")
-	public GetBrandDto get(@RequestParam int id) throws BusinessException {
+	@GetMapping("/getById")
+	public DataResult<GetBrandDto> get(@RequestParam int id) throws BusinessException {
 		return this.brandService.getById(id);
 	}
+
+	@PostMapping("/add")
+	public Result add(@RequestBody CreateBrandRequest createBrandRequest) {
+		try {
+			return this.brandService.add(createBrandRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/delete")
+	public Result delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
+		try {
+			return this.brandService.delete(deleteBrandRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
+	@PutMapping("/update")
+	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
+		try {
+			return this.brandService.update(updateBrandRequest);
+		} catch (Exception e) {
+			return new ErrorResult(e.getMessage());
+		}
+	}
+
 }
