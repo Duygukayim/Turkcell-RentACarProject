@@ -1,4 +1,6 @@
-package com.turkcell.rentACarProject.business.requests.brand;
+package com.turkcell.rentACarProject.business.requests.carMaintenance;
+
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -11,14 +13,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateBrandRequest {
+public class UpdateCarMaintenanceRequest {
 
 	@NotNull
-	@Positive
+    @Positive
 	private int id;
-
+	
 	@NotNull
-	@Size(min = 2, max = 15)
-	private String name;
-
+	@Size(min=2, max=100)
+	private String description;
+	
+	private LocalDate returnDate;
+	
+	@NotNull
+    @Positive
+	private int carId;
 }

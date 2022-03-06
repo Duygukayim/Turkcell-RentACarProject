@@ -3,6 +3,7 @@ package com.turkcell.rentACarProject.business.abstracts;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.dtos.GetCarDto;
 import com.turkcell.rentACarProject.business.dtos.ListCarDto;
@@ -13,6 +14,7 @@ import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
+@Service
 public interface CarService {
 
 	DataResult<List<ListCarDto>> getAll();

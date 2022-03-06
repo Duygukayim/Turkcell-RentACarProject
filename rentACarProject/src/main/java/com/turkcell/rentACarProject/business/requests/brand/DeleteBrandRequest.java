@@ -1,5 +1,8 @@
 package com.turkcell.rentACarProject.business.requests.brand;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteBrandRequest {
 
+	@NotNull
+	@Positive
 	private int id;
 }
