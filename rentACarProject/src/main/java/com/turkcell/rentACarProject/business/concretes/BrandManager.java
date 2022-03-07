@@ -45,13 +45,13 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public DataResult<GetBrandDto> getById(int id) throws BusinessException {
+	public DataResult<GetBrandDto> getById(int id) {
 		Brand brand = this.brandDao.getById(id);
 		if (brand != null) {
-			GetBrandDto response = modelMapperService.forDto().map(brand, GetBrandDto.class);
+			GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
 			return new SuccessDataResult<GetBrandDto>(response, "Success");
 		}
-		return new ErrorDataResult<GetBrandDto>("Brand.NotFounded");
+		return new ErrorDataResult<GetBrandDto>("Brand.NotFounded , Brand with given ID can't be found.");
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 
+import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +25,5 @@ public class CreateCarRentalRequest {
 //	@NotNull
     private int carId;
 
+    private int additionalServiceId;
 }

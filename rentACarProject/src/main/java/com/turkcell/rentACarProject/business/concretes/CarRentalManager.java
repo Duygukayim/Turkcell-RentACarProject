@@ -84,14 +84,14 @@ public class CarRentalManager implements CarRentalService {
 			this.carRentalDao.deleteById(carRental.getId());
 			return new SuccessResult("CarRental.Deleted");
 		}
-		return new ErrorResult("CarRental.NotDeleted , Rental with given Id not exists");
+		return new ErrorResult("CarRental.NotDeleted , Rental with given Id not exists!");
 	}
 
 	@Override
 	public Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException {
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalRequest, CarRental.class);
 		if (!checkCarRentalIdExists(carRental.getId()).isSuccess()) {
-			return new ErrorResult("CarRental.NotUpdated , Rental with given Id not exists");
+			return new ErrorResult("CarRental.NotUpdated , Rental with given Id not exists!");
 		}
 		if (!checkIsUnderMaintenance(carRental)) {
 			return new ErrorResult("CarRental.NotUpdated , Car is under maintenance at requested times");

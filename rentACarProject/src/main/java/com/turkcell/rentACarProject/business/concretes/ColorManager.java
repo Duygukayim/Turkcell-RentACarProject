@@ -51,7 +51,7 @@ public class ColorManager implements ColorService {
 			GetColorDto response = modelMapperService.forDto().map(color, GetColorDto.class);
 			return new SuccessDataResult<GetColorDto>(response, "Success");
 		}
-		return new ErrorDataResult<GetColorDto>("Color.NotFounded");
+		return new ErrorDataResult<GetColorDto>("Color.NotFounded , Color with given ID can't be found.");
 	}
 
 	@Override

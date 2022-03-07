@@ -18,7 +18,7 @@ public interface BrandService {
 
 	DataResult<List<ListBrandDto>> getAll();
 
-	DataResult<GetBrandDto> getById(int id) throws BusinessException;
+	DataResult<GetBrandDto> getById(int id);
 
 	Result add(CreateBrandRequest createBrandRequest) throws BusinessException;
 
