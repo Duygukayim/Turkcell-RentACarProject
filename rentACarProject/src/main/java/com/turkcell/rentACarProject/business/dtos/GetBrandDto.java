@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetBrandDto {
 
-	private int brandId;
-	private String brandName;
+	private int id;
+	private String name;
 
 }

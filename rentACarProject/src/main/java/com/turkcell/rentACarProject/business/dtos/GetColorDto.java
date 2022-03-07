@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetColorDto {
 
-	private int colorId;
-	private String colorName;
+	private int id;
+	private String name;
 
 }

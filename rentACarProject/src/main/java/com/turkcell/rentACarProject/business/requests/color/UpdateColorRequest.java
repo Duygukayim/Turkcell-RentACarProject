@@ -13,12 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateColorRequest {
 
-	@NotNull
-	@Positive
+//	@NotNull
 	private int id;
 
-	@NotNull
-	@Size(min = 2, max = 15)
+//	@NotNull
+	@Size(min = 2, max = 50)
 	private String name;
 
 }

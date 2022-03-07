@@ -37,39 +37,27 @@ public class BrandsController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListBrandDto>> getAll() {
-		return this.brandService.getAll();
+		return brandService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetBrandDto> get(@RequestParam int id) throws BusinessException {
-		return this.brandService.getById(id);
+		return brandService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateBrandRequest createBrandRequest) {
-		try {
-			return this.brandService.add(createBrandRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result add(@RequestBody CreateBrandRequest createBrandRequest) throws BusinessException {
+		return brandService.add(createBrandRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
-		try {
-			return this.brandService.delete(deleteBrandRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result delete(@RequestBody DeleteBrandRequest deleteBrandRequest) throws BusinessException {
+		return brandService.delete(deleteBrandRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
-		try {
-			return this.brandService.update(updateBrandRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) throws BusinessException {
+		return brandService.update(updateBrandRequest);
 	}
 
 }

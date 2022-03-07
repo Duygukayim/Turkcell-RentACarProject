@@ -15,17 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCarMaintenanceRequest {
 
-	@NotNull
-    @Positive
+//	@NotNull
 	private int id;
 	
-	@NotNull
+//	@NotNull
 	@Size(min=2, max=100)
 	private String description;
 	
 	private LocalDate returnDate;
 	
-	@NotNull
-    @Positive
+//	@NotNull
 	private int carId;
 }

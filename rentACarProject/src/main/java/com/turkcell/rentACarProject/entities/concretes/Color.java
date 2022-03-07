@@ -29,7 +29,7 @@ public class Color {
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany
+	@OneToMany(mappedBy = "color")
 	private List<Car> cars;
 
 }

@@ -19,8 +19,8 @@ import com.turkcell.rentACarProject.business.dtos.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;
+import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 @RestController
@@ -36,39 +36,27 @@ public class CarsController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListCarDto>> getAll() {
-		return this.carService.getAll();
+		return carService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetCarDto> get(@RequestParam int id) {
-		return this.carService.getById(id);
+		return carService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateCarRequest createCarRequest) {
-		try {
-			return this.carService.add(createCarRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result add(@RequestBody CreateCarRequest createCarRequest) throws BusinessException {
+		return this.carService.add(createCarRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) {
-		try {
-			return this.carService.delete(deleteCarRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) throws BusinessException {
+		return this.carService.delete(deleteCarRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateCarRequest updateCarRequest) {
-		try {
-			return this.carService.update(updateCarRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result update(@RequestBody UpdateCarRequest updateCarRequest) throws BusinessException {
+		return this.carService.update(updateCarRequest);
 	}
 
 	@GetMapping("/getCarByDailyPrice")

@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteCarMaintenanceRequest {
 
-	@NotNull
-	@Positive
+//	@NotNull
 	private int id;
 	
 }

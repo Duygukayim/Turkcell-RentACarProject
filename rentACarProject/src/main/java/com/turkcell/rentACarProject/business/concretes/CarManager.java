@@ -46,17 +46,17 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<ListCarDto>> getAll() {
-		List<Car> result = this.carDao.findAll();
-		List<ListCarDto> response = result.stream()
-				.map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
+		List<Car> result = carDao.findAll();
+		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
+				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCarDto>>(response);
 	}
 
 	@Override
 	public DataResult<GetCarDto> getById(int id) {
-		Car car = this.carDao.getCarById(id);
+		Car car = carDao.getById(id);
 		if (car != null) {
-			GetCarDto response = this.modelMapperService.forDto().map(car, GetCarDto.class);
+			GetCarDto response = modelMapperService.forDto().map(car, GetCarDto.class);
 			return new SuccessDataResult<GetCarDto>(response, "Success");
 		}
 		return new ErrorDataResult<GetCarDto>("Car.NotFound");
@@ -67,7 +67,7 @@ public class CarManager implements CarService {
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
-		
+
 		if (!checkIfCarDailyPriceLessThanZero(car.getDailyPrice()).isSuccess()) {
 			return new ErrorResult("Car.NotAdded : " + brandName + "," + colorName);
 		}
@@ -102,8 +102,8 @@ public class CarManager implements CarService {
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 		if (checkCarIdExists(car.getId()).isSuccess()) {
-		this.carDao.save(car);
-		return new SuccessResult("Car.Updated : " + brandName + "," + colorName);
+			this.carDao.save(car);
+			return new SuccessResult("Car.Updated : " + brandName + "," + colorName);
 		}
 		return new ErrorResult("Car.NotUpdated : " + brandName + "," + colorName);
 	}

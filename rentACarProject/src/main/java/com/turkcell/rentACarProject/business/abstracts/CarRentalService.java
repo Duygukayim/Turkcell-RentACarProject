@@ -19,7 +19,11 @@ public interface CarRentalService {
 	DataResult<List<ListCarRentalDto>> getAll();
 
 	DataResult<GetCarRentalDto> getById(int id);
-
+	
+	DataResult<List<GetCarRentalDto>> getByCarId(int id);
+	
+//	DataResult<List<GetCarRentalDto>> getByCustomerId(int id);
+//
 //	DataResult<List<ListCarDto>> getAllPaged(int pageNumber, int pageSize);
 //
 //	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);

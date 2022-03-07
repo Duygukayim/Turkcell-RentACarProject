@@ -35,12 +35,12 @@ public class CarMaintenancesController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListCarMaintenanceDto>> getAll() {
-		return this.carMaintenanceService.getAll();
+		return carMaintenanceService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetCarMaintenanceDto> getById(@RequestParam int id) {
-		return this.carMaintenanceService.getById(id);
+		return carMaintenanceService.getById(id);
 	}
 
 	@PostMapping("/add")

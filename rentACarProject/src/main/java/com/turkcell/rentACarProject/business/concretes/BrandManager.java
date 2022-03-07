@@ -37,18 +37,18 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public DataResult<List<ListBrandDto>> getAll() {
-		List<Brand> result = this.brandDao.findAll();
+		List<Brand> result = brandDao.findAll();
 		List<ListBrandDto> response = result.stream()
-				.map(brand -> this.modelMapperService.forDto().map(brand, ListBrandDto.class))
+				.map(brand -> modelMapperService.forDto().map(brand, ListBrandDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListBrandDto>>(response);
 	}
 
 	@Override
 	public DataResult<GetBrandDto> getById(int id) throws BusinessException {
-		Brand brand = this.brandDao.getBrandById(id);
+		Brand brand = this.brandDao.getById(id);
 		if (brand != null) {
-			GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
+			GetBrandDto response = modelMapperService.forDto().map(brand, GetBrandDto.class);
 			return new SuccessDataResult<GetBrandDto>(response, "Success");
 		}
 		return new ErrorDataResult<GetBrandDto>("Brand.NotFounded");

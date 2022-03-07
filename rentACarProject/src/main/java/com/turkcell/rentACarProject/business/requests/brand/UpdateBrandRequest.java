@@ -13,11 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateBrandRequest {
 
-	@NotNull
-	@Positive
+//	@NotNull
 	private int id;
 
-	@NotNull
+//	@NotNull
 	@Size(min = 2, max = 15)
 	private String name;
 

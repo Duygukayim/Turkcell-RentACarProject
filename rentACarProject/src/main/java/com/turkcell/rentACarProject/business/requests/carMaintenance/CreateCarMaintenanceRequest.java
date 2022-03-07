@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateCarMaintenanceRequest {
 
-	@NotNull
+//	@NotNull
 	@Size(min = 2, max = 100)
 	private String description;
 	

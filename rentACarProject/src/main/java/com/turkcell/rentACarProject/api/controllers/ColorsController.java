@@ -20,7 +20,6 @@ import com.turkcell.rentACarProject.business.requests.color.DeleteColorRequest;
 import com.turkcell.rentACarProject.business.requests.color.UpdateColorRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 @RestController
@@ -37,39 +36,27 @@ public class ColorsController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListColorDto>> getAll() {
-		return this.colorService.getAll();
+		return colorService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetColorDto> get(@RequestParam int id) throws BusinessException {
-		return this.colorService.getById(id);
+		return colorService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateColorRequest createColorRequest) {
-		try {
-			return this.colorService.add(createColorRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result add(@RequestBody CreateColorRequest createColorRequest) throws BusinessException {
+		return colorService.add(createColorRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
-		try {
-			return this.colorService.delete(deleteColorRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) throws BusinessException {
+		return colorService.delete(deleteColorRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
-		try {
-			return this.colorService.update(updateColorRequest);
-		} catch (Exception e) {
-			return new ErrorResult(e.getMessage());
-		}
+	public Result update(@RequestBody UpdateColorRequest updateColorRequest) throws BusinessException {
+		return colorService.update(updateColorRequest);
 	}
 
 }

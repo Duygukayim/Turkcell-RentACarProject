@@ -15,29 +15,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCarRequest {
 
-    @NotNull
-    @Positive
+//    @NotNull
 	private int id;
     
-	@NotNull
-	@Min(50)
-	@Max(1000)
+//	@NotNull
+//	@Min(50)
+//	@Max(1000)
 	private double dailyPrice;
 	
-	@NotNull
-	@Min(2015)
-	@Max(2022)
+//	@NotNull
+//	@Min(2015)
+//	@Max(2022)
 	private double modelYear;
 	
 	@Size(min = 2, max = 100)
 	private String description;
 	
-    @NotNull
-    @Positive
+//    @NotNull
 	private int brandId;
     
-    @NotNull
-    @Positive
+//    @NotNull
 	private int colorId;
     
 }

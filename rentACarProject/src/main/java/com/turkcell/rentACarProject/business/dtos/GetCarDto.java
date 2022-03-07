@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetCarDto {
 	
-	private int carId;
-	private double carDailyPrice;
-	private int carModelYear;
-	private String carDescription;
+	private int id;
+	private double dailyPrice;
+	private int modelYear;
+	private String description;
 	private String brandName;
 	private String colorName;
 

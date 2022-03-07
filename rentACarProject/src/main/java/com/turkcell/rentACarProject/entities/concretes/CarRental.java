@@ -1,7 +1,6 @@
 package com.turkcell.rentACarProject.entities.concretes;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +31,7 @@ public class CarRental {
     private LocalDate rentDate;
 
     @Column(name = "return_date")
-    private LocalDate returnDate = null;
+    private LocalDate returnDate;
 
     @Column(name="customer_id")
     private int customerId;

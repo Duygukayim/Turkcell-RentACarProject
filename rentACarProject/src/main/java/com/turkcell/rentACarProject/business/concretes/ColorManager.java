@@ -37,18 +37,18 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public DataResult<List<ListColorDto>> getAll() {
-		List<Color> result = this.colorDao.findAll();
+		List<Color> result = colorDao.findAll();
 		List<ListColorDto> response = result.stream()
-				.map(color -> this.modelMapperService.forDto().map(color, ListColorDto.class))
+				.map(color -> modelMapperService.forDto().map(color, ListColorDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListColorDto>>(response, "Success");
 	}
 
 	@Override
 	public DataResult<GetColorDto> getById(int id) {
-		Color color = this.colorDao.getColorById(id);
+		Color color = colorDao.getById(id);
 		if (color != null) {
-			GetColorDto response = this.modelMapperService.forDto().map(color, GetColorDto.class);
+			GetColorDto response = modelMapperService.forDto().map(color, GetColorDto.class);
 			return new SuccessDataResult<GetColorDto>(response, "Success");
 		}
 		return new ErrorDataResult<GetColorDto>("Color.NotFounded");

@@ -12,6 +12,7 @@ import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMa
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 
 @Service
 public interface CarMaintenanceService {
@@ -19,6 +20,8 @@ public interface CarMaintenanceService {
 	DataResult<List<ListCarMaintenanceDto>> getAll();
 
 	DataResult<GetCarMaintenanceDto> getById(int id);
+	
+	SuccessDataResult<List<GetCarMaintenanceDto>> getByCarId(int id);
 
 //	DataResult<List<ListCarMaintenanceDto>> getAllPaged(int pageNumber, int pageSize);
 //

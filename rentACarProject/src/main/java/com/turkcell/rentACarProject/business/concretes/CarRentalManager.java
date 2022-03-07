@@ -23,40 +23,41 @@ import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarMaintenanceDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
+import com.turkcell.rentACarProject.entities.concretes.Car;
 import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
 
 @Service
 public class CarRentalManager implements CarRentalService {
 
-	private CarRentalDao carRentalDao;
 	private CarDao carDao;
+	private CarRentalDao carRentalDao;
 	private CarMaintenanceDao carMaintenanceDao;
 	private ModelMapperService modelMapperService;
 
 	@Autowired
-	public CarRentalManager(CarRentalDao carRentalDao, CarDao carDao, CarMaintenanceDao carMaintenanceDao,
+	public CarRentalManager(CarDao carDao, CarRentalDao carRentalDao, CarMaintenanceDao carMaintenanceDao,
 			ModelMapperService modelMapperService) {
-		this.carRentalDao = carRentalDao;
 		this.carDao = carDao;
+		this.carRentalDao = carRentalDao;
 		this.carMaintenanceDao = carMaintenanceDao;
 		this.modelMapperService = modelMapperService;
 	}
 
 	@Override
 	public DataResult<List<ListCarRentalDto>> getAll() {
-		List<CarRental> result = this.carRentalDao.findAll();
+		List<CarRental> result = carRentalDao.findAll();
 		List<ListCarRentalDto> response = result.stream()
-				.map(carRental -> this.modelMapperService.forDto().map(carRental, ListCarRentalDto.class))
+				.map(carRental -> modelMapperService.forDto().map(carRental, ListCarRentalDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCarRentalDto>>(response);
 	}
 
 	@Override
 	public DataResult<GetCarRentalDto> getById(int id) {
-		CarRental carRental = this.carRentalDao.getById(id);
+		CarRental carRental = carRentalDao.getById(id);
 		if (carRental != null) {
-			GetCarRentalDto response = this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
+			GetCarRentalDto response = modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
 			return new SuccessDataResult<GetCarRentalDto>(response, "Success");
 		}
 		return new ErrorDataResult<GetCarRentalDto>("CarRental.NotFound");
@@ -124,6 +125,14 @@ public class CarRentalManager implements CarRentalService {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public DataResult<List<GetCarRentalDto>> getByCarId(int id) {
+		Car car = this.carDao.getById(id);
+        List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(car);
+        List<GetCarRentalDto> response = result.stream().map(rental -> this.modelMapperService.forDto().map(rental, GetCarRentalDto.class)).collect(Collectors.toList());
+        return new SuccessDataResult<List<GetCarRentalDto>>(response , "Success");
 	}
 
 }
