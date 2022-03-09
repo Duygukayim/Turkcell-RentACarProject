@@ -1,4 +1,4 @@
-package com.turkcell.rentACarProject.business.dtos;
+package com.turkcell.rentACarProject.business.dtos.list;
 
 import java.time.LocalDate;
 

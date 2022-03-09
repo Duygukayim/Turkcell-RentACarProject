@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.BrandService;
-import com.turkcell.rentACarProject.business.dtos.GetBrandDto;
-import com.turkcell.rentACarProject.business.dtos.ListBrandDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 @RestController
@@ -41,7 +40,7 @@ public class BrandsController {
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetBrandDto> get(@RequestParam int id) {
+	public DataResult<GetBrandDto> get(@RequestParam int id) throws BusinessException {
 		return brandService.getById(id);
 	}
 

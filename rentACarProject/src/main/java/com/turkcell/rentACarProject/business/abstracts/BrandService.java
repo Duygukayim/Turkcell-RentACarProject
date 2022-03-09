@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.turkcell.rentACarProject.business.dtos.GetBrandDto;
-import com.turkcell.rentACarProject.business.dtos.ListBrandDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
@@ -18,7 +18,7 @@ public interface BrandService {
 
 	DataResult<List<ListBrandDto>> getAll();
 
-	DataResult<GetBrandDto> getById(int id);
+	DataResult<GetBrandDto> getById(int id) throws BusinessException;
 
 	Result add(CreateBrandRequest createBrandRequest) throws BusinessException;
 

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.turkcell.rentACarProject.business.dtos.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;

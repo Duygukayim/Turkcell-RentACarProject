@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CarService;
-import com.turkcell.rentACarProject.business.dtos.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;

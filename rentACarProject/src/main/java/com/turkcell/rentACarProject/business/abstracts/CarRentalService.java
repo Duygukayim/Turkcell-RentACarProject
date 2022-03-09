@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.turkcell.rentACarProject.business.dtos.GetCarRentalDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarRentalDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarRentalDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.DeleteCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalRequest;

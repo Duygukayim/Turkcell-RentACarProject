@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CarMaintenanceService;
-import com.turkcell.rentACarProject.business.dtos.GetCarMaintenanceDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarMaintenanceDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarMaintenanceDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarMaintenanceDto;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.CreateCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.DeleteCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMaintenanceRequest;
@@ -44,7 +44,7 @@ public class CarMaintenancesController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException {
+	public Result add(@RequestBody CreateCarMaintenanceRequest createCarMaintenanceRequest){
 		return this.carMaintenanceService.add(createCarMaintenanceRequest);
 	}
 

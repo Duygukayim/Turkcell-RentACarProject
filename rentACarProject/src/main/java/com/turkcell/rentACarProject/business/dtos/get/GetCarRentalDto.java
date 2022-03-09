@@ -1,4 +1,4 @@
-package com.turkcell.rentACarProject.business.dtos;
+package com.turkcell.rentACarProject.business.dtos.get;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class GetCarRentalDto {
 
 	private int id;
-    private LocalDate rentalDate;
     private LocalDate returnDate;
     private int customerId;
     private int carId;

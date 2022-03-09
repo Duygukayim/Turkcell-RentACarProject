@@ -1,6 +1,7 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarService;
-import com.turkcell.rentACarProject.business.dtos.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;
@@ -26,6 +27,7 @@ import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.BrandDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.ColorDao;
+import com.turkcell.rentACarProject.entities.concretes.Brand;
 import com.turkcell.rentACarProject.entities.concretes.Car;
 
 @Service
@@ -55,11 +57,11 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<GetCarDto> getById(int id) {
 		Car car = carDao.getById(id);
-		if (car != null) {
+		if (checkCarIdExists(car.getId())) {
 			GetCarDto response = modelMapperService.forDto().map(car, GetCarDto.class);
 			return new SuccessDataResult<GetCarDto>(response, "Success");
 		}
-		return new ErrorDataResult<GetCarDto>("Car.NotFound");
+		return new ErrorDataResult<GetCarDto>("Car.NotFound , A car with this ID was not found!");
 	}
 
 	@Override
@@ -68,20 +70,23 @@ public class CarManager implements CarService {
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 
-		if (!checkIfCarDailyPriceLessThanZero(car.getDailyPrice()).isSuccess()) {
-			return new ErrorResult("Car.NotAdded : " + brandName + "," + colorName);
+		if (checkIfCarDailyPriceLessThanZero(car.getDailyPrice())) {
+			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName
+					+ " , Daily rental price cannot be less than or equal to 0.");
 		}
-		if (!checkIfBrandId(car.getBrand().getId()).isSuccess()) {
-			return new ErrorResult("Car.NotAdded : " + brandName + "," + colorName);
+		if (!checkIfBrandId(car.getBrand().getId())) {
+			return new ErrorResult(
+					"Car.NotAdded : " + brandName + " , " + colorName + " , A brand with this ID was not found!");
 		}
-		if (!checkIfColorId(car.getColor().getId()).isSuccess()) {
-			return new ErrorResult("Car.NotAdded : " + brandName + "," + colorName);
+		if (!checkIfColorId(car.getColor().getId())) {
+			return new ErrorResult(
+					"Car.NotAdded : " + brandName + " , " + colorName + " , A color with this ID was not found!");
 		}
-		if (!checkIfCarExists(car).isSuccess()) {
-			return new ErrorResult("Car.NotAdded : " + brandName + "," + colorName);
+		if (checkIfCarExists(car)) {
+			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName + " , Car already exists!");
 		}
 		this.carDao.save(car);
-		return new SuccessResult("Car.Added : " + brandName + "," + colorName);
+		return new SuccessResult("Car.Added : " + brandName + " , " + colorName);
 	}
 
 	@Override
@@ -89,7 +94,7 @@ public class CarManager implements CarService {
 		Car car = this.modelMapperService.forRequest().map(deleteCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
-		if (checkCarIdExists(car.getId()).isSuccess()) {
+		if (checkCarIdExists(car.getId())) {
 			this.carDao.delete(car);
 			return new SuccessResult("Car.Deleted : " + brandName + "," + colorName);
 		}
@@ -101,11 +106,25 @@ public class CarManager implements CarService {
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
-		if (checkCarIdExists(car.getId()).isSuccess()) {
-			this.carDao.save(car);
-			return new SuccessResult("Car.Updated : " + brandName + "," + colorName);
+//		int brandId = brandDao.findById(car.getBrand().getId()).get().getId();
+//		int colorId = colorDao.findById(car.getColor().getId()).get().getId();
+		
+		if (!checkCarIdExists(car.getId())) {
+			return new ErrorResult("Car.NotUpdated : " + brandName + " , " + colorName + " , A car with this ID was not found!");
 		}
-		return new ErrorResult("Car.NotUpdated : " + brandName + "," + colorName);
+//		if (!checkIfBrandId(car.getBrand().getId())) {
+//			return new ErrorResult(
+//					"Car.NotAdded : " + brandName + " , A brand with this ID was not found!");
+//		}
+//		if (!checkIfColorId(car.getColor().getId())) {
+//			return new ErrorResult(
+//					"Car.NotAdded : " + colorName + " , A color with this ID was not found!");
+//		}
+//		if (checkIfCarDailyPriceLessThanZero(car.getDailyPrice())) {
+//			return new ErrorResult("Car.NotAdded : Daily rental price cannot be less than or equal to 0.");
+//		}
+		this.carDao.save(car);
+		return new SuccessResult("Car.Updated : " + brandName + " , " + colorName);
 	}
 
 	@Override
@@ -141,41 +160,32 @@ public class CarManager implements CarService {
 		return new ErrorDataResult<List<ListCarDto>>("Car.NotFound");
 	}
 
-	private Result checkCarIdExists(int carId) {
-		if (this.carDao.getCarById(carId) != null) {
-			return new SuccessResult();
-		}
-		return new ErrorResult();
+	private boolean checkCarIdExists(int carId) {
+		return Objects.nonNull(carDao.getCarById(carId));
 	}
 
-	private Result checkIfCarDailyPriceLessThanZero(double dailyPrice) {
+	private boolean checkIfBrandId(int brandId) {
+		return Objects.nonNull(brandDao.getBrandById(brandId));
+	}
+
+	private boolean checkIfColorId(int colorId) {
+		return Objects.nonNull(colorDao.getColorById(colorId));
+	}
+
+	private boolean checkIfCarDailyPriceLessThanZero(double dailyPrice) {
 		if (dailyPrice <= 0) {
-			return new ErrorResult("Daily rental price cannot be less than or equal to 0.");
+			return true;
 		}
-		return new SuccessResult();
+		return false;
 	}
 
-	private Result checkIfBrandId(int brandId) {
-		if (this.brandDao.getBrandById(brandId) != null) {
-			return new SuccessResult();
-		}
-		return new ErrorResult("A brand with this ID was not found!");
-	}
-
-	private Result checkIfColorId(int colorId) {
-		if (this.colorDao.getColorById(colorId) != null) {
-			return new SuccessResult();
-		}
-		return new ErrorResult("A color with this ID was not found!");
-	}
-
-	private Result checkIfCarExists(Car car) {
+	private boolean checkIfCarExists(Car car) {
 		if (carDao.existsByDailyPrice(car.getDailyPrice()) && carDao.existsByModelYear(car.getModelYear())
 				&& carDao.existsByDescription(car.getDescription()) && carDao.existsByBrand_Id(car.getBrand().getId())
 				&& carDao.existsByColor_Id(car.getColor().getId())) {
-			return new ErrorResult("Car already exists!");
+			return true;
 		}
-		return new SuccessResult();
+		return false;
 	}
 
 }

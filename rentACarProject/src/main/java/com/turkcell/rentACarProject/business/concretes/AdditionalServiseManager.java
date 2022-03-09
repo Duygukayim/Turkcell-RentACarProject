@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.AdditionalServiceService;
-import com.turkcell.rentACarProject.business.dtos.GetAdditionalServiceDto;
-import com.turkcell.rentACarProject.business.dtos.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.ListAdditionalServiceDto;
-import com.turkcell.rentACarProject.business.dtos.ListCarDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetAdditionalServiceDto;
+import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.additionalService.CreateAdditionalServiceRequest;
 import com.turkcell.rentACarProject.business.requests.additionalService.DeleteAdditionalServiceRequest;
 import com.turkcell.rentACarProject.business.requests.additionalService.UpdateAdditionalServiceRequest;
