@@ -16,4 +16,7 @@ public class CreateAdditionalServiceRequest {
 	@Size(min = 2, max = 50)
 	private String name;
 	
+	@NotNull
+    private double dailyPrice;
+	
 }

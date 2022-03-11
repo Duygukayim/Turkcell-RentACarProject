@@ -15,12 +15,10 @@ public class UpdateCarRentalRequest {
 	
 	private int id;
 
-    private LocalDate rentDate;
-
     private LocalDate returnDate;
 
-    private int customerId;
-
     private int carId;
+    
+    private int additionalServiceId;
 
 }

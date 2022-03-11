@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarRentalDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.DeleteCarRentalRequest;
@@ -21,9 +22,11 @@ import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
+import com.turkcell.rentACarProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarMaintenanceDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
+import com.turkcell.rentACarProject.dataAccess.abstracts.OrderedAdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.Car;
 import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
@@ -34,20 +37,25 @@ public class CarRentalManager implements CarRentalService {
 	private CarDao carDao;
 	private CarRentalDao carRentalDao;
 	private CarMaintenanceDao carMaintenanceDao;
+	private AdditionalServiceDao additionalServiceDao;
 	private ModelMapperService modelMapperService;
 
 	@Autowired
 	public CarRentalManager(CarDao carDao, CarRentalDao carRentalDao, CarMaintenanceDao carMaintenanceDao,
-			ModelMapperService modelMapperService) {
+			AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
 		this.carDao = carDao;
 		this.carRentalDao = carRentalDao;
 		this.carMaintenanceDao = carMaintenanceDao;
+		this.additionalServiceDao = additionalServiceDao;
 		this.modelMapperService = modelMapperService;
 	}
 
 	@Override
 	public DataResult<List<ListCarRentalDto>> getAll() {
 		List<CarRental> result = carRentalDao.findAll();
+		 if (result.isEmpty()) {
+	            return new ErrorDataResult<List<ListCarRentalDto>>("CarRental.NotListed");
+	        }
 		List<ListCarRentalDto> response = result.stream()
 				.map(carRental -> modelMapperService.forDto().map(carRental, ListCarRentalDto.class))
 				.collect(Collectors.toList());
@@ -105,6 +113,9 @@ public class CarRentalManager implements CarRentalService {
 		if (!checkIsUnderMaintenance(carRental)) {
 			return new ErrorResult("CarRental.NotUpdated , Car is under maintenance at requested times");
 		}
+//		if(checkIfAdditionalServiceId(carRental.getAd) {
+//			return new ErrorResult("OrderedAdditionalService.NotUpdated , Ordered Additional Service with given ID not exists!");
+//		}
 		this.carRentalDao.save(carRental);
 		return new SuccessResult("CarRental.Updated");
 	}
@@ -115,6 +126,10 @@ public class CarRentalManager implements CarRentalService {
 
 	private boolean checkIfCarExists(int carId) {
 		return Objects.nonNull(carDao.getCarById(carId));
+	}
+	
+	private boolean checkIfAdditionalServiceId(int additionalServiceId) {
+		return Objects.nonNull(additionalServiceDao.getAdditionalServiceById(additionalServiceId));
 	}
 
 	private boolean checkIsUnderMaintenance(CarRental carRental) {

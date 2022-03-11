@@ -6,5 +6,8 @@ import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
 
 public interface AdditionalServiceDao extends JpaRepository<AdditionalService, Integer> {
 	
-
+	AdditionalService getAdditionalServiceById(int id);
+	
+	AdditionalService getAdditionalServiceByName(String name);
+	
 }

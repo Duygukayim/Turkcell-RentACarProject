@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteColorRequest {
 
-//	@NotNull
+	@NotNull
+	@Positive
 	private int id;
 }

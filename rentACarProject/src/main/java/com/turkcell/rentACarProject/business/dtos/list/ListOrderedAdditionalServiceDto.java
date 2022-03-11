@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListAdditionalServiceDto {
-
+public class ListOrderedAdditionalServiceDto {
+	
 	private int id;
-	private String name;
-	private double dailyPrice;
+	private int carRentalId;
+	private int additionalServiceId;
+    private int customerId;
+
 }

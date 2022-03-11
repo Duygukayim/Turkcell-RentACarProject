@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.ColorService;
 import com.turkcell.rentACarProject.business.dtos.get.GetColorDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListColorDto;
 import com.turkcell.rentACarProject.business.requests.color.CreateColorRequest;
 import com.turkcell.rentACarProject.business.requests.color.DeleteColorRequest;
@@ -38,6 +39,9 @@ public class ColorManager implements ColorService {
 	@Override
 	public DataResult<List<ListColorDto>> getAll() {
 		List<Color> result = colorDao.findAll();
+		 if (result.isEmpty()) {
+	            return new ErrorDataResult<List<ListColorDto>>("Color.NotListed");
+	        }
 		List<ListColorDto> response = result.stream()
 				.map(color -> modelMapperService.forDto().map(color, ListColorDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<ListColorDto>>(response, "Success");
@@ -60,7 +64,7 @@ public class ColorManager implements ColorService {
 			this.colorDao.save(color);
 			return new SuccessResult("Color.Added : " + color.getName());
 		}
-		return new ErrorResult("Color.NotAdded : " + color.getName() + "Color already exists!");
+		return new ErrorResult("Color.NotAdded : " + color.getName() + " , Color already exists!");
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class ColorManager implements ColorService {
 			this.colorDao.delete(color);
 			return new SuccessResult("Color.Deleted : " + color.getName());
 		}
-		return new ErrorResult("Color.NotDeleted : " + color.getName() + "A color with this ID was not found!");
+		return new ErrorResult("Color.NotDeleted : " + color.getName() + " , A color with this ID was not found!");
 	}
 
 	@Override
@@ -80,7 +84,7 @@ public class ColorManager implements ColorService {
 			this.colorDao.save(color);
 			return new SuccessResult("Color.Updated : " + color.getName());
 		}
-		return new ErrorResult("Color.NotUpdated : " + color.getName() + "A color with this ID was not found!");
+		return new ErrorResult("Color.NotUpdated : " + color.getName() + " , A color with this ID was not found!");
 	}
 
 	private boolean checkIfColorName(String colorName) {

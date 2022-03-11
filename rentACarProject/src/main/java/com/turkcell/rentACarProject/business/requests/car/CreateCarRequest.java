@@ -15,25 +15,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateCarRequest {
 
-//	@NotNull
-//	@Min(50)
-//	@Max(1000)
+	@NotNull
+	@Min(50)
+	@Max(1000)
 	private double dailyPrice;
 
-//	@NotNull
-//	@Min(2015)
-//	@Max(2022)
+	@NotNull
+	@Min(2015)
+	@Max(2022)
 	private int modelYear;
 
 	@Size(min = 2, max = 100)
 	private String description;
 
-//	@NotNull
-//    @Positive
+	@NotNull
+    @Positive
 	private int brandId;
 
-//	@NotNull
-//    @Positive
+	@NotNull
+    @Positive
 	private int colorId;
 
 }

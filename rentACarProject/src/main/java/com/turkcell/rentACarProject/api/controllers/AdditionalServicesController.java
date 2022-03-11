@@ -34,6 +34,7 @@ public class AdditionalServicesController {
 	public AdditionalServicesController(AdditionalServiceService additionalServiceService) {
 		this.additionalServiceService = additionalServiceService;
 	}
+	
 	@GetMapping("/getAll")
 	public DataResult<List<ListAdditionalServiceDto>> getAll() {
 		return additionalServiceService.getAll();

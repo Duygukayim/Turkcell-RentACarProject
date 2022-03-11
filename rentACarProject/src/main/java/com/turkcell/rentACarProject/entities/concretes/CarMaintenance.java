@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,5 +36,5 @@ public class CarMaintenance {
 	@ManyToOne()
 	@JoinColumn(name = "car_id")
 	private Car carId;
-	
+
 }

@@ -2,6 +2,7 @@ package com.turkcell.rentACarProject.business.requests.carMaintenance;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -15,15 +16,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCarMaintenanceRequest {
 
-//	@NotNull
+	@NotNull
+	@Positive
 	private int id;
 	
-//	@NotNull
+	@NotNull
 	@Size(min=2, max=100)
 	private String description;
 	
+	@FutureOrPresent
 	private LocalDate returnDate;
 	
-//	@NotNull
+	@NotNull
+	@Positive
 	private int carId;
 }

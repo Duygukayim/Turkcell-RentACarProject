@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarMaintenanceDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarMaintenanceDto;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.CreateCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.DeleteCarMaintenanceRequest;
@@ -47,6 +48,9 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public DataResult<List<ListCarMaintenanceDto>> getAll() {
 		List<CarMaintenance> result = carMaintenanceDao.findAll();
+		 if (result.isEmpty()) {
+	            return new ErrorDataResult<List<ListCarMaintenanceDto>>("CarMaintenance.NotListed");
+	        }
 		List<ListCarMaintenanceDto> response = result.stream()
 				.map(carMaintenance -> modelMapperService.forDto().map(carMaintenance, ListCarMaintenanceDto.class))
 				.collect(Collectors.toList());

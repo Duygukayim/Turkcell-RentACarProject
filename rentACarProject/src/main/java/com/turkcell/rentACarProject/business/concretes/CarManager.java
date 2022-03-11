@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
@@ -49,6 +50,9 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<List<ListCarDto>> getAll() {
 		List<Car> result = carDao.findAll();
+		 if (result.isEmpty()) {
+	            return new ErrorDataResult<List<ListCarDto>>("Car.NotListed");
+	        }
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCarDto>>(response);
@@ -71,16 +75,13 @@ public class CarManager implements CarService {
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 
 		if (checkIfCarDailyPriceLessThanZero(car.getDailyPrice())) {
-			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName
-					+ " , Daily rental price cannot be less than or equal to 0.");
+			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName + " , Daily rental price cannot be less than or equal to 0.");
 		}
 		if (!checkIfBrandId(car.getBrand().getId())) {
-			return new ErrorResult(
-					"Car.NotAdded : " + brandName + " , " + colorName + " , A brand with this ID was not found!");
+			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName + " , A brand with this ID was not found!");
 		}
 		if (!checkIfColorId(car.getColor().getId())) {
-			return new ErrorResult(
-					"Car.NotAdded : " + brandName + " , " + colorName + " , A color with this ID was not found!");
+			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName + " , A color with this ID was not found!");
 		}
 		if (checkIfCarExists(car)) {
 			return new ErrorResult("Car.NotAdded : " + brandName + " , " + colorName + " , Car already exists!");

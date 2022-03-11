@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.BrandService;
 import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
@@ -39,6 +40,9 @@ public class BrandManager implements BrandService {
 	@Override
 	public DataResult<List<ListBrandDto>> getAll() {
 		List<Brand> result = brandDao.findAll();
+		 if (result.isEmpty()) {
+	            return new ErrorDataResult<List<ListBrandDto>>("Brand.NotListed");
+	        }
 		List<ListBrandDto> response = result.stream()
 				.map(brand -> modelMapperService.forDto().map(brand, ListBrandDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<ListBrandDto>>(response);
