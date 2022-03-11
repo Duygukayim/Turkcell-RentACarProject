@@ -15,4 +15,5 @@ public class DeleteColorRequest {
 	@NotNull
 	@Positive
 	private int id;
+	
 }

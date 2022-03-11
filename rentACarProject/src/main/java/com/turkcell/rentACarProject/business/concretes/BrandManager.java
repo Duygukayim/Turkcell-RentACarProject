@@ -40,9 +40,6 @@ public class BrandManager implements BrandService {
 	@Override
 	public DataResult<List<ListBrandDto>> getAll() {
 		List<Brand> result = brandDao.findAll();
-		 if (result.isEmpty()) {
-	            return new ErrorDataResult<List<ListBrandDto>>("Brand.NotListed");
-	        }
 		List<ListBrandDto> response = result.stream()
 				.map(brand -> modelMapperService.forDto().map(brand, ListBrandDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<ListBrandDto>>(response);

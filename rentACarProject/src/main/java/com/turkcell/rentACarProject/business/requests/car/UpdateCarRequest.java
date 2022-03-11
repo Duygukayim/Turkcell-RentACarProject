@@ -40,4 +40,8 @@ public class UpdateCarRequest {
     @Positive
 	private int colorId;
     
+	@NotNull
+	@Positive
+	private int cityId; 
+    
 }

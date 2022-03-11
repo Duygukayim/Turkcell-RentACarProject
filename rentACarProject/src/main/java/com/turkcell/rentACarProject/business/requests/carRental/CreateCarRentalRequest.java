@@ -28,6 +28,10 @@ public class CreateCarRentalRequest {
     private int customerId;
 
 	@NotNull
-	@Positive
     private List<Integer> additionalServiceIds;
+	
+	@NotNull
+	@Positive
+	private int cityId; 
+	
 }

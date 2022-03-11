@@ -2,6 +2,8 @@ package com.turkcell.rentACarProject.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,17 +46,17 @@ public class CustomersController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody CreateCustomerRequest createCustomerRequest) throws BusinessException{
+    public Result add(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) throws BusinessException{
         return this.customerService.add(createCustomerRequest);
     }
 
     @DeleteMapping("/delete")
-    public Result delete(@RequestParam DeleteCustomerRequest deleteCustomerRequest) throws BusinessException{
+    public Result delete(@RequestParam @Valid DeleteCustomerRequest deleteCustomerRequest) throws BusinessException{
     	return this.customerService.delete(deleteCustomerRequest);
     }
     
     @PutMapping("/update")
-    public Result update(@RequestBody UpdateCustomerRequest updateCustomerRequest) throws BusinessException{
+    public Result update(@RequestBody @Valid UpdateCustomerRequest updateCustomerRequest) throws BusinessException{
         return this.customerService.update(updateCustomerRequest);
     }
     

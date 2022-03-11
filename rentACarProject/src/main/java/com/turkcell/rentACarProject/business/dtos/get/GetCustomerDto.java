@@ -19,6 +19,6 @@ public class GetCustomerDto {
 
     private String lastName;
 
-    private List<OrderedAdditionalService> orderedAdditionalServices;
+//    private List<OrderedAdditionalService> orderedAdditionalServices;
     
 }

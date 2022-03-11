@@ -44,6 +44,10 @@ public class CarRental {
     
     @Column(name="total_daily_price")
     private int totalDailyPrice;
+    
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City returnCity;
 
     @OneToMany
     @JoinColumn(name = "car_rental")

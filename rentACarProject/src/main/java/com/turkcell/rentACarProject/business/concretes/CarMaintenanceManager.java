@@ -48,9 +48,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public DataResult<List<ListCarMaintenanceDto>> getAll() {
 		List<CarMaintenance> result = carMaintenanceDao.findAll();
-		 if (result.isEmpty()) {
-	            return new ErrorDataResult<List<ListCarMaintenanceDto>>("CarMaintenance.NotListed");
-	        }
 		List<ListCarMaintenanceDto> response = result.stream()
 				.map(carMaintenance -> modelMapperService.forDto().map(carMaintenance, ListCarMaintenanceDto.class))
 				.collect(Collectors.toList());

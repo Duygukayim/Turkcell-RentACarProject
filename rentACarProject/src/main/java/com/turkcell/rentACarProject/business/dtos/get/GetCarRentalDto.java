@@ -16,5 +16,6 @@ public class GetCarRentalDto {
     private int customerId;
     private int carId;
     private int additionalServiceId;
+    private int cityId;
     
 }

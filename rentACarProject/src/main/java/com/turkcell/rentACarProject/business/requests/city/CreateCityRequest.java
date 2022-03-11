@@ -1,4 +1,4 @@
-package com.turkcell.rentACarProject.business.requests.customer;
+package com.turkcell.rentACarProject.business.requests.city;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,14 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCustomerRequest {
-
+public class CreateCityRequest {
+	
 	@NotNull
 	@Size(min = 2, max = 50)
-    private String firstName;
+	private String name;
 
-	@NotNull
-	@Size(min = 2, max = 50)
-    private String lastName;
-    
 }

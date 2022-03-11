@@ -39,9 +39,6 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 	@Override
 	public DataResult<List<ListAdditionalServiceDto>> getAll() {
 		List<AdditionalService> result = additionalServiceDao.findAll();
-        if (result.isEmpty()) {
-            return new ErrorDataResult<List<ListAdditionalServiceDto>>("AdditionalServices.NotListed");
-        }
 		List<ListAdditionalServiceDto> response = result.stream().map(
 				additionalService -> modelMapperService.forDto().map(additionalService, ListAdditionalServiceDto.class))
 				.collect(Collectors.toList());
@@ -66,7 +63,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		if (checkIfAdditionalServiceName(additionalService.getName())) {
 			return new ErrorResult("AdditionalService.NotAdded : " + additionalService.getName() + " , Additional Service already exists!");
 		}
-		if(!checkIfCarDailyPriceLessThanZero(additionalService.getDailyPrice())) {
+		if(checkIfCarDailyPriceLessThanZero(additionalService.getDailyPrice())) {
 			return new ErrorResult("AdditionalService.NotAdded : " + additionalService.getName() + " , Daily price cannot be less than or equal to 0.");
 		}
 		this.additionalServiceDao.save(additionalService);
@@ -79,9 +76,9 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 				AdditionalService.class);
 		if (checkIfAdditionalServiceId(additionalService.getId())) {
 			this.additionalServiceDao.deleteById(additionalService.getId());
-			return new SuccessResult("AdditionalService.Deleted : " + additionalService.getName());
+			return new SuccessResult("AdditionalService.Deleted : " + additionalService.getId());
 		}
-		return new ErrorResult("AdditionalService.NotDeleted : " + additionalService.getName() + " , Additional Service with given ID not exists!");
+		return new ErrorResult("AdditionalService.NotDeleted : " + additionalService.getId() + " , Additional Service with given ID not exists!");
 	}
 
 	@Override

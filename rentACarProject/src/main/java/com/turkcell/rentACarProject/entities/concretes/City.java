@@ -15,24 +15,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "customers")
-public class Customer {
-
+@Table(name="cities")
+public class City {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name="city_id")
 	private int id;
 	
-	@Column(name = "first_name")
-    private String firstName;
-
-	@Column(name = "last_name")
-    private String lastName;
+	@Column(name="city_name")
+	private String name;
 	
-    @OneToMany(mappedBy = "additionalService")
-    private List<OrderedAdditionalService> orderedAdditionalServices;
-    
+	@OneToMany(mappedBy = "currentCity" )
+	private List<Car> cars;
+	
+	@OneToMany(mappedBy = "returnCity" )
+	private List<CarRental> carRentals;
+	
+
 }

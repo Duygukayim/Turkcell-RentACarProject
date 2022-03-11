@@ -50,9 +50,6 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<List<ListCarDto>> getAll() {
 		List<Car> result = carDao.findAll();
-		 if (result.isEmpty()) {
-	            return new ErrorDataResult<List<ListCarDto>>("Car.NotListed");
-	        }
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCarDto>>(response);

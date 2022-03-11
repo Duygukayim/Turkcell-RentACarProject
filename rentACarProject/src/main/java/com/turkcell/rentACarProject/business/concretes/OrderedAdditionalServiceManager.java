@@ -40,9 +40,6 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	@Override
 	public DataResult<List<ListOrderedAdditionalServiceDto>> getAll() {
 		List<OrderedAdditionalService> result = orderedAdditionalServiceDao.findAll();
-		 if (result.isEmpty()) {
-	            return new ErrorDataResult<List<ListOrderedAdditionalServiceDto>>("OrderedAdditionalService.NotListed");
-	        }
 		List<ListOrderedAdditionalServiceDto> response = result.stream()
 				.map(orderedAdditionalService -> modelMapperService.forDto().map(orderedAdditionalService,
 						ListOrderedAdditionalServiceDto.class))
@@ -100,7 +97,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		return Objects.nonNull(orderedAdditionalServiceDao.getOrderedAdditionalServiceById(orderedAdditionalServiceId));
 	}
 
-	private boolean checkIfAdditionalServiceId(int additionalServiceId) {
+	private boolean checkIfAdditionalServiceId(int additionalServiceId) throws BusinessException {
 		return Objects.nonNull(additionalServiceDao.getAdditionalServiceById(additionalServiceId));
 	}
 	

@@ -37,9 +37,6 @@ public class CustomerManager implements CustomerService {
 	@Override
 	public DataResult<List<ListCustomerDto>> getAll() {
 		List<Customer> result = customerDao.findAll();
-		 if (result.isEmpty()) {
-	            return new ErrorDataResult<List<ListCustomerDto>>("Customer.NotListed");
-	        }
 		List<ListCustomerDto> response = result.stream()
 				.map(customer -> modelMapperService.forDto().map(customer, ListCustomerDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCustomerDto>>(response, "Success");
@@ -59,7 +56,7 @@ public class CustomerManager implements CustomerService {
 	public Result add(CreateCustomerRequest createCustomerRequest) throws BusinessException {
 		Customer customer = this.modelMapperService.forRequest().map(createCustomerRequest, Customer.class);
 		this.customerDao.save(customer);
-		return new SuccessDataResult<CreateCustomerRequest>("Customer.Added : " + customer.getFirstName());
+		return new SuccessDataResult<CreateCustomerRequest>("Customer.Added : " + customer.getFirstName() + " " + customer.getLastName());
 	}
 
 	@Override
