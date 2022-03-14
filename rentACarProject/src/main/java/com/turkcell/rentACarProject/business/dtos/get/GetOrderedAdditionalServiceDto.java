@@ -1,5 +1,7 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
+import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetOrderedAdditionalServiceDto {
-
-	private int id;
-	private int carRentalId;
+	
 	private int additionalServiceId;
-    private int customerId;
+	
+    private int quantity;
 
 }

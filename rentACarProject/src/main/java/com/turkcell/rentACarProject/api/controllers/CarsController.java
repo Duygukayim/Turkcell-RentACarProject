@@ -38,41 +38,49 @@ public class CarsController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListCarDto>> getAll() {
+		
 		return carService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCarDto> get(@RequestParam int id) {
+	public DataResult<GetCarDto> get(@RequestParam int id) throws BusinessException {
+		
 		return carService.getById(id);
 	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody @Valid CreateCarRequest createCarRequest) throws BusinessException {
+		
 		return this.carService.add(createCarRequest);
 	}
 
 	@DeleteMapping("/delete")
 	public Result delete(@RequestBody @Valid DeleteCarRequest deleteCarRequest) throws BusinessException {
+		
 		return this.carService.delete(deleteCarRequest);
 	}
 
 	@PutMapping("/update")
 	public Result update(@RequestBody @Valid UpdateCarRequest updateCarRequest) throws BusinessException {
+		
 		return this.carService.update(updateCarRequest);
 	}
 
 	@GetMapping("/getCarByDailyPrice")
 	DataResult<List<ListCarDto>> getAllByDailyPriceLessThanEqual(@RequestParam double dailyPrice) {
+		
 		return this.carService.getAllByDailyPriceLessThanEqual(dailyPrice);
 	}
 
 	@GetMapping("/getAllPaged")
 	DataResult<List<ListCarDto>> getAllPaged(@RequestParam int pageNumber, @RequestParam int pageSize) {
+		
 		return this.carService.getAllPaged(pageNumber, pageSize);
 	}
 
 	@GetMapping("/getAllSorted")
 	DataResult<List<ListCarDto>> getAllSorted(@RequestParam("direction") Sort.Direction direction) {
+		
 		return this.carService.getAllSorted(direction);
 	}
 

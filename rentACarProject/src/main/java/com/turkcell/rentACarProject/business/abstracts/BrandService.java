@@ -2,8 +2,6 @@ package com.turkcell.rentACarProject.business.abstracts;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
@@ -13,7 +11,7 @@ import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
-@Service
+
 public interface BrandService {
 
 	DataResult<List<ListBrandDto>> getAll();

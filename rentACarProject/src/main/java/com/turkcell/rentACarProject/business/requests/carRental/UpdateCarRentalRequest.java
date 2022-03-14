@@ -1,11 +1,9 @@
 package com.turkcell.rentACarProject.business.requests.carRental;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
-import com.turkcell.rentACarProject.entities.concretes.Car;
+import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +20,10 @@ public class UpdateCarRentalRequest {
 
     private int carId;
     
-    private int additionalServiceId;
+    private List<ListOrderedAdditionalServiceDto> orderedAdditionalServiceIds;
 
-	private int cityId; 
+	private int RentCityId; 
+	
+	private int ReturnCityId; 
 
 }

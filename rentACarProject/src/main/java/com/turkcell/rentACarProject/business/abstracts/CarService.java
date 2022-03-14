@@ -19,7 +19,7 @@ public interface CarService {
 
 	DataResult<List<ListCarDto>> getAll();
 
-	DataResult<GetCarDto> getById(int id);
+	DataResult<GetCarDto> getById(int id) throws BusinessException;
 
 	DataResult<List<ListCarDto>> getAllPaged(int pageNumber, int pageSize);
 

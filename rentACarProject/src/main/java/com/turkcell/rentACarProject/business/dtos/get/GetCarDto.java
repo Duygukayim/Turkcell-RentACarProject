@@ -10,11 +10,17 @@ import lombok.NoArgsConstructor;
 public class GetCarDto {
 	
 	private int id;
+	
 	private double dailyPrice;
+	
 	private int modelYear;
+	
 	private String description;
+	
 	private String brandName;
+	
 	private String colorName;
+	
     private int cityId;
 
 }

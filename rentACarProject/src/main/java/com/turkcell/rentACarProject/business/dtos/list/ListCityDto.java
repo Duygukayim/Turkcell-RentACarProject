@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ListCityDto {
 	
 	private int id;
+	
 	private String name;
 
 }

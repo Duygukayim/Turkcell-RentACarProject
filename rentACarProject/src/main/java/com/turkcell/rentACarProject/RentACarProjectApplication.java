@@ -12,10 +12,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 
+@RestControllerAdvice
 @SpringBootApplication
 public class RentACarProjectApplication {
 
@@ -30,8 +32,8 @@ public class RentACarProjectApplication {
 
 	@ExceptionHandler
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public ErrorDataResult<Object> handleValidationExceptions(
-			MethodArgumentNotValidException argumentNotValidException) {
+	public ErrorDataResult<Object> handleValidationExceptions(MethodArgumentNotValidException argumentNotValidException) {
+		
 		Map<String, String> validationErrors = new HashMap<String, String>();
 		for (FieldError fieldError : argumentNotValidException.getBindingResult().getFieldErrors()) {
 			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
@@ -43,8 +45,7 @@ public class RentACarProjectApplication {
 	@ExceptionHandler
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public ErrorDataResult<Object> handleBusinessExceptions(BusinessException businessException) {
-		ErrorDataResult<Object> errorDataResult = new ErrorDataResult<Object>(businessException.getMessage(),
-				"Validation.Errors");
+		ErrorDataResult<Object> errorDataResult = new ErrorDataResult<Object>(businessException.getMessage(), "BusinessException.Errors");
 		return errorDataResult;
 	}
 

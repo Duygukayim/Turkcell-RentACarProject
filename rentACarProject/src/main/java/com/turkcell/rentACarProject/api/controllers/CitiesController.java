@@ -37,26 +37,31 @@ public class CitiesController {
 	
 	@GetMapping("/getAll")
 	public DataResult<List<ListCityDto>> getAll() {
+		
 		return cityService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetCityDto> get(@RequestParam int id) throws BusinessException {
+		
 		return cityService.getById(id);
 	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody @Valid CreateCityRequest createCityRequest) throws BusinessException {
+		
 		return cityService.add(createCityRequest);
 	}
 
 	@DeleteMapping("/delete")
 	public Result delete(@RequestBody @Valid DeleteCityRequest deleteCityRequest) throws BusinessException {
+		
 		return cityService.delete(deleteCityRequest);
 	}
 
 	@PutMapping("/update")
 	public Result update(@RequestBody @Valid UpdateCityRequest updateCityRequest) throws BusinessException {
+		
 		return cityService.update(updateCityRequest);
 	}
 

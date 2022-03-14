@@ -2,27 +2,24 @@ package com.turkcell.rentACarProject.business.abstracts;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import javax.validation.Valid;
 
-import com.turkcell.rentACarProject.business.dtos.get.GetOrderedAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
-import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.DeleteOrderedAdditionalServiceRequest;
-import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.UpdateOrderedAdditionalServiceRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
-import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
-@Service
+
 public interface OrderedAdditionalServiceService {
 
-	DataResult<List<ListOrderedAdditionalServiceDto>> getAll();
-
-	DataResult<GetOrderedAdditionalServiceDto> getById(int id);
+	Result add(@Valid CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest);
 	
-	Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest) throws BusinessException;
+	void add(List<ListOrderedAdditionalServiceDto> orderedAdditionalServiceIds, int id);
 
-	Result delete(DeleteOrderedAdditionalServiceRequest deleteOrderedAdditionalServiceRequest) throws BusinessException;
+	Double calculateTotalPriceOfAdditionalServices(List<OrderedAdditionalService> orderedAdditionalServices);
 
-	Result update(UpdateOrderedAdditionalServiceRequest updateOrderedAdditionalServiceRequest) throws BusinessException;
+	List<OrderedAdditionalService> getByCarRentalId(int carRentalId);
+
+
+
 }

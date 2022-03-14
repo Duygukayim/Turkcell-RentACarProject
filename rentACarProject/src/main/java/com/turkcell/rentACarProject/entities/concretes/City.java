@@ -29,11 +29,11 @@ public class City {
 	@Column(name="city_name")
 	private String name;
 	
-	@OneToMany(mappedBy = "currentCity" )
-	private List<Car> cars;
+	@OneToMany(mappedBy = "rentCity")
+	private List<CarRental> carRentalRent;
 	
-	@OneToMany(mappedBy = "returnCity" )
-	private List<CarRental> carRentals;
+	@OneToMany(mappedBy = "returnCity")
+	private List<CarRental> carRentalReturn;
 	
 
 }

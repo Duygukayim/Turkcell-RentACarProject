@@ -1,7 +1,6 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,12 @@ import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
+import com.turkcell.rentACarProject.entities.concretes.City;
 
 @Service
 public class AdditionalServiseManager implements AdditionalServiceService {
@@ -38,73 +37,83 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 
 	@Override
 	public DataResult<List<ListAdditionalServiceDto>> getAll() {
+		
 		List<AdditionalService> result = additionalServiceDao.findAll();
-		List<ListAdditionalServiceDto> response = result.stream().map(
-				additionalService -> modelMapperService.forDto().map(additionalService, ListAdditionalServiceDto.class))
-				.collect(Collectors.toList());
+		List<ListAdditionalServiceDto> response = result.stream().map(additionalService -> modelMapperService.forDto().map(additionalService, ListAdditionalServiceDto.class)).collect(Collectors.toList());
+		
 		return new SuccessDataResult<List<ListAdditionalServiceDto>>(response);
 	}
+	
 
 	@Override
-	public DataResult<GetAdditionalServiceDto> getById(int id) {
+	public DataResult<GetAdditionalServiceDto> getById(int id) throws BusinessException {
+		
 		AdditionalService additionalService = additionalServiceDao.getById(id);
-		if (!checkIfAdditionalServiceId(additionalService.getId())) {
-			return new ErrorDataResult<GetAdditionalServiceDto>("AdditionalService.NotFound , Additional Service with this ID was not found!");
+		if(additionalService == null) {
+			return new ErrorDataResult<GetAdditionalServiceDto>("Additional Service with given ID not exists!");
 		}
-		GetAdditionalServiceDto response = modelMapperService.forDto().map(additionalService,
-				GetAdditionalServiceDto.class);
+		checkIfAdditionalServiceIdExists(additionalService.getId());
+		GetAdditionalServiceDto response = modelMapperService.forDto().map(additionalService, GetAdditionalServiceDto.class);
+		
 		return new SuccessDataResult<GetAdditionalServiceDto>(response, "Success");
 	}
+	
 
 	@Override
 	public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
-		AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest,
-				AdditionalService.class);
-		if (checkIfAdditionalServiceName(additionalService.getName())) {
-			return new ErrorResult("AdditionalService.NotAdded : " + additionalService.getName() + " , Additional Service already exists!");
-		}
-		if(checkIfCarDailyPriceLessThanZero(additionalService.getDailyPrice())) {
-			return new ErrorResult("AdditionalService.NotAdded : " + additionalService.getName() + " , Daily price cannot be less than or equal to 0.");
-		}
+		
+		AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest, AdditionalService.class);
+		checkIfAdditionalServiceNameExists(additionalService.getName());
+		checkIfCarDailyPriceLessThanZero(additionalService.getDailyPrice());
 		this.additionalServiceDao.save(additionalService);
+		
 		return new SuccessResult("AdditionalService.Added : " + additionalService.getName());
 	}
+	
 
 	@Override
 	public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
-		AdditionalService additionalService = this.modelMapperService.forRequest().map(deleteAdditionalServiceRequest,
-				AdditionalService.class);
-		if (checkIfAdditionalServiceId(additionalService.getId())) {
-			this.additionalServiceDao.deleteById(additionalService.getId());
-			return new SuccessResult("AdditionalService.Deleted : " + additionalService.getId());
-		}
-		return new ErrorResult("AdditionalService.NotDeleted : " + additionalService.getId() + " , Additional Service with given ID not exists!");
+		
+		AdditionalService additionalService = this.modelMapperService.forRequest().map(deleteAdditionalServiceRequest, AdditionalService.class);
+		checkIfAdditionalServiceIdExists(additionalService.getId());
+		this.additionalServiceDao.deleteById(additionalService.getId());
+			
+		return new SuccessResult("AdditionalService.Deleted : " + additionalService.getId());
 	}
+	
 
 	@Override
 	public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
-		AdditionalService additionalService = this.modelMapperService.forRequest().map(updateAdditionalServiceRequest,
-				AdditionalService.class);
-		if (checkIfAdditionalServiceId(additionalService.getId())) {
-			this.additionalServiceDao.save(additionalService);
-			return new SuccessResult("AdditionalService.Updated : " + additionalService.getName());
+		
+		AdditionalService additionalService = this.modelMapperService.forRequest().map(updateAdditionalServiceRequest, AdditionalService.class);
+		checkIfAdditionalServiceIdExists(additionalService.getId());
+		this.additionalServiceDao.save(additionalService);
+		
+		return new SuccessResult("AdditionalService.Updated : " + additionalService.getName());
+	}
+	
+
+	private void checkIfAdditionalServiceIdExists(int additionalServiceId) throws BusinessException {
+		
+		if(!this.additionalServiceDao.existsById(additionalServiceId)) {
+			throw new BusinessException("Additional Service with given ID not exists!");
 		}
-		return new ErrorResult("AdditionalService.NotUpdated : " + additionalService.getName() + " , Additional Service with given ID not exists!");
 	}
 
-	private boolean checkIfAdditionalServiceId(int additionalServiceId) {
-		return Objects.nonNull(additionalServiceDao.getAdditionalServiceById(additionalServiceId));
-	}
-
-	private boolean checkIfAdditionalServiceName(String additionalServiceName) {
-		return Objects.nonNull(additionalServiceDao.getAdditionalServiceByName(additionalServiceName));
-	}
-
-	private boolean checkIfCarDailyPriceLessThanZero(double dailyPrice) {
-		if (dailyPrice <= 0) {
+	private boolean checkIfAdditionalServiceNameExists(String additionalServiceName) throws BusinessException {
+		
+		AdditionalService additionalService = this.additionalServiceDao.getAdditionalServiceByName(additionalServiceName);
+		if (additionalService == null) {
 			return true;
 		}
-		return false;
+		throw new BusinessException("Additional Service already exists!");
+	}
+
+	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) throws BusinessException {
+		
+		if (dailyPrice <= 0) {
+			throw new BusinessException("Daily price cannot be less than or equal to 0.");
+		}
 	}
 
 }

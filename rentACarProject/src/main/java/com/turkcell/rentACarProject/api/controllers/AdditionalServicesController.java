@@ -32,33 +32,37 @@ public class AdditionalServicesController {
 
 	@Autowired
 	public AdditionalServicesController(AdditionalServiceService additionalServiceService) {
+		
 		this.additionalServiceService = additionalServiceService;
 	}
 	
 	@GetMapping("/getAll")
 	public DataResult<List<ListAdditionalServiceDto>> getAll() {
+		
 		return additionalServiceService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetAdditionalServiceDto> getById(@RequestParam int id) {
+	public DataResult<GetAdditionalServiceDto> getById(@RequestParam int id) throws BusinessException {
+		
 		return additionalServiceService.getById(id);
 	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody @Valid CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
+		
 		return this.additionalServiceService.add(createAdditionalServiceRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteAdditionalServiceRequest deleteAdditionalServiceRequest)
-			throws BusinessException {
+	public Result delete(@RequestBody @Valid DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
+		
 		return this.additionalServiceService.delete(deleteAdditionalServiceRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateAdditionalServiceRequest updateAdditionalServiceRequest)
-			throws BusinessException {
+	public Result update(@RequestBody @Valid UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
+		
 		return this.additionalServiceService.update(updateAdditionalServiceRequest);
 	}
 	

@@ -7,6 +7,11 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import org.springframework.lang.Nullable;
+
+import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
+import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,11 +32,15 @@ public class CreateCarRentalRequest {
 	@Positive
     private int customerId;
 
-	@NotNull
-    private List<Integer> additionalServiceIds;
+	@Nullable
+    private List<ListOrderedAdditionalServiceDto> orderedAdditionalServiceIds;
 	
 	@NotNull
 	@Positive
-	private int cityId; 
+	private int RentCityId; 
+	
+	@NotNull
+	@Positive
+	private int ReturnCityId; 
 	
 }

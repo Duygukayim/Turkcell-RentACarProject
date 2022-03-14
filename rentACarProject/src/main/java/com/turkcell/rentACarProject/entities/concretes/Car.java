@@ -46,15 +46,12 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
+
 	
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private City currentCity;
-	
-//	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "car")
 //	private List<CarMaintenance> carMaintenances;
 //	
-//	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "car")
 //	private List<CarRental> carRentals; 
 
 }

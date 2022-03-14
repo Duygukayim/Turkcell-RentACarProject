@@ -3,8 +3,10 @@ package com.turkcell.rentACarProject.entities.concretes;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,15 +44,19 @@ public class CarRental {
     @JoinColumn(name = "car_id")
     private Car carId;
     
-    @Column(name="total_daily_price")
-    private int totalDailyPrice;
+    @Column(name="daily_price")
+    private double dailyPrice;
     
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "rent_city_id")
+    private City rentCity;
+    
+    @ManyToOne
+    @JoinColumn(name = "return_city_id")
     private City returnCity;
 
-    @OneToMany
-    @JoinColumn(name = "car_rental")
+    @OneToMany(mappedBy = "carRental")
     private List<OrderedAdditionalService> orderedAdditionalServices;
+    
     
 }

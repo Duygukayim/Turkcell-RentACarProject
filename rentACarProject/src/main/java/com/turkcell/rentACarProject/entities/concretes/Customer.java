@@ -32,7 +32,7 @@ public class Customer {
 	@Column(name = "last_name")
     private String lastName;
 	
-    @OneToMany(mappedBy = "additionalService")
-    private List<OrderedAdditionalService> orderedAdditionalServices;
+	@OneToMany(mappedBy = "customer")
+	private List<CarRental> CarRentals;
     
 }

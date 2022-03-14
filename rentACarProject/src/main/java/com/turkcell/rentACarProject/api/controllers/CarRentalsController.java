@@ -32,33 +32,37 @@ public class CarRentalsController {
 	
 	@Autowired
 	public CarRentalsController(CarRentalService carRentalService) {
+		
 		this.carRentalService = carRentalService;
 	}
 	
 	@GetMapping("/getAll")
 	public DataResult<List<ListCarRentalDto>> getAll() {
+		
 		return carRentalService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCarRentalDto> getById(@RequestParam int id) {
+	public DataResult<GetCarRentalDto> getById(@RequestParam int id) throws BusinessException {
+		
 		return carRentalService.getById(id);
 	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody @Valid CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
+		
 		return this.carRentalService.add(createCarRentalRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarRentalRequest deleteCarRentalRequest)
-			throws BusinessException {
+	public Result delete(@RequestBody @Valid DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException {
+		
 		return this.carRentalService.delete(deleteCarRentalRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCarRentalRequest updateCarRentalRequest)
-			throws BusinessException {
+	public Result update(@RequestBody @Valid UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException {
+		
 		return this.carRentalService.update(updateCarRentalRequest);
 	}
 

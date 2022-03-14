@@ -38,26 +38,31 @@ public class ColorsController {
 
 	@GetMapping("/getAll")
 	public DataResult<List<ListColorDto>> getAll() {
+		
 		return colorService.getAll();
 	}
 
 	@GetMapping("/getById")
 	public DataResult<GetColorDto> get(@RequestParam int id) throws BusinessException {
+		
 		return colorService.getById(id);
 	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) throws BusinessException {
+		
 		return colorService.add(createColorRequest);
 	}
 
 	@DeleteMapping("/delete")
 	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) throws BusinessException {
+		
 		return colorService.delete(deleteColorRequest);
 	}
 
 	@PutMapping("/update")
 	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) throws BusinessException {
+		
 		return colorService.update(updateColorRequest);
 	}
 
