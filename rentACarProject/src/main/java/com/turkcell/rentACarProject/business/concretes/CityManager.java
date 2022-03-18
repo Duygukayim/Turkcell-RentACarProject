@@ -15,7 +15,6 @@ import com.turkcell.rentACarProject.business.requests.city.UpdateCityRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -47,9 +46,6 @@ public class CityManager implements CityService {
 	public DataResult<GetCityDto> getById(int id) throws BusinessException {
 		
 		City city = cityDao.getById(id);
-		if(city == null) {
-			return new ErrorDataResult<GetCityDto>("A city with this ID was not found!");
-		}
 		checkIfCityIdExists(city.getId());
 		GetCityDto response = modelMapperService.forDto().map(city, GetCityDto.class);
 		

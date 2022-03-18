@@ -9,27 +9,29 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "user_id")
+	private int userId;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 }

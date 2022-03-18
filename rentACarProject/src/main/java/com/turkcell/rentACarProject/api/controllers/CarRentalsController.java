@@ -48,10 +48,16 @@ public class CarRentalsController {
 		return carRentalService.getById(id);
 	}
 
-	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
+	@PostMapping("/createCorporateCustomer")
+	Result createCorporateCustomer(@RequestBody @Valid CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
 		
-		return this.carRentalService.add(createCarRentalRequest);
+		return this.carRentalService.createForCorporateCustomer(createCarRentalRequest);
+	}
+	
+	@PostMapping("/createIndividualCustomer")
+	Result createIndividualCustomer(@RequestBody @Valid CreateCarRentalRequest createRentalRequest) throws BusinessException {
+		
+		return this.carRentalService.createForIndividualCustomer(createRentalRequest);
 	}
 
 	@DeleteMapping("/delete")

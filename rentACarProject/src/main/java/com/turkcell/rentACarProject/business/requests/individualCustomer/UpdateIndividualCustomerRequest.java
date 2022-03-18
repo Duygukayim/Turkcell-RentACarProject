@@ -35,6 +35,6 @@ public class UpdateIndividualCustomerRequest {
 
     @NotNull
     @Size(min=2,max=20)
-    private String nationalIdentity;
+    private String identityNumber;
 
 }

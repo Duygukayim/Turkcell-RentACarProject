@@ -1,7 +1,6 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.get.GetColorDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
@@ -22,14 +19,12 @@ import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.BrandDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.ColorDao;
-import com.turkcell.rentACarProject.entities.concretes.Brand;
 import com.turkcell.rentACarProject.entities.concretes.Car;
 
 @Service
@@ -61,9 +56,6 @@ public class CarManager implements CarService {
 	public DataResult<GetCarDto> getById(int id) throws BusinessException {
 		
 		Car car = carDao.getById(id);
-			if (car == null) {
-				return new ErrorDataResult<GetCarDto>("A car with this ID was not found!");
-			}
 		checkCarIdExists(car.getId());
 		GetCarDto response = modelMapperService.forDto().map(car, GetCarDto.class);
 		
@@ -71,7 +63,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public Result add(CreateCarRequest createCarRequest) throws BusinessException {
+	public Result add(CreateCarRequest createCarRequest) {
 		
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
@@ -87,7 +79,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException {
+	public Result delete(DeleteCarRequest deleteCarRequest) {
 		
 		Car car = this.modelMapperService.forRequest().map(deleteCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
@@ -100,7 +92,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public Result update(UpdateCarRequest updateCarRequest) throws BusinessException {
+	public Result update(UpdateCarRequest updateCarRequest) {
 		
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
@@ -146,30 +138,35 @@ public class CarManager implements CarService {
 	}
 
 	private void checkCarIdExists(int carId) throws BusinessException {
+		
 		if(!this.carDao.existsById(carId)) {
 			throw new BusinessException("A car with this ID was not found!");
 		}
 	}
 
 	private void checkIfBrandIdExists(int brandId) throws BusinessException {
+		
 		if(!this.brandDao.existsById(brandId)) {
 			throw new BusinessException("A brand with this ID was not found!");
 		}
 	}
 
 	private void checkIfColorIdExists(int colorId) throws BusinessException {
+		
 		if(!this.colorDao.existsById(colorId)) {
 			throw new BusinessException("A color with this ID was not found!");
 		}
 	}
 
 	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) throws BusinessException {
+		
 		if (dailyPrice <= 0) {
 			throw new BusinessException("Daily rental price cannot be less than or equal to 0.");
 		}
 	}
 
 	private void checkIfCarExists(Car car) throws BusinessException {
+		
 		if (carDao.existsByDailyPrice(car.getDailyPrice()) && carDao.existsByModelYear(car.getModelYear())
 				&& carDao.existsByDescription(car.getDescription()) && carDao.existsByBrand_Id(car.getBrand().getId())
 				&& carDao.existsByColor_Id(car.getColor().getId())) {

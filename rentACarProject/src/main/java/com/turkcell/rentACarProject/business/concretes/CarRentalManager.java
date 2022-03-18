@@ -1,5 +1,6 @@
 package com.turkcell.rentACarProject.business.concretes;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,6 @@ import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalR
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -58,21 +58,17 @@ public class CarRentalManager implements CarRentalService {
 		
 		List<CarRental> result = carRentalDao.findAll();
 		List<ListCarRentalDto> response = result.stream().map(carRental -> modelMapperService.forDto().map(carRental, ListCarRentalDto.class)).collect(Collectors.toList());
-		result.get(0).getOrderedAdditionalServices();
-		System.out.println(result.get(0).getOrderedAdditionalServices());
 		
-		return new SuccessDataResult<List<ListCarRentalDto>>(response);
+		return new SuccessDataResult<List<ListCarRentalDto>>(response, "Success");
 	}
 
 	@Override
 	public DataResult<GetCarRentalDto> getById(int id) throws BusinessException {
 		
 		CarRental carRental = carRentalDao.getById(id);
-			if(carRental == null) {
-				return new ErrorDataResult<GetCarRentalDto>("CarRental.NotFound , Rental with this ID was not found!");
-			}
 		checkCarRentalIdExists(carRental.getId());
 		GetCarRentalDto response = modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
+		
 		return new SuccessDataResult<GetCarRentalDto>(response, "Success");
 	}
 	
@@ -80,24 +76,35 @@ public class CarRentalManager implements CarRentalService {
 	public DataResult<List<GetCarRentalDto>> getByCarId(int id) {
 		
 		Car car = this.carDao.getById(id);
-		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(car);
+		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(car.getId());
 		List<GetCarRentalDto> response = result.stream().map(rental -> this.modelMapperService.forDto().map(rental, GetCarRentalDto.class)).collect(Collectors.toList());
 		
 		return new SuccessDataResult<List<GetCarRentalDto>>(response , "Success");
 	}
 
 	@Override
-	public Result add(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
+	public Result createForCorporateCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
 		
 		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
-		checkIfCarIdExists(carRental.getCarId().getId());
-		checkUnderMaintenance(carRental);
+		checkIfCarIdExists(carRental.getCar().getId());
 		checkIfCityIdExists(carRental.getRentCity().getId());
 		checkIfCityIdExists(carRental.getReturnCity().getId());
-		this.orderedAdditionalServiceService.add(createCarRentalRequest.getOrderedAdditionalServiceIds() , carRental.getId());
-        carRental.setOrderedAdditionalServices(this.orderedAdditionalServiceService.getByCarRentalId(carRental.getId()));
+		checkUnderMaintenance(carRental);
 		this.carRentalDao.save(carRental);
+
+		return new SuccessResult("CarRental.Added");
+	}
+	
+	@Override
+	public Result createForIndividualCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
 		
+		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
+		checkIfCarIdExists(carRental.getCar().getId());
+		checkIfCityIdExists(carRental.getRentCity().getId());
+		checkIfCityIdExists(carRental.getReturnCity().getId());
+		checkUnderMaintenance(carRental);
+		this.carRentalDao.save(carRental);
+
 		return new SuccessResult("CarRental.Added");
 	}
 
@@ -134,13 +141,6 @@ public class CarRentalManager implements CarRentalService {
 		}
 	}
 	
-	private void checkIfAdditionalServiceIdExists(int additionalServiceId) throws BusinessException {
-		if(!this.additionalServiceDao.existsById(additionalServiceId)) {
-			throw new BusinessException("Additional Service with this ID was not found!");
-		}
-	}
-	
-	
 	private void checkIfCityIdExists(int cityId) throws BusinessException {
 		
 		if(!this.cityDao.existsById(cityId)) {
@@ -148,22 +148,31 @@ public class CarRentalManager implements CarRentalService {
 		}
 	}
 	
-	private void calculateTotalDailyPrice(int carRentalId) {
+	private double calculateTotalDailyPrice(int carRentalId) {
 		
+		double totalPrice = 0;
 		CarRental carRental = this.carRentalDao.getById(carRentalId);
-		double totalPrice = carRental.getDailyPrice();
+		totalPrice = carRental.getDailyPrice();
 		
 		for (OrderedAdditionalService carRentedService : carRental.getOrderedAdditionalServices()) {
-			totalPrice += carRentedService.getAdditionalService().getDailyPrice();
+			totalPrice += carRentedService.getAdditionalService().getDailyPrice()+ carRentedService.getQuantity();
 		}
-		if (carRental.getRentCity() != carRental.getReturnCity()) {
-			totalPrice += 750;
+		long days = ChronoUnit.DAYS.between(carRental.getRentDate(), carRental.getReturnDate());
+		
+		if(days == 0) {
+			days = 1;
+		
+			totalPrice = days * totalPrice;
 		}
-		carRental.setDailyPrice(totalPrice);
+		if (carRental.getRentCity().getId() != carRental.getReturnCity().getId()) {
+				totalPrice += 750;
+		}
+		return totalPrice;
 	}
 
 	private void checkUnderMaintenance(CarRental carRental) throws BusinessException {
-		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(carRental.getCarId());
+		
+		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(carRental.getCar().getId());
 		if (result != null) {
 			for (CarMaintenance carMaintenance : result) {
 				if (carMaintenance.getReturnDate() != null) {
@@ -172,5 +181,6 @@ public class CarRentalManager implements CarRentalService {
 			}
 		}
 	}
+
 
 }

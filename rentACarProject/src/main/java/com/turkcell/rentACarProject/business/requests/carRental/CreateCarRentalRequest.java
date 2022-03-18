@@ -10,7 +10,6 @@ import javax.validation.constraints.Positive;
 import org.springframework.lang.Nullable;
 
 import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
-import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +23,8 @@ public class CreateCarRentalRequest {
 	@NotNull
 	@Positive
 	private int carId;
+	
+    private LocalDate rentDate;
 	
 	@FutureOrPresent
     private LocalDate returnDate;

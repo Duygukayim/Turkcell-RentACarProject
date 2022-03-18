@@ -15,7 +15,6 @@ import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -47,9 +46,6 @@ public class BrandManager implements BrandService {
 	public DataResult<GetBrandDto> getById(int id) throws BusinessException {
 		
 		Brand brand = this.brandDao.getById(id);
-		if (brand == null) {
-			return new ErrorDataResult<GetBrandDto>("A brand with this ID was not found!");
-		}
 		checkIfBrandIdExists(brand.getId());
 		GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
 		
@@ -58,7 +54,7 @@ public class BrandManager implements BrandService {
 
 
 	@Override
-	public Result add(CreateBrandRequest createBrandRequest) throws BusinessException {
+	public Result add(CreateBrandRequest createBrandRequest) {
 		
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		checkIfBrandNameExists(brand.getName());
@@ -69,7 +65,7 @@ public class BrandManager implements BrandService {
 
 
 	@Override
-	public Result delete(DeleteBrandRequest deleteBrandRequest) throws BusinessException {
+	public Result delete(DeleteBrandRequest deleteBrandRequest) {
 		
 		Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
 		checkIfBrandIdExists(brand.getId());
@@ -79,7 +75,7 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public Result update(UpdateBrandRequest updateBrandRequest) throws BusinessException {
+	public Result update(UpdateBrandRequest updateBrandRequest) {
 		
 		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		checkIfBrandIdExists(brand.getId());

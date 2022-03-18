@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetCorporateCustomerDto {
+	
+	private int id;
 
 	private String email;
 	

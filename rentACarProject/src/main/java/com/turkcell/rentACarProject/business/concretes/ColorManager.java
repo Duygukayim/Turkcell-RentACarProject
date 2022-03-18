@@ -15,7 +15,6 @@ import com.turkcell.rentACarProject.business.requests.color.UpdateColorRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -47,9 +46,6 @@ public class ColorManager implements ColorService {
 	public DataResult<GetColorDto> getById(int id) throws BusinessException {
 		
 		Color color = colorDao.getById(id);
-		if (color == null) {
-			return new ErrorDataResult<GetColorDto>("A color with this ID was not found!");
-		}
 		checkIfColorIdExists(color.getId());
 		GetColorDto response = modelMapperService.forDto().map(color, GetColorDto.class);
 		

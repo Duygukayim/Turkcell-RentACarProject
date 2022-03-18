@@ -1,14 +1,19 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
 import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
+import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
+import com.turkcell.rentACarProject.core.utilities.results.DataResult;
+import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
+import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.OrderedAdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
@@ -16,43 +21,36 @@ import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 public class OrderedAdditionalServiceManager implements OrderedAdditionalServiceService {
 
 	private OrderedAdditionalServiceDao orderedAdditionalServiceDao;
-	private CarRentalDao carRentalDao;
 	private ModelMapperService modelMapperService;
 
 	@Autowired
-	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, CarRentalDao carRentalDao, ModelMapperService modelMapperService) {
+	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, ModelMapperService modelMapperService) {
 		this.orderedAdditionalServiceDao = orderedAdditionalServiceDao;
-		this.carRentalDao = carRentalDao;
 		this.modelMapperService = modelMapperService;
 	}
 
 	
 	
 	@Override
-	public void add(List<ListOrderedAdditionalServiceDto> orderedAdditionalServiceIds, int carRentalId) {
+	public Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest) {
 		
-		for (ListOrderedAdditionalServiceDto requests : orderedAdditionalServiceIds) {
-            OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest().map(requests, OrderedAdditionalService.class);
-            orderedAdditionalService.setCarRental(carRentalDao.getCarRentalById(carRentalId));
+            OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest().map(createOrderedAdditionalServiceRequest, OrderedAdditionalService.class);
+            orderedAdditionalService.setId(0);
             this.orderedAdditionalServiceDao.save(orderedAdditionalService);
-        }
-	}
-	
-	
-	@Override
-    public List<OrderedAdditionalService> getByCarRentalId(int carRentalId) {
-        return this.orderedAdditionalServiceDao.findByCarRental_Id(carRentalId);
-    }
+            
+            return new SuccessResult("OrderedAdditionalService.Added");    
 
-	@Override
-	public Double calculateTotalPriceOfAdditionalServices(List<OrderedAdditionalService> orderedAdditionalServices) {
-		
-		double price = 0 ;
-		for (OrderedAdditionalService orderedAdditionalService : orderedAdditionalServices) {
-			price += orderedAdditionalService.getAdditionalService().getDailyPrice()*orderedAdditionalService.getQuantity();
-		}
-		return price;
 	}
 
 	
+	@Override
+	public DataResult<List<ListOrderedAdditionalServiceDto>> getByCarRentalId(int carRentalId) {
+		List<OrderedAdditionalService> orderedAdditionalServiceList = this.orderedAdditionalServiceDao.getByCarRentalId(carRentalId);
+		List<ListOrderedAdditionalServiceDto> response = orderedAdditionalServiceList.stream().map(
+				orderedAdditionalService -> modelMapperService.forDto().map(orderedAdditionalService, ListOrderedAdditionalServiceDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<ListOrderedAdditionalServiceDto>>(response);
+	}
+
 }

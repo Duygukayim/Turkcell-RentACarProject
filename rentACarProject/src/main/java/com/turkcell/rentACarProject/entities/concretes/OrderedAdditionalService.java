@@ -2,7 +2,6 @@ package com.turkcell.rentACarProject.entities.concretes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ordered_additional_services")
+@Table(name = "additional_services")
 @Entity
 public class OrderedAdditionalService {
 
@@ -33,7 +32,7 @@ public class OrderedAdditionalService {
     @Column(name = "quantity")
     private int quantity;
     
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name="car_rental_id")
     private CarRental carRental;
 	

@@ -23,17 +23,17 @@ public class City {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="city_id")
+	@Column(name="id", nullable = false)
 	private int id;
 	
-	@Column(name="city_name")
+	@Column(name="name")
 	private String name;
 	
 	@OneToMany(mappedBy = "rentCity")
-	private List<CarRental> carRentalRent;
+	private List<CarRental> rentCity;
 	
 	@OneToMany(mappedBy = "returnCity")
-	private List<CarRental> carRentalReturn;
+	private List<CarRental> returnCity;
 	
 
 }

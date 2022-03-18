@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListCorporateCustomerDto {
 	
+	private int id;
+	
 	private String email;
 	
 	private String companyName;

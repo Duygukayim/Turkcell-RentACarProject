@@ -14,13 +14,13 @@ public class ListCarRentalDto {
 
 	private int id;
 	
+	private LocalDate rentDate;
+	
     private LocalDate returnDate;
     
     private int customerId;
     
     private int carId;
-    
-    private List<ListOrderedAdditionalServiceDto> additionalServiceId;
 
 	private int RentCityId; 
 

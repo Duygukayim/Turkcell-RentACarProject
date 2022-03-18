@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetIndividualCustomerDto {
+	
+	private int id;
 
 	private String email;
 
@@ -15,6 +17,6 @@ public class GetIndividualCustomerDto {
 
 	private String lastName;
 
-	private String nationalIdentity;
+	private String identityNumber;
 
 }

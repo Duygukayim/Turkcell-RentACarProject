@@ -36,8 +36,5 @@ public class CreateCarRequest {
     @Positive
 	private int colorId;
 	
-	@NotNull
-	@Positive
-	private int cityId; 
 
 }

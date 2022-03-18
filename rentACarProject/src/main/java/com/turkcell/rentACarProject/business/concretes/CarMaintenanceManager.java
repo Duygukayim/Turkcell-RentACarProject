@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarMaintenanceService;
@@ -15,7 +16,6 @@ import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMa
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -35,7 +35,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	private ModelMapperService modelMapperService;
 
 	@Autowired
-	public CarMaintenanceManager(CarDao carDao, CarRentalDao carRentalDao, CarMaintenanceDao carMaintenanceDao,
+	public CarMaintenanceManager(CarDao carDao, @Lazy CarRentalDao carRentalDao, CarMaintenanceDao carMaintenanceDao,
 			ModelMapperService modelMapperService) {
 		this.carDao = carDao;
 		this.carRentalDao = carRentalDao;
@@ -56,9 +56,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	public DataResult<GetCarMaintenanceDto> getById(int id) throws BusinessException {
 		
 		CarMaintenance carMaintenance = carMaintenanceDao.getById(id);
-			if (carMaintenance == null) {
-				return new ErrorDataResult<GetCarMaintenanceDto>("A color with this ID was not found!");
-			}
 		checkCarMaintenanceIdExists(carMaintenance.getId());
 		GetCarMaintenanceDto response = modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class);
 		
@@ -70,7 +67,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	public DataResult<List<GetCarMaintenanceDto>> getByCarId(int id) {
 		
 		Car car = this.carDao.getById(id);
-		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(car);
+		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(car.getId());
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> this.modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 		
 		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, "Success");
@@ -81,7 +78,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(createCarMaintenanceRequest, CarMaintenance.class);
 		carMaintenance.setId(0);
-		checkIfCarExists(carMaintenance.getCarId().getId());
+		checkIfCarExists(carMaintenance.getCar().getId());
 		checkIsRented(carMaintenance);
 		this.carMaintenanceDao.save(carMaintenance);
 		
@@ -127,7 +124,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	private void checkIsRented(CarMaintenance carMaintenance) throws BusinessException {
 		
-		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(carMaintenance.getCarId());
+		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(carMaintenance.getCar().getId());
 		if (result != null) {
 			for (CarRental rental : result) {
 				if (rental.getReturnDate() != null) {

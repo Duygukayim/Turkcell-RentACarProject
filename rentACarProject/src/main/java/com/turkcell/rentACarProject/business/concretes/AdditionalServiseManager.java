@@ -15,13 +15,11 @@ import com.turkcell.rentACarProject.business.requests.additionalService.UpdateAd
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
-import com.turkcell.rentACarProject.entities.concretes.City;
 
 @Service
 public class AdditionalServiseManager implements AdditionalServiceService {
@@ -49,9 +47,6 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 	public DataResult<GetAdditionalServiceDto> getById(int id) throws BusinessException {
 		
 		AdditionalService additionalService = additionalServiceDao.getById(id);
-		if(additionalService == null) {
-			return new ErrorDataResult<GetAdditionalServiceDto>("Additional Service with given ID not exists!");
-		}
 		checkIfAdditionalServiceIdExists(additionalService.getId());
 		GetAdditionalServiceDto response = modelMapperService.forDto().map(additionalService, GetAdditionalServiceDto.class);
 		
@@ -92,7 +87,6 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		return new SuccessResult("AdditionalService.Updated : " + additionalService.getName());
 	}
 	
-
 	private void checkIfAdditionalServiceIdExists(int additionalServiceId) throws BusinessException {
 		
 		if(!this.additionalServiceDao.existsById(additionalServiceId)) {

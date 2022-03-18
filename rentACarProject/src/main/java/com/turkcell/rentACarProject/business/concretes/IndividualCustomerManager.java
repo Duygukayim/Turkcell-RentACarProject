@@ -15,7 +15,6 @@ import com.turkcell.rentACarProject.business.requests.individualCustomer.UpdateI
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.ErrorDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
@@ -37,8 +36,9 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public DataResult<List<ListIndividualCustomerDto>> getAll() {
-		List<IndividualCustomer> result = individualCustomerDao.findAll();
-        List<ListIndividualCustomerDto> response = result.stream().map(individualCustomer -> modelMapperService.forDto().map(individualCustomer, ListIndividualCustomerDto.class)).collect(Collectors.toList());
+		
+		List<IndividualCustomer> result = this.individualCustomerDao.findAll();
+        List<ListIndividualCustomerDto> response = result.stream().map(individualCustomer -> this.modelMapperService.forDto().map(individualCustomer, ListIndividualCustomerDto.class)).collect(Collectors.toList());
         
         return new SuccessDataResult<List<ListIndividualCustomerDto>>(response);
 	}
@@ -46,13 +46,9 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public DataResult<GetIndividualCustomerDto> getById(int id) throws BusinessException {
 		
-		IndividualCustomer individualCustomer = individualCustomerDao.getById(id);
-		
-			if (individualCustomer == null) {
-				return new ErrorDataResult<GetIndividualCustomerDto>("Individual Customer with this ID was not found!");
-			}
-		checkIfIndividualCustomerIdExists(individualCustomer.getId());
-		GetIndividualCustomerDto response = modelMapperService.forDto().map(individualCustomer, GetIndividualCustomerDto.class);
+		IndividualCustomer individualCustomer = this.individualCustomerDao.getById(id);
+		checkIfIndividualCustomerIdExists(individualCustomer.getUserId());
+		GetIndividualCustomerDto response = this.modelMapperService.forDto().map(individualCustomer, GetIndividualCustomerDto.class);
 
 		return new SuccessDataResult<GetIndividualCustomerDto>(response, "Success");
 	}
@@ -63,26 +59,27 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
 		this.individualCustomerDao.save(individualCustomer);
 		
-		return new SuccessResult("IndividualCustomer.Added : " + individualCustomer.getFirstName() + individualCustomer.getLastName());
+		return new SuccessResult("IndividualCustomer.Added : " + individualCustomer.getFirstName() + " " + individualCustomer.getLastName());
 	}
 
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
+		
 		IndividualCustomer individualCustomer = individualCustomerDao.getById(deleteIndividualCustomerRequest.getUserId());
-		checkIfIndividualCustomerIdExists(individualCustomer.getId());
+		checkIfIndividualCustomerIdExists(individualCustomer.getUserId());
 		this.individualCustomerDao.delete(individualCustomer);
 		
-		return new SuccessResult("IndividualCustomer.Deleted : " + individualCustomer.getFirstName() + individualCustomer.getLastName());
+		return new SuccessResult("IndividualCustomer.Deleted : " + individualCustomer.getFirstName() + " " + individualCustomer.getLastName());
 	}
 
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
+		
 		IndividualCustomer individualCustomer = individualCustomerDao.getById(updateIndividualCustomerRequest.getUserId());
-
-		checkIfIndividualCustomerIdExists(individualCustomer.getId());
+		checkIfIndividualCustomerIdExists(individualCustomer.getUserId());
 		this.individualCustomerDao.save(individualCustomer);
 		
-		return new SuccessResult("IndividualCustomer.Updated : " + individualCustomer.getFirstName() + individualCustomer.getLastName());
+		return new SuccessResult("IndividualCustomer.Updated : " + individualCustomer.getFirstName() + " " + individualCustomer.getLastName());
 	}
 	
 

@@ -20,7 +20,5 @@ public class GetCarDto {
 	private String brandName;
 	
 	private String colorName;
-	
-    private int cityId;
 
 }

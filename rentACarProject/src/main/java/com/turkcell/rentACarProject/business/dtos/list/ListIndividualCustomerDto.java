@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListIndividualCustomerDto {
 	
+	private int id;
+	
 	private String email;
 
 	private String firstName;
 
 	private String lastName;
 
-	private String nationalIdentity;
+	private String identityNumber;
 
 }

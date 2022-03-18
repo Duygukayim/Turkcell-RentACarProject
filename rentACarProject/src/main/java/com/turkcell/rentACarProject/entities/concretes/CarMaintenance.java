@@ -33,8 +33,8 @@ public class CarMaintenance {
 	@Column(name = "return_date")
 	private LocalDate returnDate;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "car_id")
-	private Car carId;
+	private Car car;
 
 }
