@@ -14,4 +14,6 @@ public interface OrderedAdditionalServiceService {
 
 	DataResult<List<ListOrderedAdditionalServiceDto>> getByCarRentalId(int carRentalId);
 
+	void checkIfCarRentalIdExists(int carRentalId);
+
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
 import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
+import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
@@ -52,5 +53,12 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
 		return new SuccessDataResult<List<ListOrderedAdditionalServiceDto>>(response);
 	}
-
+	
+	@Override
+	public void checkIfCarRentalIdExists(int carRentalId) {
+		if (!this.orderedAdditionalServiceDao.existsByCarRental_CarRentId(carRentalId)) {
+			throw new BusinessException("There is no rental car available at OrderedAdditionalService.");
+		}
+	}
+	
 }

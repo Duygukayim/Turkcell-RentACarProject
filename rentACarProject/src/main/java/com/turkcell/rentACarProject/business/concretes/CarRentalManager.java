@@ -124,6 +124,8 @@ public class CarRentalManager implements CarRentalService {
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalRequest, CarRental.class);
 		checkCarRentalIdExists(carRental.getId());
 		checkUnderMaintenance(carRental);
+		updateOperation(carRental, updateCarRentalRequest);
+		carRental.getCar().setKilometerInfo(updateCarRentalRequest.getReturnKilometer());
 		this.carRentalDao.save(carRental);
 		
 		return new SuccessResult("CarRental.Updated");
@@ -148,27 +150,6 @@ public class CarRentalManager implements CarRentalService {
 		}
 	}
 	
-	private double calculateTotalDailyPrice(int carRentalId) {
-		
-		double totalPrice = 0;
-		CarRental carRental = this.carRentalDao.getById(carRentalId);
-		totalPrice = carRental.getDailyPrice();
-		
-		for (OrderedAdditionalService carRentedService : carRental.getOrderedAdditionalServices()) {
-			totalPrice += carRentedService.getAdditionalService().getDailyPrice()+ carRentedService.getQuantity();
-		}
-		long days = ChronoUnit.DAYS.between(carRental.getRentDate(), carRental.getReturnDate());
-		
-		if(days == 0) {
-			days = 1;
-		
-			totalPrice = days * totalPrice;
-		}
-		if (carRental.getRentCity().getId() != carRental.getReturnCity().getId()) {
-				totalPrice += 750;
-		}
-		return totalPrice;
-	}
 
 	private void checkUnderMaintenance(CarRental carRental) throws BusinessException {
 		
@@ -180,6 +161,44 @@ public class CarRentalManager implements CarRentalService {
 				}
 			}
 		}
+	}
+	
+	private void updateOperation(CarRental carRental, UpdateCarRentalRequest updateCarRentalRequest) {
+		
+		carRental.setReturnDate(updateCarRentalRequest.getReturnDate());
+		carRental.setReturnKilometer(updateCarRentalRequest.getReturnKilometer());	
+	}
+
+	@Override
+	public DataResult<CarRental> getCarRentalByRentalId(int id) {
+		
+		return new SuccessDataResult<CarRental>(this.carRentalDao.getById(id));
+	}
+
+	@Override
+	public double calculateRentalTotalPrice(int carRentalId) {
+		
+		double totalPrice = 0;
+		
+		CarRental carRental = this.carRentalDao.getById(carRentalId);
+		totalPrice = carRental.getDailyPrice();
+		
+		for (OrderedAdditionalService carRentedService : carRental.getOrderedAdditionalServices()) {
+			totalPrice += carRentedService.getAdditionalService().getDailyPrice() * carRentedService.getQuantity();
+		}
+		
+		long days = ChronoUnit.DAYS.between(carRental.getRentDate(), carRental.getReturnDate());
+		
+		if(days == 0) {
+			days = 1;
+		
+			totalPrice = days * totalPrice;
+		}
+		
+		if (carRental.getRentCity().getId() != carRental.getReturnCity().getId()) {
+				totalPrice += 750;
+		}
+		return totalPrice;
 	}
 
 

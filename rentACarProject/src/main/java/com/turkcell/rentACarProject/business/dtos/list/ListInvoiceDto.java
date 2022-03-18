@@ -1,9 +1,6 @@
 package com.turkcell.rentACarProject.business.dtos.list;
 
 import java.time.LocalDate;
-import java.util.List;
-
-import javax.persistence.Column;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,24 +9,24 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListCarRentalDto {
-
+public class ListInvoiceDto {
+	
 	private int id;
 	
-	private LocalDate rentDate;
-	
-    private LocalDate returnDate;
-    
-    private double startingKilometer;
+    private int invoiceNumber;
 
-    private double returnKilometer;
+	private LocalDate createDate;
+
+    private LocalDate rentDate;
+
+    private LocalDate returnDate;
+
+	private int totalDays;
+
+	private double rentTotalPrice;
     
     private int customerId;
     
-    private int carId;
+    private int carRentalId;
 
-	private int RentCityId; 
-
-	private int ReturnCityId; 
-    
 }

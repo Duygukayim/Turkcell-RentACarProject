@@ -173,5 +173,13 @@ public class CarManager implements CarService {
 			throw new BusinessException("Car already exists!");
 		}
 	}
+	
+	@Override
+    public void setOperationForKilometer(int carId, double kilometer) throws BusinessException {
+
+        Car car = this.carDao.getById(carId);
+        car.setKilometerInfo(kilometer);
+        this.carDao.save(car);
+    }
 
 }

@@ -3,6 +3,8 @@ package com.turkcell.rentACarProject.business.dtos.get;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +21,10 @@ public class GetCarRentalDto {
 	private LocalDate rentDate;
 	
     private LocalDate returnDate;
+    
+    private double startingKilometer;
+
+    private double returnKilometer;
     
     private int customerId;
     

@@ -46,6 +46,9 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
+	
+	@Column(name = "kilometer_info")
+	private double kilometerInfo;
 
 	@OneToMany(mappedBy = "car")
 	private List<CarMaintenance> carMaintenances;

@@ -43,7 +43,7 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public DataResult<GetBrandDto> getById(int id) throws BusinessException {
+	public DataResult<GetBrandDto> getById(int id) {
 		
 		Brand brand = this.brandDao.getById(id);
 		checkIfBrandIdExists(brand.getId());
@@ -86,7 +86,7 @@ public class BrandManager implements BrandService {
 		
 	}
 
-	private boolean checkIfBrandNameExists(String brandName) throws BusinessException {
+	private boolean checkIfBrandNameExists(String brandName) {
 		
 		Brand brand = this.brandDao.getBrandByName(brandName);
 		if (brand == null) {
@@ -95,7 +95,7 @@ public class BrandManager implements BrandService {
 		throw new BusinessException("Brand already exists!");
 	}
 
-	private void checkIfBrandIdExists(int brandId) throws BusinessException {
+	private void checkIfBrandIdExists(int brandId) {
 		
 		if(!this.brandDao.existsById(brandId)) {
 			throw new BusinessException("A brand with this ID was not found!");

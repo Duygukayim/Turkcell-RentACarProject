@@ -90,4 +90,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		}
 	}
 
+	@Override
+	public DataResult<IndividualCustomer> getIndividualCustomerByIndividualCustomerId(int userId) {
+		return new SuccessDataResult<IndividualCustomer>(this.individualCustomerDao.getById(userId));
+	}
 }

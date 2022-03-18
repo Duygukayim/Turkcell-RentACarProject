@@ -29,6 +29,9 @@ public class UpdateCarRequest {
 	@Max(2022)
 	private double modelYear;
 	
+	@NotNull
+	private double kilometerInfo;
+	
 	@Size(min = 2, max = 100)
 	private String description;
 	

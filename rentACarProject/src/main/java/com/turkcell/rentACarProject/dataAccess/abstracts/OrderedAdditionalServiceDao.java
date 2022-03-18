@@ -13,6 +13,8 @@ public interface OrderedAdditionalServiceDao extends JpaRepository<OrderedAdditi
 	List<OrderedAdditionalService> findByCarRental_Id(int carRentalId);
 
 	List<OrderedAdditionalService> getByCarRentalId(int carRentalId);
+
+	boolean existsByCarRental_CarRentId(int carRentalId);
 	
 
 }

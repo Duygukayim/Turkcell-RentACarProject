@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -53,9 +54,18 @@ public class CarRental {
     @ManyToOne
     @JoinColumn(name = "return_city_id")
     private City returnCity;
+    
+    @Column(name = "starting_kilometer")
+    private double startingKilometer;
+
+    @Column(name = "return_kilometer")
+    private double returnKilometer;
 
     @OneToMany(mappedBy = "carRental")
     private List<OrderedAdditionalService> orderedAdditionalServices;
+    
+    @OneToOne(mappedBy = "carRental")
+	private Invoice invoice;
     
     
 }

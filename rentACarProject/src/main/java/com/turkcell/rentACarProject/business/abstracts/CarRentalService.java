@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarRentalDto;
+import com.turkcell.rentACarProject.business.dtos.list.ListInvoiceDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.DeleteCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.entities.concretes.CarRental;
+import com.turkcell.rentACarProject.entities.concretes.IndividualCustomer;
 
 
 public interface CarRentalService {
@@ -20,6 +23,8 @@ public interface CarRentalService {
 	
 	DataResult<List<GetCarRentalDto>> getByCarId(int id);
 
+	DataResult<CarRental> getCarRentalByRentalId(int id);
+	
 	Result createForCorporateCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException;
 
 	Result createForIndividualCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException;  
@@ -27,6 +32,9 @@ public interface CarRentalService {
 	Result delete(DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException;
 
 	Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException;
+
+	double calculateRentalTotalPrice(int carRentalId);
+	
 
 
 }

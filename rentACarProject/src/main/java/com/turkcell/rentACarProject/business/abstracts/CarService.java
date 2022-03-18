@@ -10,7 +10,6 @@ import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -19,7 +18,7 @@ public interface CarService {
 
 	DataResult<List<ListCarDto>> getAll();
 
-	DataResult<GetCarDto> getById(int id) throws BusinessException;
+	DataResult<GetCarDto> getById(int id) ;
 
 	DataResult<List<ListCarDto>> getAllPaged(int pageNumber, int pageSize);
 
@@ -27,10 +26,12 @@ public interface CarService {
 
 	DataResult<List<ListCarDto>> getAllByDailyPriceLessThanEqual(double dailyPrice);
 
-	Result add(CreateCarRequest createCarRequest) throws BusinessException;
+	Result add(CreateCarRequest createCarRequest) ;
 
-	Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException;
+	Result delete(DeleteCarRequest deleteCarRequest);
 
-	Result update(UpdateCarRequest updateCarRequest) throws BusinessException;
+	Result update(UpdateCarRequest updateCarRequest);
+
+	void setOperationForKilometer(int carId, double kilometer);
 
 }
