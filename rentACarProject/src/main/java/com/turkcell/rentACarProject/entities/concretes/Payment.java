@@ -1,5 +1,7 @@
 package com.turkcell.rentACarProject.entities.concretes;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,24 +19,35 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "additional_services")
+@Table(name="payments")
 @Entity
-public class OrderedAdditionalService {
-
+public class Payment {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name="id")
 	private int id;
 
-	@ManyToOne
-	@JoinColumn(name = "additional_service_id")
-	private AdditionalService additionalService;
+	@Column(name = "total_payment")
+	private double totalPayment;
 	
-    @Column(name = "quantity")
-    private int quantity;
-    
-    @ManyToOne
-    @JoinColumn(name="car_rental_id")
+	@Column(name="card_holder_name")
+	private String cardOwnerName;
+	
+	@Column(name="card_number")
+	private String cardNumber;
+	
+	@Column(name="card_cvv_number")
+	private int cardCvvNumber;
+	
+	@Column(name = "expiry_date")
+	private LocalDate expiryDate;
+	
+    @OneToOne
+    @JoinColumn(name="car_rental_id", nullable = false)
     private CarRental carRental;
-	
+    
+    @OneToOne(mappedBy = "payment")
+    private Invoice invoice;
+    
 }

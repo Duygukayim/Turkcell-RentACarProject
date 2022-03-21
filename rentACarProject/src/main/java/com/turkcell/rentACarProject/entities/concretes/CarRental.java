@@ -64,8 +64,8 @@ public class CarRental {
     @OneToMany(mappedBy = "carRental")
     private List<OrderedAdditionalService> orderedAdditionalServices;
     
-    @OneToOne(mappedBy = "carRental")
-	private Invoice invoice;
+    @OneToMany(mappedBy ="rental")
+	private List<Payment> payments;
     
     
 }

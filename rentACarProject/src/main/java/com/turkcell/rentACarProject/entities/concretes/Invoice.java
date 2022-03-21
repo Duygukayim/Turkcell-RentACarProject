@@ -53,5 +53,9 @@ public class Invoice {
     @OneToOne
     @JoinColumn(name = "car_rental_id", nullable = false)
     private CarRental carRental;
+    
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+	private Payment payment;
 	
 }

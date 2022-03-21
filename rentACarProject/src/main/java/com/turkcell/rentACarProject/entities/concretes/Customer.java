@@ -2,10 +2,12 @@ package com.turkcell.rentACarProject.entities.concretes;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,11 +21,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
+@PrimaryKeyJoinColumn(name = "user_id")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Customer extends User {
+	
+	@Column(name = "customer_id",insertable = false, updatable = false)
+	private int customerId;
 	
 	@OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<CarRental> carRentals;
+	
+	@OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    private List<Invoice> invoices;
+	
   
 }

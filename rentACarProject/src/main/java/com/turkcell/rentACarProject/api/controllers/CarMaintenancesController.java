@@ -20,7 +20,6 @@ import com.turkcell.rentACarProject.business.dtos.list.ListCarMaintenanceDto;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.CreateCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.DeleteCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMaintenanceRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -42,25 +41,31 @@ public class CarMaintenancesController {
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCarMaintenanceDto> getById(@RequestParam int id) throws BusinessException {
+	public DataResult<GetCarMaintenanceDto> getById(@RequestParam int id) {
 		
 		return carMaintenanceService.getById(id);
 	}
 
+	@GetMapping("getByCarId")
+	public DataResult<List<GetCarMaintenanceDto>> getByCarId(@RequestParam int carId) {
+		
+		return this.carMaintenanceService.getByCarId(carId);
+	}
+
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException{
+	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest) {
 		
 		return this.carMaintenanceService.add(createCarMaintenanceRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) throws BusinessException {
+	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
 		
 		return this.carMaintenanceService.delete(deleteCarMaintenanceRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest) throws BusinessException {
+	public Result update(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
 		
 		return this.carMaintenanceService.update(updateCarMaintenanceRequest);
 	}

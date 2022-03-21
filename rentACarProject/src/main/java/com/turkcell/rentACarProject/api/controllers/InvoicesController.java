@@ -1,12 +1,10 @@
 package com.turkcell.rentACarProject.api.controllers;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,11 +50,6 @@ public class InvoicesController {
 	@GetMapping("/getByCustomerId")
 	public DataResult<List<ListInvoiceDto>> getByUserId(@RequestParam int userId) {
 		return this.invoiceService.getByCustomerId(userId);
-	}
-	
-	@GetMapping("/getAllByBetweenStartDateAndEndDate")
-	public DataResult<List<ListInvoiceDto>> getAllByBetweenStartDateAndEndDate(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") @RequestParam("startDate") LocalDate startDate,@DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") @RequestParam("endDate") LocalDate endDate) {
-		return this.invoiceService.getAllByBetweenStartDateAndEndDate(startDate, endDate);
 	}
 	
 

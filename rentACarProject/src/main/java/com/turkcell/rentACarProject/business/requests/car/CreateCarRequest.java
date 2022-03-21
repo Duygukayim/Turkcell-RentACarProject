@@ -25,7 +25,7 @@ public class CreateCarRequest {
 	@Max(2022)
 	private int modelYear;
 	
-	@NotNull
+//	@NotNull
 	private double kilometerInfo;
 
 	@Size(min = 2, max = 100)

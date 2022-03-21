@@ -108,15 +108,6 @@ public class InvoiceManager implements InvoiceService {
 	}
 	
 	@Override
-	public DataResult<List<ListInvoiceDto>> getAllByBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
-		
-		List<Invoice> result = this.invoiceDao.getAllByBetweenStartDateAndEndDate(startDate, endDate);
-		List<ListInvoiceDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, ListInvoiceDto.class)).collect(Collectors.toList());
-		
-		return new SuccessDataResult<List<ListInvoiceDto>>(response, "Success");
-	}
-	
-	@Override
 	public DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId) {
 
 		checkIfCustomerIdExists(customerId);
@@ -136,7 +127,7 @@ public class InvoiceManager implements InvoiceService {
 	
 	private void checkIfCarRentalIdExists(int carRentalId) {
 		
-		if (!this.invoiceDao.existsByCarRental_CarRentalId(carRentalId)) {
+		if (!this.invoiceDao.existsById(carRentalId)) {
 			throw new BusinessException("Rental Car with this ID was not found!");
 		}
 	}

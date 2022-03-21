@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "corporate_customers")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class CorporateCustomer extends Customer {
 
 	@Column(name = "company_name", nullable = false)

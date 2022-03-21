@@ -56,7 +56,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	
 	@Override
 	public void checkIfCarRentalIdExists(int carRentalId) {
-		if (!this.orderedAdditionalServiceDao.existsByCarRental_CarRentId(carRentalId)) {
+		if (!this.orderedAdditionalServiceDao.existsById(carRentalId)) {
 			throw new BusinessException("There is no rental car available at OrderedAdditionalService.");
 		}
 	}

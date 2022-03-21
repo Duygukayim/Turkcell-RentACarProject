@@ -109,7 +109,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 
 	@Override
-	public Result delete(DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException {
+	public Result delete(DeleteCarRentalRequest deleteCarRentalRequest) {
 		
 		CarRental carRental = this.modelMapperService.forRequest().map(deleteCarRentalRequest, CarRental.class);
 		checkCarRentalIdExists(carRental.getId());
@@ -119,7 +119,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 
 	@Override
-	public Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException {
+	public Result update(UpdateCarRentalRequest updateCarRentalRequest) {
 		
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalRequest, CarRental.class);
 		checkCarRentalIdExists(carRental.getId());
@@ -131,19 +131,19 @@ public class CarRentalManager implements CarRentalService {
 		return new SuccessResult("CarRental.Updated");
 	}
 
-	private void checkCarRentalIdExists(int carRentalId) throws BusinessException {
+	private void checkCarRentalIdExists(int carRentalId) {
 		if(!this.carRentalDao.existsById(carRentalId)) {
 			throw new BusinessException("Car Rental with this ID was not found!");
 		}
 	}
 
-	private void checkIfCarIdExists(int carId) throws BusinessException {
+	private void checkIfCarIdExists(int carId) {
 		if(!this.carDao.existsById(carId)) {
 			throw new BusinessException("A car with this ID was not found!");
 		}
 	}
 	
-	private void checkIfCityIdExists(int cityId) throws BusinessException {
+	private void checkIfCityIdExists(int cityId) {
 		
 		if(!this.cityDao.existsById(cityId)) {
 			throw new BusinessException("A city with this ID was not found!");
@@ -151,7 +151,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 
-	private void checkUnderMaintenance(CarRental carRental) throws BusinessException {
+	private void checkUnderMaintenance(CarRental carRental) {
 		
 		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(carRental.getCar().getId());
 		if (result != null) {

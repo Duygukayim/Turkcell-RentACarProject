@@ -137,35 +137,35 @@ public class CarManager implements CarService {
 		return new ErrorDataResult<List<ListCarDto>>("Car.NotFound");
 	}
 
-	private void checkCarIdExists(int carId) throws BusinessException {
+	private void checkCarIdExists(int carId) {
 		
 		if(!this.carDao.existsById(carId)) {
 			throw new BusinessException("A car with this ID was not found!");
 		}
 	}
 
-	private void checkIfBrandIdExists(int brandId) throws BusinessException {
+	private void checkIfBrandIdExists(int brandId) {
 		
 		if(!this.brandDao.existsById(brandId)) {
 			throw new BusinessException("A brand with this ID was not found!");
 		}
 	}
 
-	private void checkIfColorIdExists(int colorId) throws BusinessException {
+	private void checkIfColorIdExists(int colorId) {
 		
 		if(!this.colorDao.existsById(colorId)) {
 			throw new BusinessException("A color with this ID was not found!");
 		}
 	}
 
-	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) throws BusinessException {
+	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) {
 		
 		if (dailyPrice <= 0) {
 			throw new BusinessException("Daily rental price cannot be less than or equal to 0.");
 		}
 	}
 
-	private void checkIfCarExists(Car car) throws BusinessException {
+	private void checkIfCarExists(Car car) {
 		
 		if (carDao.existsByDailyPrice(car.getDailyPrice()) && carDao.existsByModelYear(car.getModelYear())
 				&& carDao.existsByDescription(car.getDescription()) && carDao.existsByBrand_Id(car.getBrand().getId())
