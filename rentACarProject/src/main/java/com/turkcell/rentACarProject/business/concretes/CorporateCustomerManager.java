@@ -96,7 +96,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	
 	private boolean checkIfEmailExists(String email) {
 		
-		if (this.customerDao.getCustomerByEmail(email) == null) {	
+		if (this.customerDao.findByEmail(email) == null) {	
 			return true;
 		}
 		throw new BusinessException(Messages.USEREMAILALREADYEXISTS);

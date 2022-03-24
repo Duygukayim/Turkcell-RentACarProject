@@ -73,7 +73,7 @@ public class CarRentalManager implements CarRentalService {
 	public DataResult<List<GetCarRentalDto>> getByCarId(int id) {
 
 		Car car = this.carDao.getById(id);
-		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(car.getId());
+		List<CarRental> result = this.carRentalDao.findByCar_Id(car.getId());
 		List<GetCarRentalDto> response = result.stream().map(rental -> this.modelMapperService.forDto().map(rental, GetCarRentalDto.class)).collect(Collectors.toList());
 
 		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARLIST);
@@ -149,7 +149,7 @@ public class CarRentalManager implements CarRentalService {
 
 	private void checkUnderMaintenance(CarRental carRental) {
 
-		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(carRental.getCar().getId());
+		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(carRental.getCar().getId());
 		if (result != null) {
 			for (CarMaintenance carMaintenance : result) {
 				if (carMaintenance.getReturnDate() != null) {
@@ -177,7 +177,7 @@ public class CarRentalManager implements CarRentalService {
 
 	private void checkIfCarIsRented(int carId, LocalDate startingDate) {
 
-		List<CarRental> carRentals = this.carRentalDao.getCarRentalsByCarId(carId);
+		List<CarRental> carRentals = this.carRentalDao.findByCar_Id(carId);
 
 		for (CarRental carRental : carRentals) {
 

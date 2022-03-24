@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.CardInfo;
 
 @Repository
-public interface CardInfoDao extends JpaRepository<CardInfo, Integer> {
+public interface CardInfoDao extends JpaRepository<CardInfo, Long> {
 	
-	CardInfo getCardInfoById(int id);
+	CardInfo findById(long id);
 
-	CardInfo getCardInfoByCardHolderName(String cardHolderName);
+	CardInfo getByCardHolderName(String cardHolderName);
 
 }

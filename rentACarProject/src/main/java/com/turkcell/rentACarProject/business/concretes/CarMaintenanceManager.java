@@ -68,7 +68,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	public DataResult<List<GetCarMaintenanceDto>> getByCarId(int id) {
 		
 		Car car = this.carDao.getById(id);
-		List<CarMaintenance> result = this.carMaintenanceDao.getCarMaintenanceByCarId(car.getId());
+		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(car.getId());
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> this.modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 		
 		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, Messages.CARLIST);
@@ -127,7 +127,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	private void checkIsRented(CarMaintenance carMaintenance) {
 		
-		List<CarRental> result = this.carRentalDao.getCarRentalsByCarId(carMaintenance.getCar().getId());
+		List<CarRental> result = this.carRentalDao.findByCar_Id(carMaintenance.getCar().getId());
 		if (result != null) {
 			for (CarRental rental : result) {
 				if (rental.getReturnDate() != null) {

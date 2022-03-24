@@ -6,12 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.Brand;
 
 @Repository
-public interface BrandDao extends JpaRepository<Brand, Integer> {
-
-	boolean existsByName(String name);
+public interface BrandDao extends JpaRepository<Brand, Long> {
 	
-	Brand getBrandById(int id);
+	Brand findById(long id);
 
-	Brand getBrandByName(String name);
+    Brand findByName(String name);
 	
 }

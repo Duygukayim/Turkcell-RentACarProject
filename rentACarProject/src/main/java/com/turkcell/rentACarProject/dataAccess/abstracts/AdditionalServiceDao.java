@@ -5,10 +5,10 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
 
 @Repository
-public interface AdditionalServiceDao extends JpaRepository<AdditionalService, Integer> {
+public interface AdditionalServiceDao extends JpaRepository<AdditionalService, Long> {
 
-	AdditionalService getAdditionalServiceById(int id);
+	AdditionalService findById(long id);
 
-	AdditionalService getAdditionalServiceByName(String name);
+	AdditionalService findByName(String name);
 	
 }

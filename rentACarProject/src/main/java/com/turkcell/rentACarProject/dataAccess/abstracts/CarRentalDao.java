@@ -8,10 +8,12 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
 
 @Repository
-public interface CarRentalDao extends JpaRepository<CarRental, Integer> {
+public interface CarRentalDao extends JpaRepository<CarRental, Long> {
 
-	CarRental getCarRentalById(int id);
+	CarRental findById(long id);
 
-	List<CarRental> getCarRentalsByCarId(int carId);
+	List<CarRental> findByCar_Id(long carId);
+	
+	List<CarRental> findByCustomer_UserId(long customerId);
 
 }

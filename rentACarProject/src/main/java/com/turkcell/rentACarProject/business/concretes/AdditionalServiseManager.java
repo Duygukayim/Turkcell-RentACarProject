@@ -96,7 +96,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 
 	private boolean checkIfAdditionalServiceNameExists(String additionalServiceName) throws BusinessException {
 		
-		AdditionalService additionalService = this.additionalServiceDao.getAdditionalServiceByName(additionalServiceName);
+		AdditionalService additionalService = this.additionalServiceDao.findByName(additionalServiceName);
 		if (additionalService == null) {
 			return true;
 		}

@@ -93,7 +93,7 @@ public class CardInfoManager implements CardInfoService {
 	
 	private boolean checkIfCardHolderNameExists(String cardHolderName) throws BusinessException{
 		
-		CardInfo cardInfo = this.cardInfoDao.getCardInfoByCardHolderName(cardHolderName);
+		CardInfo cardInfo = this.cardInfoDao.getByCardHolderName(cardHolderName);
 		if (cardInfo == null) {
 			return true;
 		}

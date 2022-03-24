@@ -8,10 +8,10 @@ import com.turkcell.rentACarProject.entities.concretes.Payment;
 
 @Repository
 @Transactional
-public interface PaymentDao extends JpaRepository<Payment, Integer> {
+public interface PaymentDao extends JpaRepository<Payment, Long> {
 	
-	Payment getPaymentById(int id);
+	Payment findById(long id);
 	
-	Payment getAllByCarRental_Id(int carRentalId);
+	Payment findAllByCarRental_Id(long carRentalId);
 	
 }

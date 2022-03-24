@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.Customer;
 
 @Repository
-public interface CustomerDao extends JpaRepository<Customer, Integer> {
+public interface CustomerDao extends JpaRepository<Customer, Long> {
 
-	Customer getCustomerByEmail(String email);
+	Customer findByEmail(String email);
 
 
 }

@@ -8,15 +8,15 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.Car;
 
 @Repository
-public interface CarDao extends JpaRepository<Car, Integer> {
+public interface CarDao extends JpaRepository<Car, Long> {
 
-	Car getCarById(int id);
+	Car findById(long id);
 
 	List<Car> findByDailyPriceLessThanEqual(double dailyPrice);
 	
-	List<Car> getByBrand_Id(int id);
+	List<Car> findByBrand_Id(long id);
 	
-	List<Car> getByColor_Id(int id);
+	List<Car> findByColor_Id(long id);
 	
 	boolean existsByDailyPrice(double dailyPrice);
 
@@ -24,8 +24,8 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 
     boolean existsByDescription(String description);
 
-    boolean existsByBrand_Id(int brandId);
+    boolean existsByBrand_Id(long brandId);
 
-    boolean existsByColor_Id(int colorId);
+    boolean existsByColor_Id(long colorId);
 
 }

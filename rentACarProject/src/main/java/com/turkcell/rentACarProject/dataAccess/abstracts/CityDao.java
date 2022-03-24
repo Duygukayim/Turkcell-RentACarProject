@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.City;
 
 @Repository
-public interface CityDao extends JpaRepository<City, Integer> {
+public interface CityDao extends JpaRepository<City, Long> {
 	
-	City getCityById(int id);
+	City findById(long id);
 
-	City getCityByName(String name);
+    City findByName(String name);
 	
 }

@@ -1,6 +1,7 @@
 package com.turkcell.rentACarProject.dataAccess.abstracts;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,11 +9,11 @@ import org.springframework.stereotype.Repository;
 import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
 @Repository
-public interface OrderedAdditionalServiceDao extends JpaRepository<OrderedAdditionalService, Integer> {
+public interface OrderedAdditionalServiceDao extends JpaRepository<OrderedAdditionalService, Long> {
 
-	List<OrderedAdditionalService> findByCarRental_Id(int carRentalId);
+	Set<OrderedAdditionalService> findByCarRental_Id(long carRentalId);
 
-	List<OrderedAdditionalService> getByCarRentalId(int carRentalId);
+	List<OrderedAdditionalService> getByCarRentalId(long carRentalId);
 	
 
 }
