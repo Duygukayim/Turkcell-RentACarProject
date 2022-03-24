@@ -1,7 +1,5 @@
 package com.turkcell.rentACarProject.entities.concretes;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,23 +29,12 @@ public class Payment {
 	@Column(name = "total_payment")
 	private double totalPayment;
 	
-	@Column(name="card_holder_name")
-	private String cardOwnerName;
-	
-	@Column(name="card_number")
-	private String cardNumber;
-	
-	@Column(name="card_cvv_number")
-	private int cardCvvNumber;
-	
-	@Column(name = "expiry_date")
-	private LocalDate expiryDate;
-	
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="car_rental_id", nullable = false)
     private CarRental carRental;
     
-    @OneToOne(mappedBy = "payment")
-    private Invoice invoice;
+    @OneToOne
+    @JoinColumn(name="card_info_id", nullable = false)
+    private CardInfo cardInfo;
     
 }
