@@ -2,10 +2,8 @@ package com.turkcell.rentACarProject.entities.concretes;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +46,7 @@ public class Car {
 	private Color color;
 	
 	@Column(name = "kilometer_info")
-	private double kilometerInfo;
+	private int kilometerInfo;
 
 	@OneToMany(mappedBy = "car")
 	private List<CarMaintenance> carMaintenances;
