@@ -1,9 +1,12 @@
 package com.turkcell.rentACarProject.entities.concretes;
 
-import java.util.List;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,28 +14,35 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@Entity
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Table(name = "cities")
+@AllArgsConstructor
+
+@Entity
+@Table(name = "CITIES")
 public class City {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private int id;
+	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name", length = 64, nullable = false)
 	private String name;
 
-	@OneToMany(mappedBy = "rentCity")
-	private List<CarRental> rentCity;
+	@OneToMany(mappedBy = "rentCity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<CarRental> rentCity;
 
-	@OneToMany(mappedBy = "returnCity")
-	private List<CarRental> returnCity;
+	@OneToMany(mappedBy = "returnCity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<CarRental> returnCity;
 
 }

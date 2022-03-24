@@ -7,34 +7,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Table(name = "additional_services")
+@AllArgsConstructor
 @Entity
+@Table(name = "ORDERED_ADDITIONAL_SERVICES")
 public class OrderedAdditionalService {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "id", nullable = false)
+	private Long id;
+	
+	@Column(name = "quantity")
+	private int quantity;
 
 	@ManyToOne
-	@JoinColumn(name = "additional_service_id")
+	@JoinColumn(name = "additional_service_id", nullable = false)
 	private AdditionalService additionalService;
-	
-    @Column(name = "quantity")
-    private int quantity;
     
     @ManyToOne
-    @JoinColumn(name="car_rental_id")
+    @JoinColumn(name="car_rental_id", nullable = false)
     private CarRental carRental;
 	
 }

@@ -10,26 +10,30 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Table(name = "car_damages")
+@AllArgsConstructor
+@Entity
+@Table(name = "CAR_DAMAGES")
 public class CarDamage {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "id", nullable = false)
+	private Long id;
 
 	@Column(name = "description", nullable = false)
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "car_id")
+	@JoinColumn(name = "car_id", nullable = false)
 	private Car car;
 
 }

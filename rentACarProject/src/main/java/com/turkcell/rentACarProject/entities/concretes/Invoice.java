@@ -13,20 +13,24 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@Entity
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Table(name="invoices")
+@AllArgsConstructor
+@Entity
+@Table(name = "INVOICES")
 public class Invoice {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id", nullable = false)
-	private int id;
+	private Long id;
 	
 	@Column(name = "invoice_number", nullable = false, unique = true)
     private int invoiceNumber;
@@ -51,11 +55,7 @@ public class Invoice {
     private Customer customer;
     
     @OneToOne
-    @JoinColumn(name = "car_rental_id", nullable = false)
-    private CarRental carRental;
-    
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @JoinColumn(name = "payment_id", nullable = false)
 	private Payment payment;
 	
 }

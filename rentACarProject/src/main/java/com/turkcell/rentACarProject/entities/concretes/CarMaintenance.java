@@ -12,29 +12,33 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "car_maintenances")
+@Table(name = "CAR_MAINTENANCES")
 public class CarMaintenance {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-	@Column(name = "description")
+	@Column(name = "description", length = 64)
 	private String description;
 
-	@Column(name = "return_date")
+	@Column(name = "return_date", nullable = false)
 	private LocalDate returnDate;
 
 	@ManyToOne
-	@JoinColumn(name = "car_id")
+	@JoinColumn(name = "car_id", nullable = false)
 	private Car car;
 
 }
