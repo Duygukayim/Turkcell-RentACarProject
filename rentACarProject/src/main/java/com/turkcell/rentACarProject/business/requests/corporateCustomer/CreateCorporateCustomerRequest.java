@@ -12,21 +12,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCorporateCustomerRequest {
-	
+
 	@Email
-    @NotNull
-    private String email;
+	@NotNull
+	private String email;
 
-    @NotNull
-    private String password;
-    
-    @NotNull
-    @Size(min=2,max=50)
-    private String companyName;
+	@NotNull
+	@Size(min = 2, max = 10)
+	private String password;
 
-    @NotNull
-    @Size(min=2,max=50)
-    private String taxNumber;
-    
+	@NotNull
+	@Size(min = 2, max = 64)
+	private String companyName;
+
+	@NotNull
+	@Size(min = 10, max = 10)
+	private String taxNumber;
 
 }

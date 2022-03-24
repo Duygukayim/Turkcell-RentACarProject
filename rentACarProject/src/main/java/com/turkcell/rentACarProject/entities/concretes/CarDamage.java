@@ -25,7 +25,7 @@ public class CarDamage {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 
 	@ManyToOne

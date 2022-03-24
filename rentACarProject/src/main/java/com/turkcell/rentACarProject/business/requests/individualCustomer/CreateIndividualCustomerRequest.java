@@ -14,22 +14,23 @@ import lombok.NoArgsConstructor;
 public class CreateIndividualCustomerRequest {
 
 	@Email
-    @NotNull
-    private String email;
+	@NotNull
+	private String email;
 
-    @NotNull
-    private String password;
+	@NotNull
+	@Size(min = 2, max = 10)
+	private String password;
 
-    @NotNull
-    @Size(min=2,max=20)
-    private String firstName;
+	@NotNull
+	@Size(min = 2, max = 64)
+	private String firstName;
 
-    @NotNull
-    @Size(min=2,max=20)
-    private String lastName;
-    
-    @NotNull
-    @Size(min=2,max=20)
-    private String identityNumber;
-    
+	@NotNull
+	@Size(min = 2, max = 64)
+	private String lastName;
+
+	@NotNull
+	@Size(min = 12, max = 12)
+	private String identityNumber;
+
 }

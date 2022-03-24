@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CreateAdditionalServiceRequest {
 
 	@NotNull
-	@Size(min = 2, max = 50)
+	@Size(min = 2, max = 64)
 	private String name;
 	
 	@NotNull

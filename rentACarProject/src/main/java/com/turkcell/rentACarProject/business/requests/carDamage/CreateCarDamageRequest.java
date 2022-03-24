@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCarDamageRequest {
-	
+
 	@NotNull
-	@Size(min=2,max=100)
+	@Size(min = 2, max = 64)
 	private String description;
-	
+
 	@NotNull
 	private int carId;
 

@@ -19,10 +19,10 @@ public class UpdateCardInfoRequest {
 	@NotNull
 	private int id;
 	
-	@Size(min = 2, max = 50)
+	@Size(min = 2, max = 64)
 	private String cardHolderName;
 
-	@Size(min = 2, max = 12)
+	@Size(min = 12, max = 12)
 	private String cardNumber;
 
 	@NotNull

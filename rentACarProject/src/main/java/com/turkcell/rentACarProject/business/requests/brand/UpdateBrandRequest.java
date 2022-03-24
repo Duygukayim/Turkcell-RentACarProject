@@ -18,7 +18,7 @@ public class UpdateBrandRequest {
 	private int id;
 
 	@NotNull
-	@Size(min = 2, max = 15)
+	@Size(min = 2, max = 64)
 	private String name;
 
 }

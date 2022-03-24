@@ -1,36 +1,36 @@
 package com.turkcell.rentACarProject.entities.concretes;
 
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "customers")
+@Table(name = "CUSTOMERS")
 @PrimaryKeyJoinColumn(name = "customer_id", referencedColumnName = "id")
 public class Customer extends User {
 
-	@Column(name = "customer_id", insertable = false, updatable = false)
-	private int customerId;
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<CarRental> carRentals;
 
-	@OneToMany(mappedBy = "customer")
-	@JsonIgnore
-	private List<CarRental> carRentals;
-
-	@OneToMany(mappedBy = "customer")
-	@JsonIgnore
-	private List<Invoice> invoices;
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<Invoice> invoices;
 
 }

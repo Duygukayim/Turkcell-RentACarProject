@@ -61,7 +61,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
 		
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
-		checkIfEmail(individualCustomer.getEmail());
+		checkIfEmailExists(individualCustomer.getEmail());
 		this.individualCustomerDao.save(individualCustomer);
 		
 		return new SuccessResult(Messages.CUSTOMERADD);
@@ -82,7 +82,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		
 		IndividualCustomer individualCustomer = individualCustomerDao.getById(updateIndividualCustomerRequest.getCustomerId());
 		checkIfIndividualCustomerIdExists(individualCustomer.getCustomerId());
-		checkIfEmail(individualCustomer.getEmail());
+		checkIfEmailExists(individualCustomer.getEmail());
 		this.individualCustomerDao.save(individualCustomer);
 		
 		return new SuccessResult(Messages.CUSTOMERUPDATE);
@@ -97,7 +97,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	}
 	
 	
-	private boolean checkIfEmail(String email) {
+	private boolean checkIfEmailExists(String email) {
 		
 		if (this.customerDao.getCustomerByEmail(email) == null) {	
 			return true;

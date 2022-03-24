@@ -19,14 +19,14 @@ public class UpdateCarMaintenanceRequest {
 	@NotNull
 	@Positive
 	private int id;
-	
+
 	@NotNull
-	@Size(min=2, max=100)
+	@Size(min = 2, max = 64)
 	private String description;
-	
+
 	@FutureOrPresent
 	private LocalDate returnDate;
-	
+
 	@NotNull
 	@Positive
 	private int carId;

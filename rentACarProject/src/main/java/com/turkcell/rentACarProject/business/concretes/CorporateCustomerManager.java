@@ -60,7 +60,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException {
 		
 		CorporateCustomer corporateCustomer = this.modelMapperService.forRequest().map(createCorporateCustomerRequest,CorporateCustomer.class);
-		checkIfEmail(corporateCustomer.getEmail());
+		checkIfEmailExists(corporateCustomer.getEmail());
 		this.corporateCustomerDao.save(corporateCustomer);
 		
 		return new SuccessResult(Messages.CUSTOMERADD);
@@ -94,7 +94,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		}
 	}
 	
-	private boolean checkIfEmail(String email) {
+	private boolean checkIfEmailExists(String email) {
 		
 		if (this.customerDao.getCustomerByEmail(email) == null) {	
 			return true;
