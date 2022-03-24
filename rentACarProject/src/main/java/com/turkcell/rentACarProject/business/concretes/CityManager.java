@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CityService;
+import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCityDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCityDto;
 import com.turkcell.rentACarProject.business.requests.city.CreateCityRequest;
@@ -39,7 +40,7 @@ public class CityManager implements CityService {
 		List<City> result = cityDao.findAll();
 		List<ListCityDto> response = result.stream().map(city -> modelMapperService.forDto().map(city, ListCityDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListCityDto>>(response, "Success");
+		return new SuccessDataResult<List<ListCityDto>>(response, Messages.CITYLIST);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class CityManager implements CityService {
 		checkIfCityIdExists(city.getId());
 		GetCityDto response = modelMapperService.forDto().map(city, GetCityDto.class);
 		
-		return new SuccessDataResult<GetCityDto>(response, "Success");
+		return new SuccessDataResult<GetCityDto>(response, Messages.CITYFOUND);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class CityManager implements CityService {
 		checkIfCityNameExists(city.getName());
 		this.cityDao.save(city);
 		
-		return new SuccessResult("City.Added : " + city.getName());
+		return new SuccessResult(Messages.CITYADD);
 	}
 	
 
@@ -70,7 +71,7 @@ public class CityManager implements CityService {
 		checkIfCityIdExists(city.getId());
 		this.cityDao.delete(city);
 			
-		return new SuccessResult("city.Deleted : " + city.getName());	
+		return new SuccessResult(Messages.CITYDELETE);	
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class CityManager implements CityService {
 		checkIfCityIdExists(city.getId());
 		this.cityDao.save(city);
 		
-		return new SuccessResult("City.Updated : " + city.getName());
+		return new SuccessResult(Messages.CITYUPDATE);
 	}
 	
 	
@@ -93,7 +94,7 @@ public class CityManager implements CityService {
 	private void checkIfCityIdExists(int cityId) throws BusinessException {
 		
 		if(!this.cityDao.existsById(cityId)) {
-			throw new BusinessException("A city with this ID was not found!");
+			throw new BusinessException(Messages.CITYNOTFOUND);
 		}
 	}
 	
@@ -103,7 +104,7 @@ public class CityManager implements CityService {
 		if (city == null) {
 			return true;
 		}
-		throw new BusinessException("City already exists!");
+		throw new BusinessException(Messages.CITYEXISTS);
 		
 	}
 

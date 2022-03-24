@@ -17,9 +17,9 @@ public class ListCarRentalDto {
 	
     private LocalDate returnDate;
     
-    private double startingKilometer;
+    private int startingKilometer;
 
-    private double returnKilometer;
+    private int returnKilometer;
     
     private int customerId;
     

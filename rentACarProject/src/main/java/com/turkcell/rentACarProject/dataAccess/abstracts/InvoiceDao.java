@@ -1,5 +1,6 @@
 package com.turkcell.rentACarProject.dataAccess.abstracts;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,13 @@ public interface InvoiceDao extends JpaRepository<Invoice, Integer> {
 	
 	List<Invoice> getByCustomer_CustomerId(int customerId);
 
+	List<Invoice> findAllByRentDateLessThanEqualAndRentDateGreaterThanEqual(LocalDate rentDate, LocalDate returnDate);
+	
 	boolean existsByCustomer_CustomerId(int customerId);
+
+	boolean existsByPayment_Id(int paymentId);
+
+	boolean existsByCarRental_Id(int carRentalId);
+
 	
 }

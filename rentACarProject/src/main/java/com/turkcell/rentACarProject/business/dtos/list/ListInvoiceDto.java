@@ -21,7 +21,7 @@ public class ListInvoiceDto {
 
     private LocalDate returnDate;
 
-	private int totalDays;
+	private long totalDays;
 
 	private double rentTotalPrice;
     

@@ -55,6 +55,19 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	}
 	
 	@Override
+    public Double calDailyTotal(List<OrderedAdditionalService> orderedAdditionalServices) {
+		
+        double dailyTotal = 0;
+
+        for (OrderedAdditionalService orderedAdditionalService : orderedAdditionalServices) {
+
+            dailyTotal += orderedAdditionalService.getQuantity() * orderedAdditionalService.getAdditionalService().getDailyPrice();
+        }
+
+        return dailyTotal;
+    }
+	
+	
 	public void checkIfCarRentalIdExists(int carRentalId) {
 		if (!this.orderedAdditionalServiceDao.existsById(carRentalId)) {
 			throw new BusinessException("There is no rental car available at OrderedAdditionalService.");

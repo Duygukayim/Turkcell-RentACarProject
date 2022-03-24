@@ -24,9 +24,6 @@ public class CreateCarRentalRequest {
 	@Positive
 	private int carId;
 	
-	@NotNull
-    private double startingKilometer;
-	
     private LocalDate rentDate;
 	
 	@FutureOrPresent

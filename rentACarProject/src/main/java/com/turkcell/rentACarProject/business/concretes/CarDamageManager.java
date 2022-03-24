@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarDamageService;
+import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarDamageDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarDamageDto;
 import com.turkcell.rentACarProject.business.requests.carDamage.CreateCarDamageRequest;
@@ -43,7 +44,7 @@ public class CarDamageManager implements CarDamageService {
 		List<CarDamage> result = this.carDamageDao.findAll();
 		List<ListCarDamageDto> response = result.stream().map(carDamage -> this.modelMapperService.forDto().map(carDamage, ListCarDamageDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarDamageDto>>(response, "CarDamages listed successfully.");
+		return new SuccessDataResult<List<ListCarDamageDto>>(response, Messages.DAMAGELIST);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class CarDamageManager implements CarDamageService {
 		checkIfCarDamageIdExists(carDamage.getId());
 		GetCarDamageDto response = modelMapperService.forDto().map(carDamage, GetCarDamageDto.class);
 		
-		return new SuccessDataResult<GetCarDamageDto>(response, "Success");
+		return new SuccessDataResult<GetCarDamageDto>(response, Messages.DAMAGEFOUND);
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class CarDamageManager implements CarDamageService {
 		List<CarDamage> result = this.carDamageDao.getByCarId(car.getId());
 		List<ListCarDamageDto> response = result.stream().map(carDamage -> this.modelMapperService.forDto().map(carDamage, ListCarDamageDto.class)).collect(Collectors.toList());
 			
-		return new SuccessDataResult<List<ListCarDamageDto>>(response, "Success");
+		return new SuccessDataResult<List<ListCarDamageDto>>(response, Messages.DAMAGELIST);
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class CarDamageManager implements CarDamageService {
 		checkIfCarIdExists(carDamage.getCar().getId());
 		this.carDamageDao.save(carDamage);
 
-		return new SuccessResult("CarDamage added successfully.");
+		return new SuccessResult(Messages.DAMAGEADD);
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class CarDamageManager implements CarDamageService {
 		checkIfCarIdExists(carDamage.getCar().getId());
 		this.carDamageDao.save(carDamage);
 
-		return new SuccessResult("CarDamage updated successfully.");
+		return new SuccessResult(Messages.DAMAGEUPDATE);
 	}
 
 	@Override
@@ -94,23 +95,20 @@ public class CarDamageManager implements CarDamageService {
 		checkIfCarDamageIdExists(carDamage.getId());
 		this.carDamageDao.delete(carDamage);
 
-		return new SuccessResult("CarDamage deleted successfully.");
+		return new SuccessResult(Messages.DAMAGEDELETE);
 	}
 	
 	private void checkIfCarDamageIdExists(int carDamageId) throws BusinessException {
 		
 		if(!this.carDamageDao.existsById(carDamageId)) {
-			throw new BusinessException("A Car Damage with this ID was not found!");
+			throw new BusinessException(Messages.DAMAGENOTFOUND);
 		}
 	}
 	
 	private void checkIfCarIdExists(int carId) {
 		if(!this.carDao.existsById(carId)) {
-			throw new BusinessException("A car with this ID was not found!");
+			throw new BusinessException(Messages.CARNOTFOUND);
 		}
 	}
 	
-	
-	
-
 }

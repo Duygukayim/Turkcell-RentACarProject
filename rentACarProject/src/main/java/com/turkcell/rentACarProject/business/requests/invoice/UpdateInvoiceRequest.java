@@ -14,7 +14,11 @@ public class UpdateInvoiceRequest {
 	
 	@NotNull
 	@Positive
-	private int carRentalId;
+	private int id;
+	
+	@NotNull
+	@Positive
+	private int paymentId;
 	
 	@NotNull
 	@Positive

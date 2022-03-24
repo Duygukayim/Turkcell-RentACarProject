@@ -6,6 +6,7 @@ import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServ
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
 
 public interface OrderedAdditionalServiceService {
@@ -13,7 +14,8 @@ public interface OrderedAdditionalServiceService {
 	Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest);
 
 	DataResult<List<ListOrderedAdditionalServiceDto>> getByCarRentalId(int carRentalId);
+	
+	Double calDailyTotal(List<OrderedAdditionalService> orderedAdditionalServices);
 
-	void checkIfCarRentalIdExists(int carRentalId);  //Kaldırılacak
 
 }

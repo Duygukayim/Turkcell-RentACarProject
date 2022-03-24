@@ -32,6 +32,6 @@ public interface CarService {
 
 	Result update(UpdateCarRequest updateCarRequest);
 
-	void setOperationForKilometer(int carId, double kilometer);
+	void setOperationForKilometer(int carId, int kilometer);  
 
 }

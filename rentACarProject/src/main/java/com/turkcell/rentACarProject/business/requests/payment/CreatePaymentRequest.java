@@ -2,6 +2,7 @@ package com.turkcell.rentACarProject.business.requests.payment;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class CreatePaymentRequest {
 	@NotNull
 	private String cardCvvNumber;
 	
+	@Future
 	private LocalDate expiryDate;
 	
 }

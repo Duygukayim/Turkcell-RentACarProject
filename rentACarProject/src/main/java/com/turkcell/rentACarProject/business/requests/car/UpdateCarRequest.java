@@ -30,7 +30,7 @@ public class UpdateCarRequest {
 	private double modelYear;
 	
 	@NotNull
-	private double kilometerInfo;
+	private int kilometerInfo;
 	
 	@Size(min = 2, max = 100)
 	private String description;

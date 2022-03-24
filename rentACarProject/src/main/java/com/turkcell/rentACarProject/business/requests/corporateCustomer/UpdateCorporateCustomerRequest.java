@@ -16,7 +16,7 @@ public class UpdateCorporateCustomerRequest {
 	
 	@NotNull
     @Positive
-    private int userId;
+    private int customerId;
 
     @Email
     @NotNull

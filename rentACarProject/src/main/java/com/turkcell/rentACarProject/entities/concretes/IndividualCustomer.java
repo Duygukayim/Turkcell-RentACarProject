@@ -2,9 +2,6 @@ package com.turkcell.rentACarProject.entities.concretes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -17,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "individual_customers")
-@PrimaryKeyJoinColumn(name = "user_id")
+@PrimaryKeyJoinColumn(name = "customer_id")
 public class IndividualCustomer extends Customer {
 
 	@Column(name = "first_name", nullable = false)

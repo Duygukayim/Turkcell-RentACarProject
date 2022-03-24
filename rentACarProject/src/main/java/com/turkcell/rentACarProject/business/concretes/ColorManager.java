@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.ColorService;
+import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetColorDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListColorDto;
 import com.turkcell.rentACarProject.business.requests.color.CreateColorRequest;
@@ -39,7 +40,7 @@ public class ColorManager implements ColorService {
 		List<Color> result = colorDao.findAll();
 		List<ListColorDto> response = result.stream().map(color -> modelMapperService.forDto().map(color, ListColorDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListColorDto>>(response, "Success");
+		return new SuccessDataResult<List<ListColorDto>>(response, Messages.COLORLIST);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class ColorManager implements ColorService {
 		checkIfColorIdExists(color.getId());
 		GetColorDto response = modelMapperService.forDto().map(color, GetColorDto.class);
 		
-		return new SuccessDataResult<GetColorDto>(response, "Success");
+		return new SuccessDataResult<GetColorDto>(response, Messages.COLORFOUND);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class ColorManager implements ColorService {
 		checkIfColorNameExists(color.getName());
 		this.colorDao.save(color);
 		
-		return new SuccessResult("Color.Added : " + color.getName());
+		return new SuccessResult(Messages.COLORADD);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class ColorManager implements ColorService {
 		checkIfColorIdExists(color.getId());
 		this.colorDao.delete(color);
 		
-		return new SuccessResult("Color.Deleted : " + color.getName());
+		return new SuccessResult(Messages.COLORDELETE);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class ColorManager implements ColorService {
 		checkIfColorNameExists(color.getName());
 		this.colorDao.save(color);
 		
-		return new SuccessResult("Color.Updated : " + color.getName());
+		return new SuccessResult(Messages.COLORUPDATE);
 
 	}
 
@@ -90,13 +91,13 @@ public class ColorManager implements ColorService {
 		if (color == null) {
 			return true;
 		}
-		throw new BusinessException("Color already exists!");
+		throw new BusinessException(Messages.COLORNAMEERROR);
 	}
 
 	private void checkIfColorIdExists(int colorId) throws BusinessException {
 		
 		if(!this.colorDao.existsById(colorId)) {
-			throw new BusinessException("A color with this ID was not found!");
+			throw new BusinessException(Messages.COLORNOTFOUND);
 		}
 	}
 	

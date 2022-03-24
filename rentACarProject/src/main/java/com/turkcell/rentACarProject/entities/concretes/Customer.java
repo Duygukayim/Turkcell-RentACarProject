@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -21,20 +19,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
-@PrimaryKeyJoinColumn(name = "user_id")
-@Inheritance(strategy = InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name = "customer_id", referencedColumnName = "id")
 public class Customer extends User {
-	
-	@Column(name = "customer_id",insertable = false, updatable = false)
+
+	@Column(name = "customer_id", insertable = false, updatable = false)
 	private int customerId;
-	
+
 	@OneToMany(mappedBy = "customer")
-    @JsonIgnore
-    private List<CarRental> carRentals;
-	
+	@JsonIgnore
+	private List<CarRental> carRentals;
+
 	@OneToMany(mappedBy = "customer")
-    @JsonIgnore
-    private List<Invoice> invoices;
-	
-  
+	@JsonIgnore
+	private List<Invoice> invoices;
+
 }

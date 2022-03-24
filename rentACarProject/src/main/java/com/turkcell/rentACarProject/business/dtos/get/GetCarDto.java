@@ -15,7 +15,7 @@ public class GetCarDto {
 	
 	private int modelYear;
 	
-	private double kilometerInfo;
+	private int kilometerInfo;
 	
 	private String description;
 	

@@ -1,5 +1,6 @@
 package com.turkcell.rentACarProject.business.abstracts;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.turkcell.rentACarProject.business.dtos.get.GetInvoiceDto;
@@ -18,11 +19,14 @@ public interface InvoiceService {
 	
 	DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId);
 	
+	DataResult<List<ListInvoiceDto>> getByBetweenDates(LocalDate startDate, LocalDate endDate);
+	
 	Result add(CreateInvoiceRequest createInvoiceRequest);
 
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
 
 	Result update(UpdateInvoiceRequest updateInvoiceRequest);
+
 
 
 	

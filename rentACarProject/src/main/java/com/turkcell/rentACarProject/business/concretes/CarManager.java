@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarService;
+import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
 import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
@@ -49,7 +50,7 @@ public class CarManager implements CarService {
 		List<Car> result = carDao.findAll();
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListCarDto>>(response);
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CARLIST);
 	}
 
 	@Override
@@ -59,49 +60,52 @@ public class CarManager implements CarService {
 		checkCarIdExists(car.getId());
 		GetCarDto response = modelMapperService.forDto().map(car, GetCarDto.class);
 		
-		return new SuccessDataResult<GetCarDto>(response, "Success");
+		return new SuccessDataResult<GetCarDto>(response, Messages.CARFOUND);
 	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
+		
+		checkIfBrandIdExists(createCarRequest.getBrandId());
+		checkIfColorIdExists(createCarRequest.getColorId());
+		checkIfCarDailyPriceLessThanZero(createCarRequest.getDailyPrice());
 		
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 		
 		checkIfCarExists(car);
-		checkIfBrandIdExists(car.getBrand().getId());
-		checkIfColorIdExists(car.getColor().getId());
-		checkIfCarDailyPriceLessThanZero(car.getDailyPrice());
 		this.carDao.save(car);
 		
-		return new SuccessResult("Car.Added : " + brandName + " , " + colorName);
+		return new SuccessResult(Messages.CARADD + " " + brandName + " " + colorName);
 	}
 
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 		
+		checkCarIdExists(deleteCarRequest.getId());
+		
 		Car car = this.modelMapperService.forRequest().map(deleteCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 		
-		checkCarIdExists(car.getId());
 		this.carDao.delete(car);
 		
-		return new SuccessResult("Car.Deleted : " + brandName + "," + colorName);
+		return new SuccessResult(Messages.CARDELETE + " " + brandName + " " + colorName);
 	}
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
 		
+		checkCarIdExists(updateCarRequest.getId());
+		
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		String brandName = brandDao.findById(car.getBrand().getId()).get().getName();
 		String colorName = colorDao.findById(car.getColor().getId()).get().getName();
 		
-		checkCarIdExists(car.getId());
 		this.carDao.save(car);
 		
-		return new SuccessResult("Car.Updated : " + brandName + " , " + colorName);
+		return new SuccessResult(Messages.CARUPDATE + " " + brandName + " " + colorName);
 	}
 
 	@Override
@@ -111,7 +115,7 @@ public class CarManager implements CarService {
 		List<Car> result = this.carDao.findAll(pageable).getContent();
 		List<ListCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListCarDto>>(response, "Success");
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CARPAGED);
 	}
 
 	@Override
@@ -121,7 +125,7 @@ public class CarManager implements CarService {
 		List<Car> result = this.carDao.findAll(sort);
 		List<ListCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListCarDto>>(response, "Success");
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CARSORTED);
 	}
 
 	@Override
@@ -132,36 +136,36 @@ public class CarManager implements CarService {
 			if (!result.isEmpty()) {
 				List<ListCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
 			
-				return new SuccessDataResult<List<ListCarDto>>(response, "Success");
+				return new SuccessDataResult<List<ListCarDto>>(response, Messages.CARFOUND);
 		}
-		return new ErrorDataResult<List<ListCarDto>>("Car.NotFound");
+		return new ErrorDataResult<List<ListCarDto>>(Messages.CARNOTFOUND);
 	}
 
 	private void checkCarIdExists(int carId) {
 		
 		if(!this.carDao.existsById(carId)) {
-			throw new BusinessException("A car with this ID was not found!");
+			throw new BusinessException(Messages.CARNOTFOUND);
 		}
 	}
 
 	private void checkIfBrandIdExists(int brandId) {
 		
 		if(!this.brandDao.existsById(brandId)) {
-			throw new BusinessException("A brand with this ID was not found!");
+			throw new BusinessException(Messages.BRANDNOTFOUND);
 		}
 	}
 
 	private void checkIfColorIdExists(int colorId) {
 		
 		if(!this.colorDao.existsById(colorId)) {
-			throw new BusinessException("A color with this ID was not found!");
+			throw new BusinessException(Messages.COLORNOTFOUND);
 		}
 	}
 
 	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) {
 		
 		if (dailyPrice <= 0) {
-			throw new BusinessException("Daily rental price cannot be less than or equal to 0.");
+			throw new BusinessException(Messages.CARDAILYPRICEERROR);
 		}
 	}
 
@@ -170,12 +174,12 @@ public class CarManager implements CarService {
 		if (carDao.existsByDailyPrice(car.getDailyPrice()) && carDao.existsByModelYear(car.getModelYear())
 				&& carDao.existsByDescription(car.getDescription()) && carDao.existsByBrand_Id(car.getBrand().getId())
 				&& carDao.existsByColor_Id(car.getColor().getId())) {
-			throw new BusinessException("Car already exists!");
+			throw new BusinessException(Messages.CARALREADYEXISTS);
 		}
 	}
 	
 	@Override
-    public void setOperationForKilometer(int carId, double kilometer) throws BusinessException {
+    public void setOperationForKilometer(int carId, int kilometer) throws BusinessException {
 
         Car car = this.carDao.getById(carId);
         car.setKilometerInfo(kilometer);

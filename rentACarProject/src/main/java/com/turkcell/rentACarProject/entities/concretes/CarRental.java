@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -35,36 +34,33 @@ public class CarRental {
 
     @Column(name = "return_date")
     private LocalDate returnDate;
-
-    @ManyToOne
-    @JoinColumn(name="customer_id")
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "car_id")
-    private Car car;
     
-    @Column(name="daily_price")
-    private double dailyPrice;
+    @Column(name = "starting_kilometer")
+    private int startingKilometer;
     
-    @ManyToOne
-    @JoinColumn(name = "rent_city_id")
-    private City rentCity;
+    @Column(name = "return_kilometer")
+    private int returnKilometer;
     
     @ManyToOne
     @JoinColumn(name = "return_city_id")
     private City returnCity;
+
+    @ManyToOne
+    @JoinColumn(name = "rent_city_id")
+    private City rentCity;
+
+    @ManyToOne
+    @JoinColumn(name="customer_id")
+    private Customer customer;
     
-    @Column(name = "starting_kilometer")
-    private double startingKilometer;
-
-    @Column(name = "return_kilometer")
-    private double returnKilometer;
-
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
+    
     @OneToMany(mappedBy = "carRental")
     private List<OrderedAdditionalService> orderedAdditionalServices;
     
-    @OneToMany(mappedBy ="rental")
+    @OneToMany(mappedBy ="carRental")
 	private List<Payment> payments;
     
     
