@@ -8,6 +8,8 @@ public class Messages {
 	public static final String ADDITIONALSERVICEADD = "additional.service.added";
 	public static final String ADDITIONALSERVICEUPDATE = "additional.service.updated";
 	public static final String ADDITIONALSERVICEDELETE = "additional.service.deleted";
+	public static final String ADDITIONALSERVICEALREADYEXISTS = "additional.service.exists";
+	public static final String ADDITIONALSERVICEDAILYPRICEERROR = "additional.service.daily.price.error";
 	
 	public static final String CITYNOTFOUND = "city.not.found";
 	public static final String CITYFOUND = "city.found";
@@ -87,7 +89,10 @@ public class Messages {
 	public static final String GETCARBYBRANDID = "get.car.by.brand.id";
 	public static final String GETCARBYCOLORID = "get.car.by.color.id";
 	public static final String GETCARBYCITYID = "get.car.by.city.id";
-
+	public static final String CARISUNDERMAINTENANCE = "car.is.under.maintenance";
+	public static final String CARISRENTED = "car.is.rented";
+	public static final String CARISDAMAGED = "car.is.damaged";
+	
 	public static final String COLORFOUND = "color.found";
 	public static final String COLORNOTFOUND = "color.not.found";
 	public static final String COLORADD = "color.added";
@@ -110,6 +115,7 @@ public class Messages {
 	public static final String PAYMENTUPDATE = "payment.updated";
 	public static final String PAYMENTDELETE = "payment.deleted";
 	public static final String PAYMENTNOTFOUND = "payment.not.found";
+	public static final String PAYMENTFOUND = "payment.found";
 	public static final String PAYMENTLIST = "payments.listed";
 	public static final String PAYMENTCARDSAVE = "credit.card.saved";
 	public static final String PAYMENTCARDNOTSAVE = "payment.card.not.saved";
@@ -128,5 +134,9 @@ public class Messages {
 	public static final String CUSTOMERNOTFOUND = "customer.not.found";
 	public static final String CUSTOMERISALREADYEXISTS = "customer.exists";
 	public static final String CUSTOMERTAXNUMBEREXISTS = "customers.tax.number.already.exists";
+	public static final String CUSTOMERIDENTITYNUMBEREXISTS = "customers.identity.number.already.exists";
 	
+	public static final String CARMILEAGE = "car.mileage.set";
+	
+	public static final String CARSTATUS = "car.status.set";
 }

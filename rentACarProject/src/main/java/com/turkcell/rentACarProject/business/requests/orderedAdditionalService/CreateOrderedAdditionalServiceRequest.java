@@ -25,8 +25,4 @@ public class CreateOrderedAdditionalServiceRequest {
     @Positive
     private int quantity;
 	
-	@NotNull
-    @Positive
-    private long carRentalId;
-	
 }

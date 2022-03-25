@@ -18,4 +18,5 @@ public class IsBankPosAdapter implements PosService {
 		return isBankPosManager.makePayment(createPaymentRequest.getCardHolderName(), createPaymentRequest.getCardNumber(), createPaymentRequest.getCardCvvNumber());
 	}
 
+	// düzenlenecek
 }

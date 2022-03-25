@@ -16,12 +16,9 @@ public interface InvoiceDao extends JpaRepository<Invoice, Long> {
 	List<Invoice> findByCustomer_UserId(long customerId);
 
 	List<Invoice> findAllByRentDateLessThanEqualAndRentDateGreaterThanEqual(LocalDate rentDate, LocalDate returnDate);
-	
-	boolean existsByCustomer_CustomerId(long customerId);
 
 	boolean existsByPayment_Id(long paymentId);
 
-	boolean existsByCarRental_Id(long carRentalId);
 
 	
 }

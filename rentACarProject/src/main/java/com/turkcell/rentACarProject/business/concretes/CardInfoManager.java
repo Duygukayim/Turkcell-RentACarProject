@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import com.turkcell.rentACarProject.business.abstracts.CardInfoService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCardInfoDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCardInfoDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
-import com.turkcell.rentACarProject.business.requests.cardInfo.DeleteCardInfoRequest;
 import com.turkcell.rentACarProject.business.requests.cardInfo.UpdateCardInfoRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
@@ -33,24 +31,36 @@ public class CardInfoManager implements CardInfoService {
 	}
 
 	@Override
-	public DataResult<List<ListCardInfoDto>> getAll() {
+	public DataResult<List<GetCardInfoDto>> getAll() {
 		
 		List<CardInfo> result = cardInfoDao.findAll();
-		List<ListCardInfoDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCardInfoDto.class)).collect(Collectors.toList());
+		List<GetCardInfoDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, GetCardInfoDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListCardInfoDto>>(response, Messages.CREDITCARDLIST);
+		return new SuccessDataResult<List<GetCardInfoDto>>(response, Messages.CREDITCARDLIST);
 	}
 
 	@Override
-	public DataResult<GetCardInfoDto> getById(int id) {
+	public DataResult<GetCardInfoDto> getById(long id) {
+		
+		checkCardInfoIdExists(id);
 		
 		CardInfo cardInfo = cardInfoDao.getById(id);
-		checkCardInfoIdExists(cardInfo.getId());
 		GetCardInfoDto response = modelMapperService.forDto().map(cardInfo, GetCardInfoDto.class);
 		
 		return new SuccessDataResult<GetCardInfoDto>(response, Messages.CREDITCARDFOUND);
 	}
 
+	@Override
+	public DataResult<CardInfo> addByPayment(CreateCardInfoRequest createRequest) {
+		
+		CardInfo cardInfo = this.modelMapperService.forRequest().map(createRequest, CardInfo.class);
+		
+		this.cardInfoDao.save(cardInfo);
+		
+		return new SuccessDataResult(cardInfo, Messages.CREDITCARDADD);
+	}
+	
+	
 	@Override
 	public Result add(CreateCardInfoRequest createCardInfoRequest) {
 		
@@ -62,29 +72,31 @@ public class CardInfoManager implements CardInfoService {
 		return new SuccessResult(Messages.CREDITCARDADD);
 	}
 
+	
 	@Override
-	public Result delete(DeleteCardInfoRequest deleteCardInfoRequest) {
+	public Result delete(long id) {
 		
-		checkCardInfoIdExists(deleteCardInfoRequest.getId());
+		checkCardInfoIdExists(id);
 		
-		CardInfo cardInfo = this.modelMapperService.forRequest().map(deleteCardInfoRequest, CardInfo.class);
-		this.cardInfoDao.delete(cardInfo);
+		this.cardInfoDao.deleteById(id);
 		
 		return new SuccessResult(Messages.CREDITCARDELETE);
 	}
 
+	
 	@Override
-	public Result update(UpdateCardInfoRequest updateCardInfoRequest) {
+	public Result update(long id, UpdateCardInfoRequest updateCardInfoRequest) {
 		
-		checkCardInfoIdExists(updateCardInfoRequest.getId());
+		checkCardInfoIdExists(id);
 		
 		CardInfo cardInfo = this.modelMapperService.forRequest().map(updateCardInfoRequest, CardInfo.class);
+		cardInfo.setId(id);
 		this.cardInfoDao.save(cardInfo);
 		
 		return new SuccessResult(Messages.CREDITCARDUPDATE);
 	}
 	
-	private void checkCardInfoIdExists(int cardInfoId) {
+	private void checkCardInfoIdExists(long cardInfoId) {
 		
 		if(!this.cardInfoDao.existsById(cardInfoId)) {
 			throw new BusinessException(Messages.CREDITCARDNOTFOUND);
@@ -99,5 +111,6 @@ public class CardInfoManager implements CardInfoService {
 		}
 		throw new BusinessException(Messages.CREDITCARDALREADYEXISTS);	
 	}
+
 
 }

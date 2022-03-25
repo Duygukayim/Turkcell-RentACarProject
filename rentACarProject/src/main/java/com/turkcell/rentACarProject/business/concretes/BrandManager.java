@@ -3,16 +3,13 @@ package com.turkcell.rentACarProject.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.BrandService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
-import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
@@ -36,19 +33,20 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public DataResult<List<ListBrandDto>> getAll() {
+	public DataResult<List<GetBrandDto>> getAll() {
 		
 		List<Brand> result = brandDao.findAll();
-		List<ListBrandDto> response = result.stream().map(brand -> modelMapperService.forDto().map(brand, ListBrandDto.class)).collect(Collectors.toList());
+		List<GetBrandDto> response = result.stream().map(brand -> modelMapperService.forDto().map(brand, GetBrandDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListBrandDto>>(response, Messages.BRANDLIST);
+		return new SuccessDataResult<List<GetBrandDto>>(response, Messages.BRANDLIST);
 	}
 
 	@Override
-	public DataResult<GetBrandDto> getById(int id) {
+	public DataResult<GetBrandDto> getById(long id) {
+		
+		checkIfBrandIdExists(id);
 		
 		Brand brand = this.brandDao.getById(id);
-		checkIfBrandIdExists(brand.getId());
 		GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
 		
 		return new SuccessDataResult<GetBrandDto>(response, Messages.BRANDFOUND);
@@ -58,8 +56,10 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
 		
+		checkIfBrandNameExists(createBrandRequest.getName());
+		
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
-		checkIfBrandNameExists(brand.getName());
+		
 		this.brandDao.save(brand);
 		
 		return new SuccessResult(Messages.BRANDADD);
@@ -67,21 +67,25 @@ public class BrandManager implements BrandService {
 
 
 	@Override
-	public Result delete(DeleteBrandRequest deleteBrandRequest) {
+	public Result delete(long id) {
 		
-		Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
-		checkIfBrandIdExists(brand.getId());
-		this.brandDao.delete(brand);
+		checkIfBrandIdExists(id);
+		
+		this.brandDao.deleteById(id);
 		
 		return new SuccessResult(Messages.BRANDDELETE);
 	}
 
+	
 	@Override
-	public Result update(UpdateBrandRequest updateBrandRequest) {
+	public Result update(long id, UpdateBrandRequest updateBrandRequest) {
+		
+		checkIfBrandIdExists(id);
+		checkIfBrandNameExists(updateBrandRequest.getName());
 		
 		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
-		checkIfBrandIdExists(brand.getId());
-		checkIfBrandNameExists(brand.getName());
+		brand.setId(id);
+		
 		this.brandDao.save(brand);
 		
 		return new SuccessResult(Messages.BRANDUPDATE);
@@ -90,16 +94,16 @@ public class BrandManager implements BrandService {
 
 	private boolean checkIfBrandNameExists(String brandName) {
 		
-		Brand brand = this.brandDao.getBrandByName(brandName);
+		Brand brand = this.brandDao.findByName(brandName);
 		if (brand == null) {
 			return true;
 		}
 		throw new BusinessException(Messages.BRANDALREADYEXISTS);
 	}
 
-	private void checkIfBrandIdExists(int brandId) {
+	private void checkIfBrandIdExists(long id) {
 		
-		if(!this.brandDao.existsById(brandId)) {
+		if(!this.brandDao.existsById(id)) {
 			throw new BusinessException(Messages.BRANDNOTFOUND);
 		}
 	}

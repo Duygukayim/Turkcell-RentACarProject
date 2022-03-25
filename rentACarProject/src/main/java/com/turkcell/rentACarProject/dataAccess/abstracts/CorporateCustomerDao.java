@@ -11,5 +11,7 @@ public interface CorporateCustomerDao extends JpaRepository<CorporateCustomer, L
 	CorporateCustomer findByUserId(long userId);
 
     CorporateCustomer findByEmail(String email);
+
+	CorporateCustomer findByTaxNumber(String taxNumber);
     
 }

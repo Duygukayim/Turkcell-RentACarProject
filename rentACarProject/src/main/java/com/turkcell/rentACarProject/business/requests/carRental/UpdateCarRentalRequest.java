@@ -26,10 +26,6 @@ public class UpdateCarRentalRequest {
 	
 	@NotNull
 	@Positive
-	private double startingMileage;
-	
-	@NotNull
-	@Positive
     private double returnMileage;
 	
 	@FutureOrPresent

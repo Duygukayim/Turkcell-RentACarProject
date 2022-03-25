@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
+import com.turkcell.rentACarProject.business.abstracts.CarService;
 import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
+import com.turkcell.rentACarProject.business.constants.CarStatus;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCarRentalDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
-import com.turkcell.rentACarProject.business.requests.carRental.DeleteCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
@@ -23,153 +23,164 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
-import com.turkcell.rentACarProject.dataAccess.abstracts.CarMaintenanceDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CityDao;
-import com.turkcell.rentACarProject.entities.concretes.Car;
-import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
+import com.turkcell.rentACarProject.entities.concretes.Customer;
 
 @Service
 public class CarRentalManager implements CarRentalService {
 
 	private CarDao carDao;
+	private CarService carService;  //hem servis hem Dao kullanımı düzenlenecek
 	private CityDao cityDao;
 	private CarRentalDao carRentalDao;
-	private CarMaintenanceDao carMaintenanceDao;
 	private OrderedAdditionalServiceService orderedAdditionalServiceService;
 	private ModelMapperService modelMapperService;
+	
 
 	@Autowired
-	public CarRentalManager(CarDao carDao, CityDao cityDao, CarRentalDao carRentalDao, CarMaintenanceDao carMaintenanceDao, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
+	public CarRentalManager(CarDao carDao, CarService carService, CityDao cityDao, CarRentalDao carRentalDao, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
 		this.carDao = carDao;
+		this.carService = carService;
 		this.cityDao = cityDao;
 		this.carRentalDao = carRentalDao;
-		this.carMaintenanceDao = carMaintenanceDao;
 		this.orderedAdditionalServiceService = orderedAdditionalServiceService;
 		this.modelMapperService = modelMapperService;
 	}
 
 	@Override
-	public DataResult<List<ListCarRentalDto>> getAll() {
+	public DataResult<List<GetCarRentalDto>> getAll() {
 
 		List<CarRental> result = carRentalDao.findAll();
-		List<ListCarRentalDto> response = result.stream().map(carRental -> modelMapperService.forDto().map(carRental, ListCarRentalDto.class)).collect(Collectors.toList());
+		List<GetCarRentalDto> response = result.stream().map(carRental -> modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarRentalDto>>(response, Messages.CARRENTALLIST);
+		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARRENTALLIST);
 	}
 
 	@Override
-	public DataResult<GetCarRentalDto> getById(int id) throws BusinessException {
+	public DataResult<GetCarRentalDto> getById(long id) {
+		
+		checkCarRentalIdExists(id);
 
 		CarRental carRental = carRentalDao.getById(id);
-		checkCarRentalIdExists(carRental.getId());
 		GetCarRentalDto response = modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
 
 		return new SuccessDataResult<GetCarRentalDto>(response, Messages.CARRENTALFOUND);
 	}
 
 	@Override
-	public DataResult<List<GetCarRentalDto>> getByCarId(int id) {
+	public DataResult<List<GetCarRentalDto>> getByCarId(long carId) {
 
-		Car car = this.carDao.getById(id);
-		List<CarRental> result = this.carRentalDao.findByCar_Id(car.getId());
-		List<GetCarRentalDto> response = result.stream().map(rental -> this.modelMapperService.forDto().map(rental, GetCarRentalDto.class)).collect(Collectors.toList());
+		List<CarRental> result = this.carRentalDao.findByCar_Id(carId);
+		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
 
 		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARLIST);
 	}
 	
-	// customer getById yap
+	
+	@Override
+	public DataResult<List<GetCarRentalDto>> getByCustomerId(long customerId) {
+		
+		List<CarRental> result = this.carRentalDao.findByCustomer_UserId(customerId);
+		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
+		
+		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CUSTOMERNOTFOUND);
+	}
+
 
 	@Override
 	public Result createForCorporateCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
 
-		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
-		checkIfCarIdExists(carRental.getCar().getId());
-		checkIfCarIsRented(carRental.getCar().getId(), carRental.getRentDate());
-		checkIfCityIdExists(carRental.getRentCity().getId());
-		checkIfCityIdExists(carRental.getReturnCity().getId());
-		checkUnderMaintenance(carRental);
-		this.carRentalDao.save(carRental);
+		checkIfCarIdExists(createCarRentalRequest.getCarId());
+		// corporate customer kontrol yap
+		checkIfCityIdExists(createCarRentalRequest.getRentCityId());
+		checkIfCityIdExists(createCarRentalRequest.getReturnCityId());
+		checkCarStatus(createCarRentalRequest.getCarId());
+		
+		CarRental temp = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
+		
+		Customer customer = new Customer();
+        customer.setUserId(createCarRentalRequest.getCustomerId());
+        temp.setCustomer(customer);
+        
+        temp.setStartingMileage(carService.getById(createCarRentalRequest.getCarId()).getData().getMileage());
+        temp.setReturnMileage(carService.getById(createCarRentalRequest.getCarId()).getData().getMileage());
+        
+        CarRental carRental = this.carRentalDao.saveAndFlush(temp);
+
+        this.orderedAdditionalServiceService.add(createCarRentalRequest.getCreatedOrderedAdditionalServiceRequestSet(), carRental.getId());
+        carRental.setOrderedAdditionalServices(this.orderedAdditionalServiceService.getByCarRentalId(carRental.getId()));
+
+        carService.setCarStatus(CarStatus.RENTED, carRental.getCar().getId());
 
 		return new SuccessResult(Messages.CARRENTALADDFORCORPORATE);
 	}
 
 	@Override
 	public Result createForIndividualCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
+		
+		checkIfCarIdExists(createCarRentalRequest.getCarId());
+		// individal customer kontrol yap
+		checkIfCityIdExists(createCarRentalRequest.getRentCityId());
+		checkIfCityIdExists(createCarRentalRequest.getReturnCityId());
+		checkCarStatus(createCarRentalRequest.getCarId());
+		
+		CarRental temp = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
+		
+		Customer customer = new Customer();
+        customer.setUserId(createCarRentalRequest.getCustomerId());
+        temp.setCustomer(customer);
+        
+        temp.setStartingMileage(carService.getById(createCarRentalRequest.getCarId()).getData().getMileage());
+        temp.setReturnMileage(carService.getById(createCarRentalRequest.getCarId()).getData().getMileage());
+        
+        CarRental carRental = this.carRentalDao.saveAndFlush(temp);
 
-		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
-		checkIfCarIdExists(carRental.getCar().getId());
-		checkIfCityIdExists(carRental.getRentCity().getId());
-		checkIfCityIdExists(carRental.getReturnCity().getId());
-		checkUnderMaintenance(carRental);
-		this.carRentalDao.save(carRental);
+        this.orderedAdditionalServiceService.add(createCarRentalRequest.getCreatedOrderedAdditionalServiceRequestSet(), carRental.getId());
+        carRental.setOrderedAdditionalServices(this.orderedAdditionalServiceService.getByCarRentalId(carRental.getId()));
+
+        carService.setCarStatus(CarStatus.RENTED, carRental.getCar().getId());
 
 		return new SuccessResult(Messages.CARRENTALADDFORINDIVIDUAL);
 	}
 
 	@Override
-	public Result delete(DeleteCarRentalRequest deleteCarRentalRequest) {
+	public Result delete(long id) {
+		
+		checkCarRentalIdExists(id);
 
-		CarRental carRental = this.modelMapperService.forRequest().map(deleteCarRentalRequest, CarRental.class);
-		checkCarRentalIdExists(carRental.getId());
-		this.carRentalDao.deleteById(carRental.getId());
+		this.carRentalDao.deleteById(id);
 
 		return new SuccessResult(Messages.CARRENTALDELETE);
 	}
 
 	@Override
-	public Result update(UpdateCarRentalRequest updateCarRentalRequest) {
-
+	public Result update(long id, UpdateCarRentalRequest updateCarRentalRequest) {
+		
+		checkCarRentalIdExists(id);
+		// customer kontrol yap
+		checkIfCityIdExists(updateCarRentalRequest.getRentCityId());
+		checkIfCityIdExists(updateCarRentalRequest.getReturnCityId());
+		
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalRequest, CarRental.class);
-		checkCarRentalIdExists(carRental.getId());
-		checkUnderMaintenance(carRental);
-		carRental.getCar().setKilometerInfo(updateCarRentalRequest.getReturnKilometer());
+		carRental.setId(id);
+		carService.setMileage(updateCarRentalRequest.getReturnMileage(), updateCarRentalRequest.getCarId());
+		
+		Customer customer = new Customer();
+	    customer.setUserId(updateCarRentalRequest.getCustomerId());
+	    carRental.setCustomer(customer);
+		
 		this.carRentalDao.save(carRental);
+		
+		carService.setCarStatus(CarStatus.AVAILABLE, updateCarRentalRequest.getCarId());
 
 		return new SuccessResult(Messages.CARRENTALUPDATE);
 	}
-
-	private void checkCarRentalIdExists(int carRentalId) {
-		if (!this.carRentalDao.existsById(carRentalId)) {
-			throw new BusinessException("Car Rental with this ID was not found!");
-		}
-	}
-
-	private void checkIfCarIdExists(int carId) {
-		if (!this.carDao.existsById(carId)) {
-			throw new BusinessException(Messages.CARNOTFOUND);
-		}
-	}
-
-	private void checkIfCityIdExists(int cityId) {
-
-		if (!this.cityDao.existsById(cityId)) {
-			throw new BusinessException(Messages.CITYNOTFOUND);
-		}
-	}
-
-	private void checkUnderMaintenance(CarRental carRental) {
-
-		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(carRental.getCar().getId());
-		if (result != null) {
-			for (CarMaintenance carMaintenance : result) {
-				if (carMaintenance.getReturnDate() != null) {
-					throw new BusinessException(Messages.CARRENTALMAINTENANCEERROR);
-				}
-			}
-		}
-	}
-
-	@Override
-	public DataResult<CarRental> getCarRentalByRentalId(int id) {
-
-		return new SuccessDataResult<CarRental>(this.carRentalDao.getById(id));
-	}
-
+	
 	
 	@Override
-	public double calTotalPriceForInvoice(int carRentalId) {
+	public double calTotalPrice(long carRentalId) {
 		
 		CarRental carRental = carRentalDao.getById(carRentalId);
 		
@@ -177,18 +188,6 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 
-	private void checkIfCarIsRented(int carId, LocalDate startingDate) {
-
-		List<CarRental> carRentals = this.carRentalDao.findByCar_Id(carId);
-
-		for (CarRental carRental : carRentals) {
-
-			if (startingDate.isAfter(carRental.getReturnDate())) {
-
-				throw new BusinessException(Messages.CARRENTALERROR);
-			}
-		}
-	}
 	
 
 	private int calTotalDaysForRental(LocalDate startDate, LocalDate endDate) {
@@ -201,7 +200,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 
-	private double calDifferentCityPrice(int carRentalId) {
+	private double calDifferentCityPrice(long carRentalId) {
 		
 		CarRental carRental = carRentalDao.getById(carRentalId);
 
@@ -213,7 +212,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 
-	private double calTotalDailyPriceForRentalCar(int carRentalId) {
+	private double calTotalDailyPriceForRentalCar(long carRentalId) {
 		
 		CarRental carRental = carRentalDao.getById(carRentalId);
 
@@ -221,7 +220,7 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 
-	private double calTotalDailyPriceForAdditionalService(int carRentalId) {
+	private double calTotalDailyPriceForAdditionalService(long carRentalId) {
 		
 		CarRental carRental = carRentalDao.getById(carRentalId);
 
@@ -229,5 +228,43 @@ public class CarRentalManager implements CarRentalService {
 
 	}
 	
+	private void checkCarStatus(long carId) {
+		
+		if (this.carService.getById(carId).getData().getStatus() == CarStatus.RENTED)
+			throw new BusinessException(Messages.CARISRENTED);
+		
+		else if (this.carService.getById(carId).getData().getStatus() == CarStatus.UNDER_MAINTENANCE)
+			throw new BusinessException(Messages.CARISUNDERMAINTENANCE);
+		
+		else if (this.carService.getById(carId).getData().getStatus() == CarStatus.DAMAGED)
+			throw new BusinessException(Messages.CARISDAMAGED);
+	}
+	
+	private void checkCarRentalIdExists(long carRentalId) {
+		
+		if (!this.carRentalDao.existsById(carRentalId)) {
+			throw new BusinessException("Car Rental with this ID was not found!");
+		}
+	}
+	
+	private void checkIfCarIdExists(long carId) {
+		
+		if (!this.carDao.existsById(carId)) {
+			throw new BusinessException(Messages.CARNOTFOUND);
+		}
+	}
+	
+	private void checkIfCityIdExists(long cityId) {
+		
+		if (!this.cityDao.existsById(cityId)) {
+			throw new BusinessException(Messages.CITYNOTFOUND);
+		}
+	}
+	
+	// customer kontrolü yap
+	// corporate and individual customer .. ayrı ayrı
+	
 
 }
+
+

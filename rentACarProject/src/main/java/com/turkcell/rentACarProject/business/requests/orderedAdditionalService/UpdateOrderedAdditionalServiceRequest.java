@@ -24,9 +24,5 @@ public class UpdateOrderedAdditionalServiceRequest {
     @Min(1)
     @Positive
     private int quantity;
-    
-    @NotNull
-    @Positive
-    private long carRentalId;
-	
+
 }

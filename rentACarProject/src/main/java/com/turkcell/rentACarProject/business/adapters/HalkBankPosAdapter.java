@@ -18,5 +18,6 @@ public class HalkBankPosAdapter implements PosService {
 		return halkBankPosManager.odemeYap( createPaymentRequest.getCardNumber(), createPaymentRequest.getCardHolderName(), createPaymentRequest.getCardCvvNumber());
 	}
 	
+	// düzenlenecek
 }
 

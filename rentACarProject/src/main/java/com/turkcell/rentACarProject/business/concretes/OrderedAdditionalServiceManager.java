@@ -1,21 +1,15 @@
 package com.turkcell.rentACarProject.business.concretes;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
-import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentACarProject.core.utilities.results.DataResult;
-import com.turkcell.rentACarProject.core.utilities.results.Result;
-import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
-import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.OrderedAdditionalServiceDao;
+import com.turkcell.rentACarProject.entities.concretes.CarRental;
 import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
 @Service
@@ -31,31 +25,32 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	}
 
 	
-	
 	@Override
-	public Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest) {
+	public void add(Set<CreateOrderedAdditionalServiceRequest> createOrderedAdditionalServiceRequest, long carRentalId) {
 		
-            OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest().map(createOrderedAdditionalServiceRequest, OrderedAdditionalService.class);
-            orderedAdditionalService.setId(0);
+		for (CreateOrderedAdditionalServiceRequest createOrderedAdditionalRequest : createOrderedAdditionalServiceRequest) {
+
+            OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest().map(createOrderedAdditionalRequest, OrderedAdditionalService.class);
+
+            CarRental carRental = new CarRental();
+            carRental.setId(carRentalId);
+            orderedAdditionalService.setCarRental(carRental);
+           
             this.orderedAdditionalServiceDao.save(orderedAdditionalService);
-            
-            return new SuccessResult("OrderedAdditionalService.Added");    
+ 
+		}
 
 	}
 
 	
 	@Override
-	public DataResult<List<ListOrderedAdditionalServiceDto>> getByCarRentalId(int carRentalId) {
-		List<OrderedAdditionalService> orderedAdditionalServiceList = this.orderedAdditionalServiceDao.getByCarRentalId(carRentalId);
-		List<ListOrderedAdditionalServiceDto> response = orderedAdditionalServiceList.stream().map(
-				orderedAdditionalService -> modelMapperService.forDto().map(orderedAdditionalService, ListOrderedAdditionalServiceDto.class))
-				.collect(Collectors.toList());
-
-		return new SuccessDataResult<List<ListOrderedAdditionalServiceDto>>(response);
-	}
+	public Set<OrderedAdditionalService> getByCarRentalId(long carRentalId) {
+        return this.orderedAdditionalServiceDao.findByCarRental_Id(carRentalId);
+    }
+	
 	
 	@Override
-    public Double calDailyTotal(List<OrderedAdditionalService> orderedAdditionalServices) {
+    public Double calDailyTotal(Set<OrderedAdditionalService> orderedAdditionalServices) {
 		
         double dailyTotal = 0;
 
@@ -66,12 +61,5 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
         return dailyTotal;
     }
-	
-	
-	public void checkIfCarRentalIdExists(int carRentalId) {
-		if (!this.orderedAdditionalServiceDao.existsById(carRentalId)) {
-			throw new BusinessException("There is no rental car available at OrderedAdditionalService.");
-		}
-	}
 	
 }

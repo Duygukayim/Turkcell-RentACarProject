@@ -12,4 +12,6 @@ public interface IndividualCustomerDao extends JpaRepository<IndividualCustomer,
 
     IndividualCustomer findByEmail(String email);
 
+	IndividualCustomer findByIdentityNumber(String identityNumber);
+
 }
