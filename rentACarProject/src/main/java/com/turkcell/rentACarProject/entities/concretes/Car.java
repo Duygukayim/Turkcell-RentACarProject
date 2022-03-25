@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.turkcell.rentACarProject.business.constants.CarStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +35,9 @@ public class Car {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
+	
+	@Column(name = "status", nullable = false)
+    private CarStatus status;
 
 	@Column(name = "daily_price", nullable = false)
 	private double dailyPrice;
@@ -52,7 +57,7 @@ public class Car {
 	private Color color;
 	
 	@Column(name = "mileage")
-	private int mileage;
+	private double mileage;
 
 	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<CarMaintenance> carMaintenances;

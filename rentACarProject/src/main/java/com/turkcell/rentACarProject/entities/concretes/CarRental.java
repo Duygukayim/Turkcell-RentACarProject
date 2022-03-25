@@ -42,10 +42,10 @@ public class CarRental {
     private LocalDate returnDate;
     
     @Column(name = "starting_mileage")
-    private int startingMileage;
+    private double startingMileage;
     
     @Column(name = "return_mileage")
-    private int returnMileage;
+    private double returnMileage;
     
     @ManyToOne
     @JoinColumn(name = "return_city_id", nullable = false)

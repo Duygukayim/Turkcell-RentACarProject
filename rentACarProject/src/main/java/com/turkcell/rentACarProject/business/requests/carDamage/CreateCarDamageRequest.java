@@ -1,13 +1,18 @@
 package com.turkcell.rentACarProject.business.requests.carDamage;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCarDamageRequest {
@@ -17,6 +22,8 @@ public class CreateCarDamageRequest {
 	private String description;
 
 	@NotNull
-	private int carId;
+	@Positive
+	private long carId;
 
 }
+

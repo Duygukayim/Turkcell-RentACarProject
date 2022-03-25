@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.BrandService;
 import com.turkcell.rentACarProject.business.dtos.get.GetBrandDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListBrandDto;
 import com.turkcell.rentACarProject.business.requests.brand.CreateBrandRequest;
-import com.turkcell.rentACarProject.business.requests.brand.DeleteBrandRequest;
 import com.turkcell.rentACarProject.business.requests.brand.UpdateBrandRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -36,34 +33,34 @@ public class BrandsController {
 		this.brandService = brandService;
 	}
 
-	@GetMapping("/getAll")
-	public DataResult<List<ListBrandDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetBrandDto>> getAll() {
 		
 		return brandService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetBrandDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetBrandDto> get(@RequestParam long id) {
 		
 		return brandService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateBrandRequest createBrandRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateBrandRequest createRequest) {
 		
-		return brandService.add(createBrandRequest);
+		return brandService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteBrandRequest deleteBrandRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return brandService.delete(deleteBrandRequest);
+		return brandService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) throws BusinessException {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateBrandRequest updateRequest) {
 		
-		return brandService.update(updateBrandRequest);
+		return brandService.update(id, updateRequest);
 	}
 
 }

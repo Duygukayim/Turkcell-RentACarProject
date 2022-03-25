@@ -3,23 +3,24 @@ package com.turkcell.rentACarProject.business.abstracts;
 import java.util.List;
 
 import com.turkcell.rentACarProject.business.dtos.get.GetCardInfoDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCardInfoDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
-import com.turkcell.rentACarProject.business.requests.cardInfo.DeleteCardInfoRequest;
 import com.turkcell.rentACarProject.business.requests.cardInfo.UpdateCardInfoRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
+import com.turkcell.rentACarProject.entities.concretes.CardInfo;
 
 public interface CardInfoService {
 	
-	DataResult<List<ListCardInfoDto>> getAll();
+	DataResult<List<GetCardInfoDto>> getAll();
 
-	DataResult<GetCardInfoDto> getById(int id);
+	DataResult<GetCardInfoDto> getById(long id);
 	
-	Result add(CreateCardInfoRequest createCardInfoRequest);
+	DataResult<CardInfo> addByPayment(CreateCardInfoRequest createRequest);
+	
+	Result add(CreateCardInfoRequest createRequest);
 
-	Result delete(DeleteCardInfoRequest deleteCardInfoRequest);
+	Result delete(long id);
 
-	Result update(UpdateCardInfoRequest updateCardInfoRequest);
+	Result update(long id, UpdateCardInfoRequest updateRequest);
 
 }

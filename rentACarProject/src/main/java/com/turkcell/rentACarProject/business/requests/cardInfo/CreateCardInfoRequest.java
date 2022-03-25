@@ -8,10 +8,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCardInfoRequest {
@@ -19,7 +23,7 @@ public class CreateCardInfoRequest {
 	@Size(min = 2, max = 64)
 	private String cardHolderName;
 
-	@Size(min = 12, max = 12)
+	@Size(min = 16, max = 16)
 	private String cardNumber;
 
 	@NotNull

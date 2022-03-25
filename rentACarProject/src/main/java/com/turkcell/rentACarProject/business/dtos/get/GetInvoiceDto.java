@@ -1,17 +1,15 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
+import lombok.*;
+
 import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class GetInvoiceDto {
-	
-	private int id;
 	
     private int invoiceNumber;
 
@@ -25,8 +23,8 @@ public class GetInvoiceDto {
 
 	private double rentTotalPrice;
     
-    private int customerId;
+    private long customerId;
     
-    private int carRentalId;
+    private long carRentalId;
 
 }

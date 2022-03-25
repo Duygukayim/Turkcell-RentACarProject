@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.turkcell.rentACarProject.business.constants.CarStatus;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCarDto;
 import com.turkcell.rentACarProject.business.requests.car.CreateCarRequest;
-import com.turkcell.rentACarProject.business.requests.car.DeleteCarRequest;
 import com.turkcell.rentACarProject.business.requests.car.UpdateCarRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
@@ -16,22 +15,24 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @Service
 public interface CarService {
 
-	DataResult<List<ListCarDto>> getAll();
+	DataResult<List<GetCarDto>> getAll();
 
-	DataResult<GetCarDto> getById(int id) ;
+	DataResult<GetCarDto> getById(long id) ;
 
-	DataResult<List<ListCarDto>> getAllPaged(int pageNumber, int pageSize);
+	DataResult<List<GetCarDto>> getAllPaged(int pageNumber, int pageSize);
 
-	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);
+	DataResult<List<GetCarDto>> getAllSorted(Sort.Direction direction);
 
-	DataResult<List<ListCarDto>> getAllByDailyPriceLessThanEqual(double dailyPrice);
+	DataResult<List<GetCarDto>> getAllByDailyPriceLessThanEqual(double dailyPrice);
 
-	Result add(CreateCarRequest createCarRequest) ;
+	Result add(CreateCarRequest createRequest) ;
 
-	Result delete(DeleteCarRequest deleteCarRequest);
+	Result delete(long id);
 
-	Result update(UpdateCarRequest updateCarRequest);
+	Result update(long id, UpdateCarRequest updateRequest);
+	
+	void setCarStatus(CarStatus status, long carId);
 
-	void setOperationForKilometer(int carId, int kilometer);  
+	void setMileage(double returnMileage, long carId);
 
 }

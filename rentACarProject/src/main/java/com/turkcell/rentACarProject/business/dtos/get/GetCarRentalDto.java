@@ -1,33 +1,31 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
+import lombok.*;
+
 import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetCarRentalDto {
-
-	private int id;
 	
 	private LocalDate rentDate;
 	
     private LocalDate returnDate;
     
-    private int startingKilometer;
+    private double startingMileage;
 
-    private int returnKilometer;
+    private double returnMileage;
     
-    private int customerId;
+    private long customerId;
     
-    private int carId;
+    private long carId;
     
-	private int RentCityId; 
+	private String RentCityName; 
 
-	private int ReturnCityId; 
+	private String ReturnCityName; 
     
     
 }

@@ -4,30 +4,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.turkcell.rentACarProject.business.dtos.get.GetInvoiceDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListInvoiceDto;
 import com.turkcell.rentACarProject.business.requests.invoice.CreateInvoiceRequest;
-import com.turkcell.rentACarProject.business.requests.invoice.DeleteInvoiceRequest;
-import com.turkcell.rentACarProject.business.requests.invoice.UpdateInvoiceRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 public interface InvoiceService {
 
-	DataResult<List<ListInvoiceDto>> getAll();
+	DataResult<List<GetInvoiceDto>> getAll();
 
-	DataResult<GetInvoiceDto> getById(int id);
+	DataResult<GetInvoiceDto> getById(long id);
 	
-	DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId);
+	DataResult<List<GetInvoiceDto>> getByCustomerId(long customerId);
 	
-	DataResult<List<ListInvoiceDto>> getByBetweenDates(LocalDate startDate, LocalDate endDate);
+	DataResult<List<GetInvoiceDto>> getByBetweenDates(LocalDate startDate, LocalDate endDate);
 	
-	Result add(CreateInvoiceRequest createInvoiceRequest);
+	Result add(CreateInvoiceRequest createRequest);
 
-	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
-
-	Result update(UpdateInvoiceRequest updateInvoiceRequest);
-
-
-
-	
 }

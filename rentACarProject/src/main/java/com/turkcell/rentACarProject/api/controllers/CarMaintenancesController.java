@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarMaintenanceDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCarMaintenanceDto;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.CreateCarMaintenanceRequest;
-import com.turkcell.rentACarProject.business.requests.carMaintenance.DeleteCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMaintenanceRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
@@ -34,40 +32,40 @@ public class CarMaintenancesController {
 		this.carMaintenanceService = carMaintenanceService;
 	}
 
-	@GetMapping("/getAll")
-	public DataResult<List<ListCarMaintenanceDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetCarMaintenanceDto>> getAll() {
 		
 		return carMaintenanceService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCarMaintenanceDto> getById(@RequestParam int id) {
+	public DataResult<GetCarMaintenanceDto> getById(@RequestParam long id) {
 		
 		return carMaintenanceService.getById(id);
 	}
 
 	@GetMapping("getByCarId")
-	public DataResult<List<GetCarMaintenanceDto>> getByCarId(@RequestParam int carId) {
+	public DataResult<List<GetCarMaintenanceDto>> getByCarId(@RequestParam long carId) {
 		
 		return this.carMaintenanceService.getByCarId(carId);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest) {
+	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createRequest) {
 		
-		return this.carMaintenanceService.add(createCarMaintenanceRequest);
+		return this.carMaintenanceService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
+	public Result delete(@RequestParam long id) {
 		
-		return this.carMaintenanceService.delete(deleteCarMaintenanceRequest);
+		return this.carMaintenanceService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateCarMaintenanceRequest updateRequest) {
 		
-		return this.carMaintenanceService.update(updateCarMaintenanceRequest);
+		return this.carMaintenanceService.update(id, updateRequest);
 	}
 
 }

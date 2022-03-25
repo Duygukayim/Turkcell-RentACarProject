@@ -7,37 +7,39 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCarRequest {
 
 	@NotNull
-	@Min(50)
-	@Max(1000)
+	@Positive
 	private double dailyPrice;
 
 	@NotNull
-	@Min(2015)
+	@Min(2000)
 	@Max(2022)
 	private int modelYear;
-	
+
 //	@NotNull
-	private int kilometerInfo;
+	private double mileage;
 
 	@Size(min = 2, max = 64)
 	private String description;
 
 	@NotNull
-    @Positive
-	private int brandId;
+	@Positive
+	private long brandId;
 
 	@NotNull
-    @Positive
-	private int colorId;
-	
+	@Positive
+	private long colorId;
 
 }

@@ -3,9 +3,7 @@ package com.turkcell.rentACarProject.business.abstracts;
 import java.util.List;
 
 import com.turkcell.rentACarProject.business.dtos.get.GetCarMaintenanceDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCarMaintenanceDto;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.CreateCarMaintenanceRequest;
-import com.turkcell.rentACarProject.business.requests.carMaintenance.DeleteCarMaintenanceRequest;
 import com.turkcell.rentACarProject.business.requests.carMaintenance.UpdateCarMaintenanceRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
@@ -13,16 +11,16 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 public interface CarMaintenanceService {
 
-	DataResult<List<ListCarMaintenanceDto>> getAll();
+	DataResult<List<GetCarMaintenanceDto>> getAll();
 
-	DataResult<GetCarMaintenanceDto> getById(int id);
+	DataResult<GetCarMaintenanceDto> getById(long id);
 	
-	DataResult<List<GetCarMaintenanceDto>> getByCarId(int id);
+	DataResult<List<GetCarMaintenanceDto>> getByCarId(long carId);
 
-	Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest);
+	Result add(CreateCarMaintenanceRequest createRequest);
 
-	Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest);
+	Result delete(long id);
 
-	Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest);
+	Result update(long id, UpdateCarMaintenanceRequest updateRequest);
 
 }

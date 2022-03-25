@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CorporateCustomerService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCorporateCustomerDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCorporateCustomerDto;
 import com.turkcell.rentACarProject.business.requests.corporateCustomer.CreateCorporateCustomerRequest;
-import com.turkcell.rentACarProject.business.requests.corporateCustomer.DeleteCorporateCustomerRequest;
 import com.turkcell.rentACarProject.business.requests.corporateCustomer.UpdateCorporateCustomerRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -35,34 +32,34 @@ public class CorporateCustomersController {
 		this.corporateCustomerService = corporateCustomerService;
 	}
 	
-	@GetMapping("/getAll")
-	public DataResult<List<ListCorporateCustomerDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetCorporateCustomerDto>> getAll() {
 		
 		return corporateCustomerService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCorporateCustomerDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetCorporateCustomerDto> get(@RequestParam long id) {
 		
 		return corporateCustomerService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateCorporateCustomerRequest createRequest){
 		
-		return corporateCustomerService.add(createCorporateCustomerRequest);
+		return corporateCustomerService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return corporateCustomerService.delete(deleteCorporateCustomerRequest);
+		return corporateCustomerService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException {
+	public Result update(@RequestParam  long id, @RequestBody @Valid UpdateCorporateCustomerRequest updateRequest) {
 		
-		return corporateCustomerService.update(updateCorporateCustomerRequest);
+		return corporateCustomerService.update(id, updateRequest);
 	}
 
 

@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CityService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCityDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCityDto;
 import com.turkcell.rentACarProject.business.requests.city.CreateCityRequest;
-import com.turkcell.rentACarProject.business.requests.city.DeleteCityRequest;
 import com.turkcell.rentACarProject.business.requests.city.UpdateCityRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -35,34 +32,34 @@ public class CitiesController {
 		this.cityService = cityService;
 	}
 	
-	@GetMapping("/getAll")
-	public DataResult<List<ListCityDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetCityDto>> getAll() {
 		
 		return cityService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCityDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetCityDto> get(@RequestParam long id) {
 		
 		return cityService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCityRequest createCityRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateCityRequest createRequest)  {
 		
-		return cityService.add(createCityRequest);
+		return cityService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCityRequest deleteCityRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return cityService.delete(deleteCityRequest);
+		return cityService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCityRequest updateCityRequest) throws BusinessException {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateCityRequest updateRequest) {
 		
-		return cityService.update(updateCityRequest);
+		return cityService.update(id, updateRequest);
 	}
 
 }

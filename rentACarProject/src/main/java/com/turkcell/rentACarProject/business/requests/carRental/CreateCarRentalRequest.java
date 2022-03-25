@@ -1,15 +1,16 @@
 package com.turkcell.rentACarProject.business.requests.carRental;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.springframework.lang.Nullable;
 
-import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
+import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,27 +23,32 @@ public class CreateCarRentalRequest {
 
 	@NotNull
 	@Positive
-	private int carId;
+	private long carId;
 	
-    private LocalDate rentDate;
+	@NotNull
+	@Positive
+	private double startingMileage;
 	
 	@FutureOrPresent
+    private LocalDate rentDate;
+	
+	@Future
     private LocalDate returnDate;
 
 	@NotNull
 	@Positive
-    private int customerId;
+    private long customerId;
 
 	@Nullable
-    private List<ListOrderedAdditionalServiceDto> orderedAdditionalServiceIds;
+	private Set<CreateOrderedAdditionalServiceRequest> createdOrderedAdditionalServiceRequestSet;
 	
 	@NotNull
 	@Positive
-	private int RentCityId; 
+	private long RentCityId; 
 	
 	@NotNull
 	@Positive
-	private int ReturnCityId; 
+	private long ReturnCityId; 
 	
 	
 	

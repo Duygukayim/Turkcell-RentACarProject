@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.IndividualCustomerService;
 import com.turkcell.rentACarProject.business.dtos.get.GetIndividualCustomerDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListIndividualCustomerDto;
 import com.turkcell.rentACarProject.business.requests.individualCustomer.CreateIndividualCustomerRequest;
-import com.turkcell.rentACarProject.business.requests.individualCustomer.DeleteIndividualCustomerRequest;
 import com.turkcell.rentACarProject.business.requests.individualCustomer.UpdateIndividualCustomerRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -35,34 +32,34 @@ public class IndividualCustomersController {
 		this.individualCustomerService = individualCustomerService;
 	}
 	
-	@GetMapping("/getAll")
-	public DataResult<List<ListIndividualCustomerDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetIndividualCustomerDto>> getAll() {
 		
 		return individualCustomerService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetIndividualCustomerDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetIndividualCustomerDto> get(@RequestParam long id) {
 		
 		return individualCustomerService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateIndividualCustomerRequest createRequest) {
 		
-		return individualCustomerService.add(createIndividualCustomerRequest);
+		return individualCustomerService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return individualCustomerService.delete(deleteIndividualCustomerRequest);
+		return individualCustomerService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateIndividualCustomerRequest updateRequest) {
 		
-		return individualCustomerService.update(updateIndividualCustomerRequest);
+		return individualCustomerService.update(id, updateRequest);
 	}
 	
 }

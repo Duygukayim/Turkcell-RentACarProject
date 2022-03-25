@@ -1,16 +1,22 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetOrderedAdditionalServiceDto {
 	
-	private int additionalServiceId;
+	private String additionalServiceName;
 	
     private int quantity;
+    
+    private long carRentalId;
 
 }

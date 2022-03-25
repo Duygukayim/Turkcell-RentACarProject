@@ -8,17 +8,17 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCarMaintenanceRequest {
-
-	@NotNull
-	@Positive
-	private int id;
 
 	@NotNull
 	@Size(min = 2, max = 64)
@@ -29,5 +29,5 @@ public class UpdateCarMaintenanceRequest {
 
 	@NotNull
 	@Positive
-	private int carId;
+	private long carId;
 }

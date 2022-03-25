@@ -1,21 +1,23 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.turkcell.rentACarProject.business.constants.CarStatus;
 
-@Data
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetCarDto {
 	
-	private int id;
+	private CarStatus status;
 	
 	private double dailyPrice;
 	
 	private int modelYear;
 	
-	private int kilometerInfo;
+	private double mileage;
 	
 	private String description;
 	

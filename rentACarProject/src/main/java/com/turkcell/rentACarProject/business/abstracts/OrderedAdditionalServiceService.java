@@ -1,21 +1,19 @@
 package com.turkcell.rentACarProject.business.abstracts;
 
-import java.util.List;
+import java.util.Set;
 
-import com.turkcell.rentACarProject.business.dtos.list.ListOrderedAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
-import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 
 
 public interface OrderedAdditionalServiceService {
 
-	Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest);
+	Result add(Set<CreateOrderedAdditionalServiceRequest> createRequest);
 
-	DataResult<List<ListOrderedAdditionalServiceDto>> getByCarRentalId(int carRentalId);
+	Set<OrderedAdditionalService> getByCarRentalId(long carRentalId);
 	
-	Double calDailyTotal(List<OrderedAdditionalService> orderedAdditionalServices);
+	Double calDailyTotal(Set<OrderedAdditionalService> orderedAdditionalServices);
 
 
 }

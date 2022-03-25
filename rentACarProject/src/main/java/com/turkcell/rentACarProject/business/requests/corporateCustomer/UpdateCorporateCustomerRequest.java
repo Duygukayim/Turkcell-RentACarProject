@@ -2,21 +2,20 @@ package com.turkcell.rentACarProject.business.requests.corporateCustomer;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCorporateCustomerRequest {
-
-	@NotNull
-	@Positive
-	private int customerId;
 
 	@Email
 	@NotNull

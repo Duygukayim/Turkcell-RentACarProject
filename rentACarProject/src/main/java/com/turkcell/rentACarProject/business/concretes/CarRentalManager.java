@@ -78,6 +78,8 @@ public class CarRentalManager implements CarRentalService {
 
 		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARLIST);
 	}
+	
+	// customer getById yap
 
 	@Override
 	public Result createForCorporateCustomer(CreateCarRentalRequest createCarRentalRequest) throws BusinessException {

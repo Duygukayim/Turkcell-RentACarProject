@@ -1,32 +1,24 @@
 package com.turkcell.rentACarProject.business.dtos.get;
 
-import java.time.LocalDate;
-
-import javax.validation.constraints.NotNull;
+import com.turkcell.rentACarProject.entities.concretes.CardInfo;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetPaymentDto {
 	
-	@NotNull
-	private int CarRentalId;
+	private long CarRentalId;
 	
 	private double totalPayment;
 	
-	@NotNull
-	private String cardHolderName;  
-	
-	@NotNull
-	private String cardNumber;
-	
-	@NotNull
-	private String cardCvvNumber;
-	
-	private LocalDate expiryDate;
+	private CardInfo cardInfo;
 
 }

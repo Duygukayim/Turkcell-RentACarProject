@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCarRentalDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
-import com.turkcell.rentACarProject.business.requests.carRental.DeleteCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -36,40 +33,52 @@ public class CarRentalsController {
 		this.carRentalService = carRentalService;
 	}
 	
-	@GetMapping("/getAll")
-	public DataResult<List<ListCarRentalDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetCarRentalDto>> getAll() {
 		
 		return carRentalService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCarRentalDto> getById(@RequestParam int id) throws BusinessException {
+	public DataResult<GetCarRentalDto> getById(@RequestParam long id) {
 		
 		return carRentalService.getById(id);
 	}
 
 	@PostMapping("/createCorporateCustomer")
-	Result createCorporateCustomer(@RequestBody @Valid CreateCarRentalRequest createCarRentalRequest) throws BusinessException {
+	public Result createCorporateCustomer(@RequestBody @Valid CreateCarRentalRequest createRequest) {
 		
-		return this.carRentalService.createForCorporateCustomer(createCarRentalRequest);
+		return this.carRentalService.createForCorporateCustomer(createRequest);
 	}
 	
 	@PostMapping("/createIndividualCustomer")
-	Result createIndividualCustomer(@RequestBody @Valid CreateCarRentalRequest createRentalRequest) throws BusinessException {
+	public Result createIndividualCustomer(@RequestBody @Valid CreateCarRentalRequest createRequest) {
 		
-		return this.carRentalService.createForIndividualCustomer(createRentalRequest);
+		return this.carRentalService.createForIndividualCustomer(createRequest);
+	}
+	
+	@GetMapping("/getByCarId")
+	public DataResult<List<GetCarRentalDto>> getByCarId(@RequestParam long carId) {
+	        
+		 return carRentalService.getByCarId(carId);
+	}
+	
+	@GetMapping("/getByCustomerId")
+	public DataResult<List<GetCarRentalDto>> getByCustomerId(@RequestParam long customerId) {
+	        
+		 return carRentalService.getByCustomerId(customerId);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return this.carRentalService.delete(deleteCarRentalRequest);
+		return this.carRentalService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateCarRentalRequest updateRequest) {
 		
-		return this.carRentalService.update(updateCarRentalRequest);
+		return this.carRentalService.update(id, updateRequest);
 	}
 
 }

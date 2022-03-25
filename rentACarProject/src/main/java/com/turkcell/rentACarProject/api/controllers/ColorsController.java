@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.ColorService;
 import com.turkcell.rentACarProject.business.dtos.get.GetColorDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListColorDto;
 import com.turkcell.rentACarProject.business.requests.color.CreateColorRequest;
-import com.turkcell.rentACarProject.business.requests.color.DeleteColorRequest;
 import com.turkcell.rentACarProject.business.requests.color.UpdateColorRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -37,33 +34,33 @@ public class ColorsController {
 	}
 
 	@GetMapping("/getAll")
-	public DataResult<List<ListColorDto>> getAll() {
+	public DataResult<List<GetColorDto>> getAll() {
 		
 		return colorService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetColorDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetColorDto> get(@RequestParam long id) {
 		
 		return colorService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateColorRequest createRequest) {
 		
-		return colorService.add(createColorRequest);
+		return this.colorService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return colorService.delete(deleteColorRequest);
+		return this.colorService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) throws BusinessException {
+	public Result update(@RequestParam  long id, @RequestBody @Valid UpdateColorRequest updateRequest) {
 		
-		return colorService.update(updateColorRequest);
+		return this.colorService.update(id, updateRequest);
 	}
 
 }

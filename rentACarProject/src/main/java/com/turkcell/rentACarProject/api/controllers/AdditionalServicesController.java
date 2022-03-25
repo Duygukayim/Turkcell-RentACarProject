@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.AdditionalServiceService;
 import com.turkcell.rentACarProject.business.dtos.get.GetAdditionalServiceDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListAdditionalServiceDto;
 import com.turkcell.rentACarProject.business.requests.additionalService.CreateAdditionalServiceRequest;
-import com.turkcell.rentACarProject.business.requests.additionalService.DeleteAdditionalServiceRequest;
 import com.turkcell.rentACarProject.business.requests.additionalService.UpdateAdditionalServiceRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -36,34 +33,34 @@ public class AdditionalServicesController {
 		this.additionalServiceService = additionalServiceService;
 	}
 	
-	@GetMapping("/getAll")
-	public DataResult<List<ListAdditionalServiceDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetAdditionalServiceDto>> getAll() {
 		
 		return additionalServiceService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetAdditionalServiceDto> getById(@RequestParam int id) throws BusinessException {
+	public DataResult<GetAdditionalServiceDto> getById(@RequestParam long id) {
 		
 		return additionalServiceService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
+	public Result add(@RequestBody @Valid CreateAdditionalServiceRequest createRequest) {
 		
-		return this.additionalServiceService.add(createAdditionalServiceRequest);
+		return this.additionalServiceService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
+	public Result delete(@RequestParam long id) {
 		
-		return this.additionalServiceService.delete(deleteAdditionalServiceRequest);
+		return this.additionalServiceService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateAdditionalServiceRequest updateRequest) {
 		
-		return this.additionalServiceService.update(updateAdditionalServiceRequest);
+		return this.additionalServiceService.update(id, updateRequest);
 	}
 	
 }

@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentACarProject.business.abstracts.CardInfoService;
 import com.turkcell.rentACarProject.business.dtos.get.GetCardInfoDto;
-import com.turkcell.rentACarProject.business.dtos.list.ListCardInfoDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
-import com.turkcell.rentACarProject.business.requests.cardInfo.DeleteCardInfoRequest;
 import com.turkcell.rentACarProject.business.requests.cardInfo.UpdateCardInfoRequest;
-import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
@@ -35,34 +32,34 @@ public class CardInfosController {
 		this.cardInfoService = cardInfoService;
 	}
 
-	@GetMapping("/getAll")
-	public DataResult<List<ListCardInfoDto>> getAll() {
+	@GetMapping("/get/all")
+	public DataResult<List<GetCardInfoDto>> getAll() {
 		
 		return cardInfoService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<GetCardInfoDto> get(@RequestParam int id) throws BusinessException {
+	public DataResult<GetCardInfoDto> get(@RequestParam long id) {
 		
 		return cardInfoService.getById(id);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCardInfoRequest createCardInfoRequest) {
+	public Result add(@RequestBody @Valid CreateCardInfoRequest createRequest) {
 		
-		return cardInfoService.add(createCardInfoRequest);
+		return cardInfoService.add(createRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCardInfoRequest deleteCardInfoRequest) {
+	public Result delete(@RequestParam long id ) {
 		
-		return cardInfoService.delete(deleteCardInfoRequest);
+		return cardInfoService.delete(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateCardInfoRequest updateCardInfoRequest) {
+	public Result update(@RequestParam long id, @RequestBody @Valid UpdateCardInfoRequest updateRequest) {
 		
-		return cardInfoService.update(updateCardInfoRequest);
+		return cardInfoService.update(id, updateRequest);
 	}
 
 }
