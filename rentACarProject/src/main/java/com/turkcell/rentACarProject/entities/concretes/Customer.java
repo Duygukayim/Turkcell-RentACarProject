@@ -33,4 +33,12 @@ public class Customer extends User {
 	@ToString.Exclude
 	private Set<Invoice> invoices;
 
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<CardInfo> cardInfos;
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private Set<Payment> payments;
+
 }
