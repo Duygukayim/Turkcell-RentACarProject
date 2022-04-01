@@ -7,7 +7,6 @@ import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoReq
 import com.turkcell.rentACarProject.business.requests.cardInfo.UpdateCardInfoRequest;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
-import com.turkcell.rentACarProject.entities.concretes.CardInfo;
 
 public interface CardInfoService {
 	
@@ -15,12 +14,11 @@ public interface CardInfoService {
 
 	DataResult<GetCardInfoDto> getById(long id);
 	
-	DataResult<CardInfo> addByPayment(CreateCardInfoRequest createRequest);
-	
-	Result add(CreateCardInfoRequest createRequest);
+	Result add(CreateCardInfoRequest createRequest, long customerId);
 
 	Result delete(long id);
 
 	Result update(long id, UpdateCardInfoRequest updateRequest);
+
 
 }

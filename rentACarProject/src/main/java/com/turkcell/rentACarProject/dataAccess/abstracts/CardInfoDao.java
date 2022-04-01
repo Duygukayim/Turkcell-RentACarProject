@@ -1,5 +1,7 @@
 package com.turkcell.rentACarProject.dataAccess.abstracts;
 
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,6 @@ public interface CardInfoDao extends JpaRepository<CardInfo, Long> {
 	
 	CardInfo findById(long id);
 
-	CardInfo getByCardHolderName(String cardHolderName);
+	CardInfo findByAllCardInformation(String cardHolderName, String cardNumber, LocalDate expiryDate, String cardCvvNumber);
 
 }

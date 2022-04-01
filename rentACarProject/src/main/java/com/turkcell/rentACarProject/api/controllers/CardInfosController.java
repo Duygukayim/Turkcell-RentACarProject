@@ -45,9 +45,9 @@ public class CardInfosController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreateCardInfoRequest createRequest) {
+	public Result add(@RequestBody @Valid CreateCardInfoRequest createRequest, @RequestParam long customerId) {
 		
-		return cardInfoService.add(createRequest);
+		return cardInfoService.add(createRequest, customerId);
 	}
 
 	@DeleteMapping("/delete")
