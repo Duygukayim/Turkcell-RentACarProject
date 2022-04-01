@@ -18,14 +18,6 @@ public interface CarDao extends JpaRepository<Car, Long> {
 	
 	List<Car> findByColor_Id(long id);
 	
-	boolean existsByDailyPrice(double dailyPrice);
-
-    boolean existsByModelYear(int modelYear);
-
-    boolean existsByDescription(String description);
-
-    boolean existsByBrand_Id(long brandId);
-
-    boolean existsByColor_Id(long colorId);
+	Car findByAllCar(long brandId, long colorId, int modelYear, double dailyPrice, String description);
 
 }

@@ -30,7 +30,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
     @Autowired
 	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, ModelMapperService modelMapperService) {
-		this.individualCustomerDao = individualCustomerDao;
+		
+    	this.individualCustomerDao = individualCustomerDao;
 		this.modelMapperService = modelMapperService;
 	}
 

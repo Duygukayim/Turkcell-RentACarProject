@@ -29,7 +29,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
     @Autowired
 	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService) {
-		this.corporateCustomerDao = corporateCustomerDao;
+		
+    	this.corporateCustomerDao = corporateCustomerDao;
 		this.modelMapperService = modelMapperService;
 	}
 
