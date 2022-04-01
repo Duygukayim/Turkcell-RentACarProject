@@ -19,9 +19,9 @@ public interface CarRentalService {
 
 	DataResult<List<GetCarRentalDto>> getByCustomerId(long customerId);
 	
-	Result createForCorporateCustomer(CreateCarRentalRequest createRequest);
+	Result addForCorporateCustomer(CreateCarRentalRequest createRequest);
 
-	Result createForIndividualCustomer(CreateCarRentalRequest createRequest);  
+	Result addForIndividualCustomer(CreateCarRentalRequest createRequest);  
 	
 	Result delete(long id);
 

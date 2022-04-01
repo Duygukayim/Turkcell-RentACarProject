@@ -7,6 +7,8 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,5 +47,9 @@ public class UpdateCarRentalRequest {
 	@NotNull
 	@Positive
 	private long ReturnCityId; 
+	
+	private boolean rememberMe;
+
+    private CreatePaymentRequest createPaymentRequest;
 
 }

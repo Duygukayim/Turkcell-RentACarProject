@@ -48,13 +48,13 @@ public class CarRentalsController {
 	@PostMapping("/createCorporateCustomer")
 	public Result createCorporateCustomer(@RequestBody @Valid CreateCarRentalRequest createRequest) {
 		
-		return this.carRentalService.createForCorporateCustomer(createRequest);
+		return this.carRentalService.addForCorporateCustomer(createRequest);
 	}
 	
 	@PostMapping("/createIndividualCustomer")
 	public Result createIndividualCustomer(@RequestBody @Valid CreateCarRentalRequest createRequest) {
 		
-		return this.carRentalService.createForIndividualCustomer(createRequest);
+		return this.carRentalService.addForIndividualCustomer(createRequest);
 	}
 	
 	@GetMapping("/getByCarId")

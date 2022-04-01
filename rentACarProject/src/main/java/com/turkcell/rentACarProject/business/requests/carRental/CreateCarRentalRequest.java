@@ -25,10 +25,6 @@ public class CreateCarRentalRequest {
 	@Positive
 	private long carId;
 	
-	@NotNull
-	@Positive
-	private double startingMileage;
-	
 	@FutureOrPresent
     private LocalDate rentDate;
 	
