@@ -21,27 +21,22 @@ import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarMaintenanceDao;
-import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
 import com.turkcell.rentACarProject.entities.concretes.Car;
 import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
-import com.turkcell.rentACarProject.entities.concretes.CarRental;
 
 @Service
 public class CarMaintenanceManager implements CarMaintenanceService {
 
 	private CarDao carDao;
 	private CarService carService;
-	private CarRentalDao carRentalDao;
 	private CarMaintenanceDao carMaintenanceDao;
 	private ModelMapperService modelMapperService;
 	
 	@Autowired
-	public CarMaintenanceManager(CarDao carDao, CarService carService, CarRentalDao carRentalDao,
-			CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService) {
-		super();
+	public CarMaintenanceManager(CarDao carDao, CarService carService, CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService) {
+		
 		this.carDao = carDao;
 		this.carService = carService;
-		this.carRentalDao = carRentalDao;
 		this.carMaintenanceDao = carMaintenanceDao;
 		this.modelMapperService = modelMapperService;
 	}
@@ -64,7 +59,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		CarMaintenance carMaintenance = carMaintenanceDao.getById(id);
 		GetCarMaintenanceDto response = modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class);
 		
-		return new SuccessDataResult<GetCarMaintenanceDto>(response, Messages.CARMAINTENANCENOTFOUND);
+		return new SuccessDataResult<GetCarMaintenanceDto>(response, Messages.CARMAINTENANCEFOUND);
 	}
 
 
@@ -75,7 +70,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(car.getId());
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> this.modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, Messages.CARLIST);
+		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, Messages.CARFOUND);
 	}
 
 	@Override
