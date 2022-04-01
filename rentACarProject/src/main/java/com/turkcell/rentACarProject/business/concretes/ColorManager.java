@@ -28,6 +28,7 @@ public class ColorManager implements ColorService {
 
 	@Autowired
 	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService) {
+		
 		this.colorDao = colorDao;
 		this.modelMapperService = modelMapperService;
 	}

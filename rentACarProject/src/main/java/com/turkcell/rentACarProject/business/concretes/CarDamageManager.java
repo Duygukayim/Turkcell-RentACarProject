@@ -34,9 +34,8 @@ public class CarDamageManager implements CarDamageService {
 
 
 	@Autowired
-	public CarDamageManager(CarDao carDao, CarService carService, CarDamageDao carDamageDao,
-			ModelMapperService modelMapperService) {
-		super();
+	public CarDamageManager(CarDao carDao, CarService carService, CarDamageDao carDamageDao, ModelMapperService modelMapperService) {
+		
 		this.carDao = carDao;
 		this.carService = carService;
 		this.carDamageDao = carDamageDao;
@@ -78,6 +77,7 @@ public class CarDamageManager implements CarDamageService {
 	public Result add(CreateCarDamageRequest createCarDamageRequest) {
 		
 		checkIfCarIdExists(createCarDamageRequest.getCarId());
+		checkCarStatus(createCarDamageRequest.getCarId());
 		
 		CarDamage carDamage = this.modelMapperService.forRequest().map(createCarDamageRequest, CarDamage.class);
 		this.carDamageDao.save(carDamage);
@@ -87,11 +87,12 @@ public class CarDamageManager implements CarDamageService {
 		return new SuccessResult(Messages.DAMAGEADD);
 	}
 
+
 	@Override
 	public Result update(long id, UpdateCarDamageRequest updateCarDamageRequest) {
 		
-		checkIfCarDamageIdExists(id);
 		checkIfCarIdExists(updateCarDamageRequest.getCarId());
+		checkIfCarDamageIdExists(id);
 
 		CarDamage carDamage = this.modelMapperService.forRequest().map(updateCarDamageRequest, CarDamage.class);
 		carDamage.setId(id);
@@ -117,14 +118,26 @@ public class CarDamageManager implements CarDamageService {
 	private void checkIfCarDamageIdExists(long carDamageId) {
 		
 		if(!this.carDamageDao.existsById(carDamageId)) {
+			
 			throw new BusinessException(Messages.DAMAGENOTFOUND);
 		}
 	}
 	
 	private void checkIfCarIdExists(long carId) {
+		
 		if(!this.carDao.existsById(carId)) {
+			
 			throw new BusinessException(Messages.CARNOTFOUND);
 		}
 	}
 	
+	private void checkCarStatus(long carId) {
+		
+		if (this.carService.getById(carId).getData().getStatus() == CarStatus.DAMAGED)
+			
+			throw new BusinessException(Messages.CARISDAMAGED);	
+	}
+	
 }
+
+	

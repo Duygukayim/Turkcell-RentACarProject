@@ -28,6 +28,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 
 	@Autowired
 	public AdditionalServiseManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
+		
 		this.additionalServiceDao = additionalServiceDao;
 		this.modelMapperService = modelMapperService;
 	}

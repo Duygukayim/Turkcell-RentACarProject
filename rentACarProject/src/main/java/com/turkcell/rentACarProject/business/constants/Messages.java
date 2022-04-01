@@ -27,7 +27,7 @@ public class Messages {
 	public static final String CREDITCARDELETE = "credit.card.deleted";
 	public static final String CREDITCARDNUMBERERROR = "credit.card.number.error";
 	public static final String CREDITCARDDATEERROR = "credit.card.date.error";
-	public static final String CREDITCARDCVCERROR = "credit.card.cvv.error";
+	public static final String CREDITCARDCVVERROR = "credit.card.cvv.error";
 	public static final String CREDITCARDSAVE = "credit.card.registered";
 	public static final String CREDITCARDNOTSAVE = "credit.card.not.save";
 	public static final String CREDITCARDALREADYEXISTS = "credit.card.exists";

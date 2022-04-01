@@ -28,6 +28,7 @@ public class BrandManager implements BrandService {
 
 	@Autowired
 	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService) {
+		
 		this.brandDao = brandDao;
 		this.modelMapperService = modelMapperService;
 	}

@@ -20,6 +20,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
 	@Autowired
 	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, ModelMapperService modelMapperService) {
+		
 		this.orderedAdditionalServiceDao = orderedAdditionalServiceDao;
 		this.modelMapperService = modelMapperService;
 	}
@@ -39,13 +40,13 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
             this.orderedAdditionalServiceDao.save(orderedAdditionalService);
  
 		}
-
 	}
 
 	
 	@Override
 	public Set<OrderedAdditionalService> getByCarRentalId(long carRentalId) {
-        return this.orderedAdditionalServiceDao.findByCarRental_Id(carRentalId);
+        
+		return this.orderedAdditionalServiceDao.findByCarRental_Id(carRentalId);
     }
 	
 	
