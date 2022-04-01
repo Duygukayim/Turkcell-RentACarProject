@@ -25,6 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.InvoiceDao;
 import com.turkcell.rentACarProject.entities.concretes.Customer;
 import com.turkcell.rentACarProject.entities.concretes.Invoice;
+import com.turkcell.rentACarProject.entities.concretes.Payment;
 
 @Service
 public class InvoiceManager implements InvoiceService {
@@ -37,6 +38,7 @@ public class InvoiceManager implements InvoiceService {
 	
 	@Autowired
 	public InvoiceManager(InvoiceDao invoiceDao, CarRentalService carRentalService, PaymentService paymentService, ModelMapperService modelMapperService) {
+		
 		this.invoiceDao = invoiceDao;
 		this.carRentalService = carRentalService;
 		this.paymentService = paymentService;
@@ -91,14 +93,14 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public DataResult<List<GetInvoiceDto>> getByBetweenDates(LocalDate startDate, LocalDate endDate) {
 		
-		List<Invoice> result =  invoiceDao.findAllByRentDateLessThanEqualAndRentDateGreaterThanEqual(startDate, endDate);
+		List<Invoice> result =  this.invoiceDao.findAllByRentDateLessThanEqualAndRentDateGreaterThanEqual(startDate, endDate);
 		List<GetInvoiceDto> response = result.stream().map(invoice -> this.modelMapperService.forDto().map(invoice, GetInvoiceDto.class)).collect(Collectors.toList());
 		
 		return new SuccessDataResult<List<GetInvoiceDto>>(response, Messages.INVOICELIST);
 	}
 
 
-	private Integer invoiceNumberCreator(Invoice invoice, long carRentalId) throws BusinessException {
+	private Integer invoiceNumberCreator(Invoice invoice, long carRentalId) {
 		
 		GetCarRentalDto carRentalDto = this.carRentalService.getById(carRentalId).getData();
 		
@@ -130,6 +132,10 @@ public class InvoiceManager implements InvoiceService {
         customer.setUserId(carRental.getCustomerId());
         invoice.setCustomer(customer);
         
+        Payment pay = new Payment();
+        pay.setId(paymentId);
+        invoice.setPayment(pay);
+        
 		return invoice;
 	}
 
@@ -137,6 +143,7 @@ public class InvoiceManager implements InvoiceService {
 	private void checkIfInvoiceIdExists(long invoiceId) {
 		
 		if (!this.invoiceDao.existsById(invoiceId)) {
+			
 			throw new BusinessException(Messages.INVOICENOTFOUND);
 		}
 	}
@@ -144,6 +151,7 @@ public class InvoiceManager implements InvoiceService {
 	private void checkIfPaymentIdExists(long paymentId) {  
 		
 		if (!this.invoiceDao.existsByPayment_Id(paymentId)) {
+			
 			throw new BusinessException(Messages.CARRENTALNOTFOUND);
 		}
 	}

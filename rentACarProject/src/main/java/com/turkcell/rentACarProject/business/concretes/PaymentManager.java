@@ -10,6 +10,7 @@ import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
 import com.turkcell.rentACarProject.business.abstracts.CardInfoService;
 import com.turkcell.rentACarProject.business.abstracts.InvoiceService;
 import com.turkcell.rentACarProject.business.abstracts.PaymentService;
+import com.turkcell.rentACarProject.business.abstracts.PosService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetPaymentDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
@@ -18,12 +19,13 @@ import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentReque
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
+import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.PaymentDao;
-import com.turkcell.rentACarProject.entities.concretes.CardInfo;
+import com.turkcell.rentACarProject.entities.concretes.Customer;
 import com.turkcell.rentACarProject.entities.concretes.Payment;
 
 @Service
@@ -35,15 +37,18 @@ public class PaymentManager implements PaymentService {
 	private CarRentalService carRentalService;
 	private ModelMapperService modelMapperService;
 	private CardInfoService cardInfoService;
+	private PosService posService;
 	
 	@Autowired
-	public PaymentManager(PaymentDao paymentDao, InvoiceService invoiceService, CarRentalDao carRentalDao, CarRentalService carRentalService, ModelMapperService modelMapperService,CardInfoService cardInfoService) {
+	public PaymentManager(PaymentDao paymentDao, InvoiceService invoiceService, CarRentalDao carRentalDao, CarRentalService carRentalService, ModelMapperService modelMapperService,CardInfoService cardInfoService, PosService posService) {
+		
 		this.paymentDao = paymentDao;
 		this.invoiceService = invoiceService;
 		this.carRentalDao = carRentalDao;
 		this.carRentalService = carRentalService;
 		this.modelMapperService = modelMapperService;
 		this.cardInfoService = cardInfoService;
+		this.posService = posService;
 	}
 
 	
@@ -76,13 +81,49 @@ public class PaymentManager implements PaymentService {
 
 		Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
 		payment.setTotalPayment(carRentalService.calTotalPrice(createPaymentRequest.getCarRentalId()));
-        payment.setCardInfo(handleCardInfo(createPaymentRequest.getCardInfo(), rememberCardInfo));
+		
+		Customer customer = new Customer();
+        customer.setUserId(carRentalService.getById(payment.getCarRental().getId()).getData().getCustomerId());
+        payment.setCustomer(customer);
+        
+        saveCardInfo(createPaymentRequest.getCardInfo(), rememberCardInfo, carRentalService.getById(payment.getCarRental().getId()).getData().getCustomerId());
 
-		this.paymentDao.save(payment);
+        payment = this.paymentDao.saveAndFlush(payment);
+
 		invoiceService.add(new CreateInvoiceRequest(payment.getId()));
+		sendPosService(createPaymentRequest);
 
 		return new SuccessResult(Messages.PAYMENTADD);
 	}
+	
+	@Override
+    public void addForExtra(CreatePaymentRequest createPaymentRequest, boolean rememberCardInfo, double newExtraTotal) {
+        
+		checkCarRentalIdExists(createPaymentRequest.getCarRentalId());
+
+        Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
+
+        payment.setTotalPayment(newExtraTotal);
+
+        Customer customer = new Customer();
+        customer.setUserId(carRentalService.getById(payment.getCarRental().getId()).getData().getCustomerId());
+        payment.setCustomer(customer);
+
+        saveCardInfo(createPaymentRequest.getCardInfo(), rememberCardInfo, carRentalService.getById(payment.getCarRental().getId()).getData().getCustomerId());
+
+        payment = this.paymentDao.saveAndFlush(payment);
+
+        invoiceService.add(new CreateInvoiceRequest(payment.getId()));
+
+        sendPosService(createPaymentRequest);
+
+        new SuccessResult(Messages.PAYMENTADD);
+    }
+	
+	private void sendPosService(CreatePaymentRequest createPaymentRequest) {
+       
+		this.posService.payment(createPaymentRequest);
+    }
 
 	
 	private void checkPaymentIdExists(long paymentId) {
@@ -103,31 +144,15 @@ public class PaymentManager implements PaymentService {
 	}
 	
 	
-	private CardInfo handleCardInfo(CreateCardInfoRequest createCardInfoRequest, boolean rememberCardInfo) {
-        
-		if (rememberCardInfo) {
-            return saveCardInfo(createCardInfoRequest);
-        }
-        return setCardInfo(createCardInfoRequest);
-    }
-	
-	
-	private CardInfo saveCardInfo(CreateCardInfoRequest createCardInfoRequest) {
+	private void saveCardInfo(CreateCardInfoRequest createCardInfoRequest, boolean rememberCardInfo, long customerId) {
 		
-        return this.cardInfoService.addByPayment(createCardInfoRequest).getData();
-    }
-	
-	
-	 private CardInfo setCardInfo(CreateCardInfoRequest createCardInfoRequest) {
-		 
-	        CardInfo cardInfo = new CardInfo();
-	        
-	        cardInfo.setCardNumber(createCardInfoRequest.getCardNumber());
-	        cardInfo.setCardHolderName(createCardInfoRequest.getCardHolderName());
-	        cardInfo.setExpiryDate(createCardInfoRequest.getExpiryDate());
-	        cardInfo.setCardCvvNumber(createCardInfoRequest.getCardCvvNumber());
+		if (rememberCardInfo) {
+			
+            this.cardInfoService.add(createCardInfoRequest, customerId);
 
-	        return cardInfo;
-	    }
+            new SuccessResult(Messages.CREDITCARDSAVE);
+        }
+        new ErrorResult(Messages.CREDITCARDNOTSAVE);
+    }
 
 }

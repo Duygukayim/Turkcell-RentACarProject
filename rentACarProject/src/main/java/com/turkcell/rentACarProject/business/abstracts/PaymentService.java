@@ -16,4 +16,6 @@ public interface PaymentService {
 	
 	Result add(CreatePaymentRequest createRequest, boolean rememberCardInfo );
 
+	void addForExtra(CreatePaymentRequest createPaymentRequest, boolean rememberCardInfo, double newExtraTotal);
+
 }
