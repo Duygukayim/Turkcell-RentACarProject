@@ -23,8 +23,8 @@ import com.turkcell.rentACarProject.entities.concretes.City;
 @Service
 public class CityManager implements CityService {
 	
-	private CityDao cityDao;
-	private ModelMapperService modelMapperService;
+	private final CityDao cityDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public CityManager(CityDao cityDao, ModelMapperService modelMapperService) {
@@ -39,7 +39,7 @@ public class CityManager implements CityService {
 		List<City> result = cityDao.findAll();
 		List<GetCityDto> response = result.stream().map(city -> modelMapperService.forDto().map(city, GetCityDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCityDto>>(response, Messages.CITYLIST);
+		return new SuccessDataResult<>(response, Messages.CITYLIST);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class CityManager implements CityService {
 		City city = cityDao.getById(id);
 		GetCityDto response = modelMapperService.forDto().map(city, GetCityDto.class);
 		
-		return new SuccessDataResult<GetCityDto>(response, Messages.CITYFOUND);
+		return new SuccessDataResult<>(response, Messages.CITYFOUND);
 	}
 
 	@Override
@@ -97,14 +97,13 @@ public class CityManager implements CityService {
 		}
 	}
 	
-	private boolean checkIfCityNameExists(String cityName) {
+	private void checkIfCityNameExists(String cityName) {
 		
 		City city = this.cityDao.findByName(cityName);
 		if (city == null) {
-			return true;
+			return;
 		}
 		throw new BusinessException(Messages.CITYEXISTS);
-		
 	}
 
 }

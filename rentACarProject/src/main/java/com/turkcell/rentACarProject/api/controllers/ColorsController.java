@@ -26,7 +26,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 public class ColorsController {
 
-	private ColorService colorService;
+	private final ColorService colorService;
 
 	@Autowired
 	public ColorsController(ColorService colorService) {

@@ -23,8 +23,8 @@ import com.turkcell.rentACarProject.entities.concretes.Brand;
 @Service
 public class BrandManager implements BrandService {
 
-	private BrandDao brandDao;
-	private ModelMapperService modelMapperService;
+	private final BrandDao brandDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService) {
@@ -39,7 +39,7 @@ public class BrandManager implements BrandService {
 		List<Brand> result = brandDao.findAll();
 		List<GetBrandDto> response = result.stream().map(brand -> modelMapperService.forDto().map(brand, GetBrandDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetBrandDto>>(response, Messages.BRANDLIST);
+		return new SuccessDataResult<>(response, Messages.BRANDLIST);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class BrandManager implements BrandService {
 		Brand brand = this.brandDao.getById(id);
 		GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
 		
-		return new SuccessDataResult<GetBrandDto>(response, Messages.BRANDFOUND);
+		return new SuccessDataResult<>(response, Messages.BRANDFOUND);
 	}
 
 
@@ -93,11 +93,11 @@ public class BrandManager implements BrandService {
 		
 	}
 
-	private boolean checkIfBrandNameExists(String brandName) {
+	private void checkIfBrandNameExists(String brandName) {
 		
 		Brand brand = this.brandDao.findByName(brandName);
 		if (brand == null) {
-			return true;
+			return;
 		}
 		throw new BusinessException(Messages.BRANDALREADYEXISTS);
 	}

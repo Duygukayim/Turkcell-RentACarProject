@@ -17,7 +17,7 @@ import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 @RequestMapping("/api/invoices")
 public class InvoicesController {
 
-	private InvoiceService invoiceService;
+	private final InvoiceService invoiceService;
 
 	@Autowired
 	public InvoicesController(InvoiceService invoiceService) {

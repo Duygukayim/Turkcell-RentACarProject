@@ -25,8 +25,8 @@ import com.turkcell.rentACarProject.entities.concretes.IndividualCustomer;
 @Service
 public class IndividualCustomerManager implements IndividualCustomerService {
 	
-	private IndividualCustomerDao individualCustomerDao;
-    private ModelMapperService modelMapperService;
+	private final IndividualCustomerDao individualCustomerDao;
+    private final ModelMapperService modelMapperService;
 
     @Autowired
 	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, ModelMapperService modelMapperService) {
@@ -41,7 +41,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		List<IndividualCustomer> result = this.individualCustomerDao.findAll();
         List<GetIndividualCustomerDto> response = result.stream().map(individualCustomer -> this.modelMapperService.forDto().map(individualCustomer, GetIndividualCustomerDto.class)).collect(Collectors.toList());
         
-        return new SuccessDataResult<List<GetIndividualCustomerDto>>(response, Messages.CUSTOMERLIST);
+        return new SuccessDataResult<>(response, Messages.CUSTOMERLIST);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		IndividualCustomer individualCustomer = this.individualCustomerDao.getById(id);
 		GetIndividualCustomerDto response = this.modelMapperService.forDto().map(individualCustomer, GetIndividualCustomerDto.class);
 
-		return new SuccessDataResult<GetIndividualCustomerDto>(response, Messages.CUSTOMERFOUND);
+		return new SuccessDataResult<>(response, Messages.CUSTOMERFOUND);
 	}
 
 	@Override

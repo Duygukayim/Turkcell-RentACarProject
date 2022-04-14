@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/cities")
 public class CitiesController {
 	
-	private CityService cityService;
+	private final CityService cityService;
 
 	@Autowired
 	public CitiesController(CityService cityService) {

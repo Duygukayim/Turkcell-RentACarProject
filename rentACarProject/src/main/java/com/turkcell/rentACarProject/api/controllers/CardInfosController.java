@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/cardInfos")
 public class CardInfosController {
 	
-	private CardInfoService cardInfoService;
+	private final CardInfoService cardInfoService;
 
 	@Autowired
 	public CardInfosController(CardInfoService cardInfoService) {

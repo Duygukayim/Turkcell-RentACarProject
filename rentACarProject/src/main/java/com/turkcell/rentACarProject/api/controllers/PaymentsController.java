@@ -11,6 +11,8 @@ import com.turkcell.rentACarProject.business.dtos.get.GetPaymentDto;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentsController {
@@ -36,7 +38,7 @@ public class PaymentsController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody CreatePaymentRequest createRequest, @RequestParam("rememberMe") boolean rememberMe) {
+    public Result add(@RequestBody @Valid CreatePaymentRequest createRequest, @RequestParam("rememberMe") boolean rememberMe) {
 
         return this.paymentService.add(createRequest, rememberMe);
     }

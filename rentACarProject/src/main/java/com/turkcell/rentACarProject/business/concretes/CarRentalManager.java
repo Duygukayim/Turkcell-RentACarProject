@@ -61,7 +61,7 @@ public class CarRentalManager implements CarRentalService {
 		List<CarRental> result = carRentalDao.findAll();
 		List<GetCarRentalDto> response = result.stream().map(carRental -> modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARRENTALLIST);
+		return new SuccessDataResult<>(response, Messages.CARRENTALLIST);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class CarRentalManager implements CarRentalService {
 		CarRental carRental = carRentalDao.getById(id);
 		GetCarRentalDto response = modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
 
-		return new SuccessDataResult<GetCarRentalDto>(response, Messages.CARRENTALFOUND);
+		return new SuccessDataResult<>(response, Messages.CARRENTALFOUND);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class CarRentalManager implements CarRentalService {
 		List<CarRental> result = this.carRentalDao.findByCar_Id(carId);
 		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CARFOUND);
+		return new SuccessDataResult<>(response, Messages.CARFOUND);
 	}
 	
 	
@@ -95,7 +95,7 @@ public class CarRentalManager implements CarRentalService {
 		List<CarRental> result = this.carRentalDao.findByCustomer_UserId(customerId);
 		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarRentalDto>>(response, Messages.CUSTOMERFOUND);
+		return new SuccessDataResult<>(response, Messages.CUSTOMERFOUND);
 	}
 
 

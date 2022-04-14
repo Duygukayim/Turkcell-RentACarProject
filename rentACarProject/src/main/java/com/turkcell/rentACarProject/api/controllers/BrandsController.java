@@ -26,7 +26,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 
 public class BrandsController {
 
-	private BrandService brandService;
+	private final BrandService brandService;
 
 	@Autowired
 	public BrandsController(BrandService brandService) {

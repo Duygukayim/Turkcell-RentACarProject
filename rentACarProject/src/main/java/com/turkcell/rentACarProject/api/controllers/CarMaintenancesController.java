@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/carMaintenances")
 public class CarMaintenancesController {
 
-	private CarMaintenanceService carMaintenanceService;
+	private final CarMaintenanceService carMaintenanceService;
 
 	@Autowired
 	public CarMaintenancesController(CarMaintenanceService carMaintenanceService) {

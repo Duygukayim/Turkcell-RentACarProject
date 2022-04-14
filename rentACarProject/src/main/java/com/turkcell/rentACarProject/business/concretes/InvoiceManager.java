@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.turkcell.rentACarProject.business.abstracts.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
@@ -52,7 +50,7 @@ public class InvoiceManager implements InvoiceService {
 		List<Invoice> result = invoiceDao.findAll();
 		List<GetInvoiceDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, GetInvoiceDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetInvoiceDto>>(response, Messages.INVOICELIST);
+		return new SuccessDataResult<>(response, Messages.INVOICELIST);
 	}
 
 
@@ -64,7 +62,7 @@ public class InvoiceManager implements InvoiceService {
 		Invoice invoice = this.invoiceDao.getById(id);
 		GetInvoiceDto response = this.modelMapperService.forDto().map(invoice, GetInvoiceDto.class);
 		
-		return new SuccessDataResult<GetInvoiceDto>(response, Messages.INVOICEFOUND);	
+		return new SuccessDataResult<>(response, Messages.INVOICEFOUND);
 	}
 	
 	
@@ -88,7 +86,7 @@ public class InvoiceManager implements InvoiceService {
 		List<Invoice> result = this.invoiceDao.findByCustomer_UserId(customerId);
 		List<GetInvoiceDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, GetInvoiceDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetInvoiceDto>>(response, Messages.INVOICEBYCUSTOMERLIST);
+		return new SuccessDataResult<>(response, Messages.INVOICEBYCUSTOMERLIST);
 	}
 	
 
@@ -98,7 +96,7 @@ public class InvoiceManager implements InvoiceService {
 		List<Invoice> result =  this.invoiceDao.findAllByRentDateLessThanEqualAndRentDateGreaterThanEqual(startDate, endDate);
 		List<GetInvoiceDto> response = result.stream().map(invoice -> this.modelMapperService.forDto().map(invoice, GetInvoiceDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetInvoiceDto>>(response, Messages.INVOICELIST);
+		return new SuccessDataResult<>(response, Messages.INVOICELIST);
 	}
 
 

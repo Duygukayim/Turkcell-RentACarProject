@@ -27,10 +27,10 @@ import com.turkcell.rentACarProject.entities.concretes.CarDamage;
 @Service
 public class CarDamageManager implements CarDamageService {
 	
-	private CarDao carDao;
-	private CarService carService;
-	private CarDamageDao carDamageDao;
-	private ModelMapperService modelMapperService;
+	private final CarDao carDao;
+	private final CarService carService;
+	private final CarDamageDao carDamageDao;
+	private final ModelMapperService modelMapperService;
 
 
 	@Autowired
@@ -49,7 +49,7 @@ public class CarDamageManager implements CarDamageService {
 		List<CarDamage> result = this.carDamageDao.findAll();
 		List<GetCarDamageDto> response = result.stream().map(carDamage -> this.modelMapperService.forDto().map(carDamage, GetCarDamageDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetCarDamageDto>>(response, Messages.DAMAGELIST);
+		return new SuccessDataResult<>(response, Messages.DAMAGELIST);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class CarDamageManager implements CarDamageService {
 		CarDamage carDamage = carDamageDao.getById(id);
 		GetCarDamageDto response = modelMapperService.forDto().map(carDamage, GetCarDamageDto.class);
 		
-		return new SuccessDataResult<GetCarDamageDto>(response, Messages.DAMAGEFOUND);
+		return new SuccessDataResult<>(response, Messages.DAMAGEFOUND);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class CarDamageManager implements CarDamageService {
 		List<CarDamage> result = this.carDamageDao.findByCar_Id(car.getId());
 		List<GetCarDamageDto> response = result.stream().map(carDamage -> this.modelMapperService.forDto().map(carDamage, GetCarDamageDto.class)).collect(Collectors.toList());
 			
-		return new SuccessDataResult<List<GetCarDamageDto>>(response, Messages.DAMAGELIST);
+		return new SuccessDataResult<>(response, Messages.DAMAGELIST);
 	}
 
 	@Override

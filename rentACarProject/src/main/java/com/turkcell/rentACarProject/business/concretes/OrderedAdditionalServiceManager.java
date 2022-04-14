@@ -18,9 +18,9 @@ import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 @Service
 public class OrderedAdditionalServiceManager implements OrderedAdditionalServiceService {
 
-	private OrderedAdditionalServiceDao orderedAdditionalServiceDao;
-	private AdditionalServiceService additionalServiceService;
-	private ModelMapperService modelMapperService;
+	private final OrderedAdditionalServiceDao orderedAdditionalServiceDao;
+	private final AdditionalServiceService additionalServiceService;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, AdditionalServiceService additionalServiceService, ModelMapperService modelMapperService) {

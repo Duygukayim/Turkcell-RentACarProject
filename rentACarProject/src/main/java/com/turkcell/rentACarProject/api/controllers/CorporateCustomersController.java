@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/corporateCustomers")
 public class CorporateCustomersController {
 	
-	private CorporateCustomerService corporateCustomerService;
+	private final CorporateCustomerService corporateCustomerService;
 
 	@Autowired
 	public CorporateCustomersController(CorporateCustomerService corporateCustomerService) {

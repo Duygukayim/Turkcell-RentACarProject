@@ -10,14 +10,13 @@ import com.turkcell.rentACarProject.entities.concretes.Customer;
 @Service
 public class CustomerManager implements CustomerService {
 
-	CustomerDao customerDao;
+	private final CustomerDao customerDao;
 	
 	@Autowired
 	public CustomerManager(CustomerDao customerDao) {
 		
 		this.customerDao = customerDao;
 	}
-
 
 	@Override
 	public Customer getById(long id) {

@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/additionalServices")
 public class AdditionalServicesController {
 
-	private AdditionalServiceService additionalServiceService;
+	private final AdditionalServiceService additionalServiceService;
 
 	@Autowired
 	public AdditionalServicesController(AdditionalServiceService additionalServiceService) {

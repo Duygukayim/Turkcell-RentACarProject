@@ -23,8 +23,8 @@ import com.turkcell.rentACarProject.entities.concretes.Color;
 @Service
 public class ColorManager implements ColorService {
 
-	private ColorDao colorDao;
-	private ModelMapperService modelMapperService;
+	private final ColorDao colorDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService) {
@@ -39,7 +39,7 @@ public class ColorManager implements ColorService {
 		List<Color> result = colorDao.findAll();
 		List<GetColorDto> response = result.stream().map(color -> modelMapperService.forDto().map(color, GetColorDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetColorDto>>(response, Messages.COLORLIST);
+		return new SuccessDataResult<>(response, Messages.COLORLIST);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ColorManager implements ColorService {
 		Color color = colorDao.getById(id);
 		GetColorDto response = modelMapperService.forDto().map(color, GetColorDto.class);
 		
-		return new SuccessDataResult<GetColorDto>(response, Messages.COLORFOUND);
+		return new SuccessDataResult<>(response, Messages.COLORFOUND);
 	}
 
 	@Override
@@ -87,11 +87,11 @@ public class ColorManager implements ColorService {
 
 	}
 
-	private boolean checkIfColorNameExists(String colorName) {
+	private void checkIfColorNameExists(String colorName) {
 		
 		Color color = this.colorDao.findByName(colorName);
 		if (color == null) {
-			return true;
+			return;
 		}
 		throw new BusinessException(Messages.COLORNAMEERROR);
 	}

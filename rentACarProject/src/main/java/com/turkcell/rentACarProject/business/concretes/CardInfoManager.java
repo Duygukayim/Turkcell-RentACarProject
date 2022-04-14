@@ -45,7 +45,7 @@ public class CardInfoManager implements CardInfoService {
 		List<CardInfo> result = cardInfoDao.findAll();
 		List<GetCardInfoDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, GetCardInfoDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCardInfoDto>>(response, Messages.CREDITCARDLIST);
+		return new SuccessDataResult<>(response, Messages.CREDITCARDLIST);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class CardInfoManager implements CardInfoService {
 		CardInfo cardInfo = cardInfoDao.getById(id);
 		GetCardInfoDto response = modelMapperService.forDto().map(cardInfo, GetCardInfoDto.class);
 		
-		return new SuccessDataResult<GetCardInfoDto>(response, Messages.CREDITCARDFOUND);
+		return new SuccessDataResult<>(response, Messages.CREDITCARDFOUND);
 	}
 	
 	

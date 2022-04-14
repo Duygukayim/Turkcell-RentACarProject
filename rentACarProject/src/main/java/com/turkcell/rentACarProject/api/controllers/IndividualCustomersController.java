@@ -25,7 +25,7 @@ import com.turkcell.rentACarProject.core.utilities.results.Result;
 @RequestMapping("/api/individualCustomers")
 public class IndividualCustomersController {
 	
-	private IndividualCustomerService individualCustomerService;
+	private final IndividualCustomerService individualCustomerService;
 
 	@Autowired
 	public IndividualCustomersController(IndividualCustomerService individualCustomerService) {

@@ -24,8 +24,8 @@ import com.turkcell.rentACarProject.entities.concretes.CorporateCustomer;
 @Service
 public class CorporateCustomerManager implements CorporateCustomerService {
 	
-	private CorporateCustomerDao corporateCustomerDao;
-    private ModelMapperService modelMapperService;
+	private final CorporateCustomerDao corporateCustomerDao;
+    private final ModelMapperService modelMapperService;
 
     @Autowired
 	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService) {
@@ -40,7 +40,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		List<CorporateCustomer> result = corporateCustomerDao.findAll();
         List<GetCorporateCustomerDto> response = result.stream().map(corporateCustomer -> modelMapperService.forDto().map(corporateCustomer,GetCorporateCustomerDto.class)).collect(Collectors.toList());
         
-        return new SuccessDataResult<List<GetCorporateCustomerDto>>(response, Messages.CUSTOMERLIST);
+        return new SuccessDataResult<>(response, Messages.CUSTOMERLIST);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		CorporateCustomer corporateCustomer = this.corporateCustomerDao.getById(id);
 		GetCorporateCustomerDto response = this.modelMapperService.forDto().map(corporateCustomer, GetCorporateCustomerDto.class);
 	
-		return new SuccessDataResult<GetCorporateCustomerDto>(response, Messages.CUSTOMERFOUND);
+		return new SuccessDataResult<>(response, Messages.CUSTOMERFOUND);
 	}
 
 	@Override

@@ -98,11 +98,11 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 		}
 	}
 
-	private boolean checkIfAdditionalServiceNameExists(String additionalServiceName) {
+	private void checkIfAdditionalServiceNameExists(String additionalServiceName) {
 		
 		AdditionalService additionalService = this.additionalServiceDao.findByName(additionalServiceName);
 		if (additionalService == null) {
-			return true;
+			return;
 		}
 		throw new BusinessException(Messages.ADDITIONALSERVICEALREADYEXISTS);
 	}

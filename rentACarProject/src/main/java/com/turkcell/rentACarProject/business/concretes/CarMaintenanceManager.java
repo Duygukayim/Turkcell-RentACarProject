@@ -27,10 +27,10 @@ import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
 @Service
 public class CarMaintenanceManager implements CarMaintenanceService {
 
-	private CarDao carDao;
-	private CarService carService;
-	private CarMaintenanceDao carMaintenanceDao;
-	private ModelMapperService modelMapperService;
+	private final CarDao carDao;
+	private final CarService carService;
+	private final CarMaintenanceDao carMaintenanceDao;
+	private final ModelMapperService modelMapperService;
 	
 	@Autowired
 	public CarMaintenanceManager(CarDao carDao, CarService carService, CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService) {
@@ -48,7 +48,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		List<CarMaintenance> result = carMaintenanceDao.findAll();
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, Messages.CARMAINTENANCELIST);
+		return new SuccessDataResult<>(response, Messages.CARMAINTENANCELIST);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		CarMaintenance carMaintenance = carMaintenanceDao.getById(id);
 		GetCarMaintenanceDto response = modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class);
 		
-		return new SuccessDataResult<GetCarMaintenanceDto>(response, Messages.CARMAINTENANCEFOUND);
+		return new SuccessDataResult<>(response, Messages.CARMAINTENANCEFOUND);
 	}
 
 
@@ -70,7 +70,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(car.getId());
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> this.modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarMaintenanceDto>>(response, Messages.CARFOUND);
+		return new SuccessDataResult<>(response, Messages.CARFOUND);
 	}
 
 	@Override
