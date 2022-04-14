@@ -12,6 +12,6 @@ public interface CardInfoDao extends JpaRepository<CardInfo, Long> {
 	
 	CardInfo findById(long id);
 
-	CardInfo findByAllCardInformation(String cardHolderName, String cardNumber, LocalDate expiryDate, String cardCvvNumber);
+	CardInfo findByCardHolderNameAndCardNumberAndExpiryDateAndCardCvvNumber(String cardHolderName, String cardNumber, LocalDate expiryDate, String cardCvvNumber);
 
 }

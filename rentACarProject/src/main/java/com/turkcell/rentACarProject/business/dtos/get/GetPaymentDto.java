@@ -15,7 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GetPaymentDto {
 	
-	private long CarRentalId;
+	private Long CarRentalId;
 	
 	private double totalPayment;
 	

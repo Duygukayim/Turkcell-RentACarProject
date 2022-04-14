@@ -65,7 +65,9 @@ public class CarDamageManager implements CarDamageService {
 
 	@Override
 	public DataResult<List<GetCarDamageDto>> getByCarId(long id) {
-			
+		
+		checkIfCarIdExists(id);
+		
 		Car car = this.carDao.getById(id);
 		List<CarDamage> result = this.carDamageDao.findByCar_Id(car.getId());
 		List<GetCarDamageDto> response = result.stream().map(carDamage -> this.modelMapperService.forDto().map(carDamage, GetCarDamageDto.class)).collect(Collectors.toList());

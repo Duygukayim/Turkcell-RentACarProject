@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CardInfoService;
+import com.turkcell.rentACarProject.business.abstracts.CustomerService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCardInfoDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
@@ -26,13 +27,15 @@ import com.turkcell.rentACarProject.entities.concretes.Customer;
 @Service
 public class CardInfoManager implements CardInfoService {
 	
-	private CardInfoDao cardInfoDao;
-	private ModelMapperService modelMapperService;
+	private final CardInfoDao cardInfoDao;
+	private final CustomerService customerService;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
-	public CardInfoManager(CardInfoDao cardInfoDao, ModelMapperService modelMapperService) {
+	public CardInfoManager(CardInfoDao cardInfoDao, CustomerService customerService, ModelMapperService modelMapperService) {
 		
 		this.cardInfoDao = cardInfoDao;
+		this.customerService = customerService;
 		this.modelMapperService = modelMapperService;
 	}
 
@@ -60,6 +63,7 @@ public class CardInfoManager implements CardInfoService {
 	@Override
 	public Result add(CreateCardInfoRequest createCardInfoRequest, long customerId) {
 
+		checkIfCustomerIdExists(customerId);
 		checkCardNumber(createCardInfoRequest.getCardNumber());
 		checkCardCvvNumber(createCardInfoRequest.getCardCvvNumber());
         checkExpiryDate(createCardInfoRequest.getExpiryDate());
@@ -98,9 +102,22 @@ public class CardInfoManager implements CardInfoService {
 		
 		CardInfo cardInfo = this.modelMapperService.forRequest().map(updateCardInfoRequest, CardInfo.class);
 		cardInfo.setId(id);
+		
+		Customer customer = new Customer();
+        customer.setUserId(cardInfoDao.findById(id).getCustomer().getUserId());   
+        cardInfo.setCustomer(customer);
+        
 		this.cardInfoDao.save(cardInfo);
 		
 		return new SuccessResult(Messages.CREDITCARDUPDATE);
+	}
+	
+	private void checkIfCustomerIdExists(long customerId) {
+			
+		if (this.customerService.getById(customerId) == null) {
+				
+			throw new BusinessException(Messages.CUSTOMERNOTFOUND);
+		}
 	}
 	
 	private void checkCardInfoIdExists(long cardInfoId) {
@@ -113,16 +130,22 @@ public class CardInfoManager implements CardInfoService {
 	
 	private void checkCardNumber(String cardNumber) {
        
-		if (cardNumber.length() != 16)
+		if (cardNumber.length() != 16) {
            
         	throw new BusinessException(Messages.CREDITCARDNUMBERERROR);
+		}
     }
 	
 	private void checkCardCvvNumber(String cardCvvNumber) {
        
-		if (cardCvvNumber.length() != 3 || cardCvvNumber == "000")
+		if (cardCvvNumber.length() != 3) {
            
         	throw new BusinessException(Messages.CREDITCARDCVVERROR);
+		} 
+		else if (cardCvvNumber.equals("000")) {
+			
+			throw new BusinessException(Messages.CREDITCARDCVVERROR);
+		}
     }
 	
 	private void checkExpiryDate(LocalDate expiryDate) {
@@ -135,9 +158,10 @@ public class CardInfoManager implements CardInfoService {
 	
 	private void checkCardExists(CreateCardInfoRequest createCardInfoRequest) {
        
-		if (!Objects.nonNull(cardInfoDao.findByAllCardInformation(createCardInfoRequest.getCardHolderName(), createCardInfoRequest.getCardNumber(), createCardInfoRequest.getExpiryDate(), createCardInfoRequest.getCardCvvNumber())))
-           
-        	throw new BusinessException(Messages.CREDITCARDALREADYEXISTS);
+		if (Objects.nonNull(cardInfoDao.findByCardHolderNameAndCardNumberAndExpiryDateAndCardCvvNumber(createCardInfoRequest.getCardHolderName(), createCardInfoRequest.getCardNumber(), createCardInfoRequest.getExpiryDate(), createCardInfoRequest.getCardCvvNumber()))) {
+			
+			throw new BusinessException(Messages.CREDITCARDALREADYEXISTS);			
+		}
     }
 	
 

@@ -21,13 +21,13 @@ import com.turkcell.rentACarProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.AdditionalService;
 
 @Service
-public class AdditionalServiseManager implements AdditionalServiceService {
+public class AdditionalServiceManager implements AdditionalServiceService {
 
-	private AdditionalServiceDao additionalServiceDao;
-	private ModelMapperService modelMapperService;
+	private final AdditionalServiceDao additionalServiceDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
-	public AdditionalServiseManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
+	public AdditionalServiceManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
 		
 		this.additionalServiceDao = additionalServiceDao;
 		this.modelMapperService = modelMapperService;
@@ -39,7 +39,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		List<AdditionalService> result = additionalServiceDao.findAll();
 		List<GetAdditionalServiceDto> response = result.stream().map(additionalService -> modelMapperService.forDto().map(additionalService, GetAdditionalServiceDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetAdditionalServiceDto>>(response, Messages.ADDITIONALSERVICELIST);
+		return new SuccessDataResult<>(response, Messages.ADDITIONALSERVICELIST);
 	}
 	
 
@@ -51,7 +51,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		AdditionalService additionalService = additionalServiceDao.getById(id);
 		GetAdditionalServiceDto response = modelMapperService.forDto().map(additionalService, GetAdditionalServiceDto.class);
 		
-		return new SuccessDataResult<GetAdditionalServiceDto>(response, Messages.ADDITIONALSERVICEFOUND);
+		return new SuccessDataResult<>(response, Messages.ADDITIONALSERVICEFOUND);
 	}
 	
 
@@ -91,14 +91,14 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		return new SuccessResult(Messages.ADDITIONALSERVICEUPDATE);
 	}
 	
-	private void checkIfAdditionalServiceIdExists(long additionalServiceId) throws BusinessException {
+	private void checkIfAdditionalServiceIdExists(long additionalServiceId) {
 		
 		if(!this.additionalServiceDao.existsById(additionalServiceId)) {
 			throw new BusinessException(Messages.ADDITIONALSERVICENOTFOUND);
 		}
 	}
 
-	private boolean checkIfAdditionalServiceNameExists(String additionalServiceName) throws BusinessException {
+	private boolean checkIfAdditionalServiceNameExists(String additionalServiceName) {
 		
 		AdditionalService additionalService = this.additionalServiceDao.findByName(additionalServiceName);
 		if (additionalService == null) {
@@ -107,7 +107,7 @@ public class AdditionalServiseManager implements AdditionalServiceService {
 		throw new BusinessException(Messages.ADDITIONALSERVICEALREADYEXISTS);
 	}
 
-	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) throws BusinessException {
+	private void checkIfCarDailyPriceLessThanZero(double dailyPrice) {
 		
 		if (dailyPrice <= 0) {
 			throw new BusinessException(Messages.ADDITIONALSERVICEDAILYPRICEERROR);

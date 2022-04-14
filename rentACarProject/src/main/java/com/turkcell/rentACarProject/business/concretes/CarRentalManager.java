@@ -5,19 +5,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentACarProject.business.abstracts.*;
+import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
-import com.turkcell.rentACarProject.business.abstracts.CarService;
-import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
-import com.turkcell.rentACarProject.business.abstracts.PaymentService;
 import com.turkcell.rentACarProject.business.constants.CarStatus;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetCarRentalDto;
 import com.turkcell.rentACarProject.business.requests.carRental.CreateCarRentalRequest;
 import com.turkcell.rentACarProject.business.requests.carRental.UpdateCarRentalRequest;
-import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
@@ -27,31 +25,31 @@ import com.turkcell.rentACarProject.core.utilities.results.SuccessResult;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CarRentalDao;
 import com.turkcell.rentACarProject.dataAccess.abstracts.CityDao;
-import com.turkcell.rentACarProject.dataAccess.abstracts.CustomerDao;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
 import com.turkcell.rentACarProject.entities.concretes.Customer;
 
 @Service
 public class CarRentalManager implements CarRentalService {
 
-	private CarDao carDao;
-	private CarService carService;  //hem servis hem Dao kullanımı düzenlenecek
-	private CityDao cityDao;
-	private CarRentalDao carRentalDao;
-	private CustomerDao customerDao;
-	private PaymentService paymentService;
-	private OrderedAdditionalServiceService orderedAdditionalServiceService;
-	private ModelMapperService modelMapperService;
+	private final CarDao carDao;
+	private final CarService carService;  //hem servis hem Dao kullanımı düzenlenecek
+	private final CityDao cityDao;
+	private final CarRentalDao carRentalDao;
+
+	private final CustomerService customerService;
+	private final PaymentService paymentService;
+	private final OrderedAdditionalServiceService orderedAdditionalServiceService;
+	private final ModelMapperService modelMapperService;
 	
 
 	@Autowired
-	public CarRentalManager(CarDao carDao, CarService carService, CityDao cityDao, CarRentalDao carRentalDao, CustomerDao customerDao, PaymentService paymentService, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
+	public CarRentalManager(CarDao carDao, CarService carService, CityDao cityDao, CarRentalDao carRentalDao, CustomerService customerService, @Lazy PaymentService paymentService, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
 		
 		this.carDao = carDao;
 		this.carService = carService;
 		this.cityDao = cityDao;
 		this.carRentalDao = carRentalDao;
-		this.customerDao = customerDao;
+		this.customerService = customerService;
 		this.paymentService = paymentService;
 		this.orderedAdditionalServiceService = orderedAdditionalServiceService;
 		this.modelMapperService = modelMapperService;
@@ -79,6 +77,8 @@ public class CarRentalManager implements CarRentalService {
 
 	@Override
 	public DataResult<List<GetCarRentalDto>> getByCarId(long carId) {
+		
+		checkIfCarIdExists(carId);
 
 		List<CarRental> result = this.carRentalDao.findByCar_Id(carId);
 		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
@@ -89,6 +89,8 @@ public class CarRentalManager implements CarRentalService {
 	
 	@Override
 	public DataResult<List<GetCarRentalDto>> getByCustomerId(long customerId) {
+		
+		checkIfCustomerIdExists(customerId);
 		
 		List<CarRental> result = this.carRentalDao.findByCustomer_UserId(customerId);
 		List<GetCarRentalDto> response = result.stream().map(carRental -> this.modelMapperService.forDto().map(carRental, GetCarRentalDto.class)).collect(Collectors.toList());
@@ -314,7 +316,7 @@ public class CarRentalManager implements CarRentalService {
 	
 	private void checkIfCustomerIdExists(long customerId) {
 		
-		if (!this.customerDao.existsById(customerId)) {
+		if (this.customerService.getById(customerId) == null) {
 			
 			throw new BusinessException(Messages.CUSTOMERNOTFOUND);
 		}

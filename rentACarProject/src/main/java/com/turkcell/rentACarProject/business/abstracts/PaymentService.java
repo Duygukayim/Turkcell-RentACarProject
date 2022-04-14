@@ -14,8 +14,7 @@ public interface PaymentService {
 
 	DataResult<GetPaymentDto> getById(long id);
 	
-	Result add(CreatePaymentRequest createRequest, boolean rememberCardInfo );
+	Result add(CreatePaymentRequest createPaymentRequest, boolean rememberCardInfo );
 
 	void addForExtra(CreatePaymentRequest createPaymentRequest, boolean rememberCardInfo, double newExtraTotal);
-
 }

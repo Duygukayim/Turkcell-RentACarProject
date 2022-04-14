@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.turkcell.rentACarProject.business.abstracts.PosService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.outServices.IsBankPosManager;
-import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 

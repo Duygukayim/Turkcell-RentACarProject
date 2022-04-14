@@ -24,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CAR_INFOS")
+@Table(name = "CARD_INFOS")
 public class CardInfo {
 	
 	@Id

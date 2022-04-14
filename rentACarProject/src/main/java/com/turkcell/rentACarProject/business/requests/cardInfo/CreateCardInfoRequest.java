@@ -3,7 +3,6 @@ package com.turkcell.rentACarProject.business.requests.cardInfo;
 import java.time.LocalDate;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,7 +26,7 @@ public class CreateCardInfoRequest {
 	private String cardNumber;
 
 	@NotNull
-	@Max(3)
+	@Size(min = 3, max = 3)
 	private String cardCvvNumber;
 
 	@Future

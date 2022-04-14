@@ -34,7 +34,7 @@ public class CreateIndividualCustomerRequest {
 	private String lastName;
 
 	@NotNull
-	@Size(min = 12, max = 12)
+	@Size(min = 11, max = 11)
 	private String identityNumber;
 
 }

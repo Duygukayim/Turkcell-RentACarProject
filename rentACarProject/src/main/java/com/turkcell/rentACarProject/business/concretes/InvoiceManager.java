@@ -5,7 +5,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentACarProject.business.abstracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
@@ -30,21 +32,19 @@ import com.turkcell.rentACarProject.entities.concretes.Payment;
 @Service
 public class InvoiceManager implements InvoiceService {
 	
-	private InvoiceDao invoiceDao;
-	private CarRentalService carRentalService;
-	private PaymentService paymentService;
-	private ModelMapperService modelMapperService;
+	private final InvoiceDao invoiceDao;
+	private final CarRentalService carRentalService;
+	private final PaymentService paymentService;
+	private final ModelMapperService modelMapperService;
+	private final CustomerService customerService;
 
-	
-	@Autowired
-	public InvoiceManager(InvoiceDao invoiceDao, CarRentalService carRentalService, PaymentService paymentService, ModelMapperService modelMapperService) {
-		
+	public InvoiceManager(InvoiceDao invoiceDao, CarRentalService carRentalService, PaymentService paymentService, ModelMapperService modelMapperService, CustomerService customerService) {
 		this.invoiceDao = invoiceDao;
 		this.carRentalService = carRentalService;
 		this.paymentService = paymentService;
 		this.modelMapperService = modelMapperService;
+		this.customerService = customerService;
 	}
-
 
 	@Override
 	public DataResult<List<GetInvoiceDto>> getAll() {
@@ -82,7 +82,9 @@ public class InvoiceManager implements InvoiceService {
 	
 	@Override
 	public DataResult<List<GetInvoiceDto>> getByCustomerId(long customerId) {
-		
+
+		checkIfCustomerIdExists(customerId);
+
 		List<Invoice> result = this.invoiceDao.findByCustomer_UserId(customerId);
 		List<GetInvoiceDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, GetInvoiceDto.class)).collect(Collectors.toList());
 
@@ -150,9 +152,17 @@ public class InvoiceManager implements InvoiceService {
 	
 	private void checkIfPaymentIdExists(long paymentId) {  
 		
-		if (!this.invoiceDao.existsByPayment_Id(paymentId)) {
+		if (this.paymentService.getById(paymentId).getData() == null) {
 			
-			throw new BusinessException(Messages.CARRENTALNOTFOUND);
+			throw new BusinessException(Messages.PAYMENTNOTFOUND);
+		}
+	}
+
+	private void checkIfCustomerIdExists(long customerId) {
+
+		if (this.customerService.getById(customerId) == null) {
+
+			throw new BusinessException(Messages.CUSTOMERNOTFOUND);
 		}
 	}
 

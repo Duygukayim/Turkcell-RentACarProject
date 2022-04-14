@@ -5,8 +5,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.turkcell.rentACarProject.business.abstracts.AdditionalServiceService;
 import com.turkcell.rentACarProject.business.abstracts.OrderedAdditionalServiceService;
+import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.requests.orderedAdditionalService.CreateOrderedAdditionalServiceRequest;
+import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.dataAccess.abstracts.OrderedAdditionalServiceDao;
 import com.turkcell.rentACarProject.entities.concretes.CarRental;
@@ -16,12 +19,14 @@ import com.turkcell.rentACarProject.entities.concretes.OrderedAdditionalService;
 public class OrderedAdditionalServiceManager implements OrderedAdditionalServiceService {
 
 	private OrderedAdditionalServiceDao orderedAdditionalServiceDao;
+	private AdditionalServiceService additionalServiceService;
 	private ModelMapperService modelMapperService;
 
 	@Autowired
-	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, ModelMapperService modelMapperService) {
+	public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, AdditionalServiceService additionalServiceService, ModelMapperService modelMapperService) {
 		
 		this.orderedAdditionalServiceDao = orderedAdditionalServiceDao;
+		this.additionalServiceService = additionalServiceService;
 		this.modelMapperService = modelMapperService;
 	}
 
@@ -30,6 +35,8 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	public void add(Set<CreateOrderedAdditionalServiceRequest> createOrderedAdditionalServiceRequest, long carRentalId) {
 		
 		for (CreateOrderedAdditionalServiceRequest createOrderedAdditionalRequest : createOrderedAdditionalServiceRequest) {
+			
+			checkIfAdditionalServiceIdExists(createOrderedAdditionalRequest.getAdditionalServiceId());
 
             OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest().map(createOrderedAdditionalRequest, OrderedAdditionalService.class);
 
@@ -62,5 +69,13 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
         return dailyTotal;
     }
+	
+	private void checkIfAdditionalServiceIdExists(long additionalServiceId) {
+		
+		if (this.additionalServiceService.getById(additionalServiceId) == null) {
+				
+			throw new BusinessException(Messages.ADDITIONALSERVICENOTFOUND);
+		}
+	}
 	
 }

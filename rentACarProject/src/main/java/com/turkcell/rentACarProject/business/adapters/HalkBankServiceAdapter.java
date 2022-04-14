@@ -1,12 +1,12 @@
 package com.turkcell.rentACarProject.business.adapters;
 
+import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.PosService;
 import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.outServices.HalkBankPosManager;
-import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import com.turkcell.rentACarProject.core.utilities.results.ErrorResult;
 import com.turkcell.rentACarProject.core.utilities.results.Result;
 

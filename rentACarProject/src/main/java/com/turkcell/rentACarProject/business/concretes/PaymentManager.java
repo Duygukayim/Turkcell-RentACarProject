@@ -3,7 +3,9 @@ package com.turkcell.rentACarProject.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACarProject.business.abstracts.CarRentalService;
@@ -15,7 +17,6 @@ import com.turkcell.rentACarProject.business.constants.Messages;
 import com.turkcell.rentACarProject.business.dtos.get.GetPaymentDto;
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
 import com.turkcell.rentACarProject.business.requests.invoice.CreateInvoiceRequest;
-import com.turkcell.rentACarProject.business.requests.payment.CreatePaymentRequest;
 import com.turkcell.rentACarProject.core.exceptions.BusinessException;
 import com.turkcell.rentACarProject.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACarProject.core.utilities.results.DataResult;
@@ -31,16 +32,16 @@ import com.turkcell.rentACarProject.entities.concretes.Payment;
 @Service
 public class PaymentManager implements PaymentService {
 
-	private PaymentDao paymentDao;
-	private InvoiceService invoiceService;
-	private CarRentalDao carRentalDao;
-	private CarRentalService carRentalService;
-	private ModelMapperService modelMapperService;
-	private CardInfoService cardInfoService;
-	private PosService posService;
+	private final PaymentDao paymentDao;
+	private final InvoiceService invoiceService;
+	private final CarRentalDao carRentalDao;
+	private final CarRentalService carRentalService;
+	private final ModelMapperService modelMapperService;
+	private final CardInfoService cardInfoService;
+	private final PosService posService;
 	
 	@Autowired
-	public PaymentManager(PaymentDao paymentDao, InvoiceService invoiceService, CarRentalDao carRentalDao, CarRentalService carRentalService, ModelMapperService modelMapperService,CardInfoService cardInfoService, PosService posService) {
+	public PaymentManager(PaymentDao paymentDao, @Lazy InvoiceService invoiceService, CarRentalDao carRentalDao, @Lazy CarRentalService carRentalService, ModelMapperService modelMapperService,CardInfoService cardInfoService, PosService posService) {
 		
 		this.paymentDao = paymentDao;
 		this.invoiceService = invoiceService;
@@ -56,9 +57,9 @@ public class PaymentManager implements PaymentService {
 	public DataResult<List<GetPaymentDto>> getAll() {
 		
 		List<Payment> result = paymentDao.findAll();
-		List<GetPaymentDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, GetPaymentDto.class)).collect(Collectors.toList());
+		List<GetPaymentDto> response = result.stream().map(payment -> modelMapperService.forDto().map(payment, GetPaymentDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetPaymentDto>>(response, Messages.PAYMENTLIST);
+		return new SuccessDataResult<>(response, Messages.PAYMENTLIST);
 	}
 	
 	
@@ -70,7 +71,7 @@ public class PaymentManager implements PaymentService {
 		Payment payment = this.paymentDao.getById(id);
 		GetPaymentDto response = this.modelMapperService.forDto().map(payment, GetPaymentDto.class);
 		
-		return new SuccessDataResult<GetPaymentDto>(response, Messages.PAYMENTFOUND);	
+		return new SuccessDataResult<>(response, Messages.PAYMENTFOUND);
 	}
 	
 	

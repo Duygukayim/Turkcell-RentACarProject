@@ -1,7 +1,6 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +30,10 @@ import com.turkcell.rentACarProject.entities.concretes.Car;
 @Service
 public class CarManager implements CarService {
 
-	private CarDao carDao;
-	private ModelMapperService modelMapperService;
-	private BrandDao brandDao;
-	private ColorDao colorDao;
+	private final CarDao carDao;
+	private final ModelMapperService modelMapperService;
+	private final BrandDao brandDao;
+	private final ColorDao colorDao;
 
 	@Autowired
 	public CarManager(CarDao carDao, ModelMapperService modelMapperService, BrandDao brandDao, ColorDao colorDao) {
@@ -51,7 +50,7 @@ public class CarManager implements CarService {
 		List<Car> result = carDao.findAll();
 		List<GetCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, GetCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarDto>>(response, Messages.CARLIST);
+		return new SuccessDataResult<>(response, Messages.CARLIST);
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class CarManager implements CarService {
 		Car car = carDao.getById(id);
 		GetCarDto response = modelMapperService.forDto().map(car, GetCarDto.class);
 		
-		return new SuccessDataResult<GetCarDto>(response, Messages.CARFOUND);
+		return new SuccessDataResult<>(response, Messages.CARFOUND);
 	}
 
 	@Override
@@ -71,10 +70,10 @@ public class CarManager implements CarService {
 		checkIfBrandIdExists(createCarRequest.getBrandId());
 		checkIfColorIdExists(createCarRequest.getColorId());
 		checkIfCarDailyPriceLessThanZero(createCarRequest.getDailyPrice());
+//		checkIfCarExists(createCarRequest);
 		
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		
-		checkIfCarExists(car);
 		car.setStatus(CarStatus.AVAILABLE);
 		this.carDao.save(car);
 		
@@ -101,7 +100,6 @@ public class CarManager implements CarService {
 		
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		
-		checkIfCarExists(car);
 		car.setStatus(CarStatus.AVAILABLE);
 		car.setId(id);
 		this.carDao.save(car);
@@ -117,7 +115,7 @@ public class CarManager implements CarService {
 		List<Car> result = this.carDao.findAll(pageable).getContent();
 		List<GetCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, GetCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarDto>>(response, Messages.CARPAGED);
+		return new SuccessDataResult<>(response, Messages.CARPAGED);
 	}
 
 	@Override
@@ -128,21 +126,19 @@ public class CarManager implements CarService {
 		List<Car> result = this.carDao.findAll(sort);
 		List<GetCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, GetCarDto.class)).collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<GetCarDto>>(response, Messages.CARSORTED);
+		return new SuccessDataResult<>(response, Messages.CARSORTED);
 	}
 
 	@Override
 	public DataResult<List<GetCarDto>> getAllByDailyPriceLessThanEqual(double dailyPrice) {
 		
-		Sort sort = Sort.by(Sort.Direction.ASC, "dailyPrice");
-		
 		List<Car> result = this.carDao.findByDailyPriceLessThanEqual(dailyPrice);
 			if (!result.isEmpty()) {
 				List<GetCarDto> response = result.stream().map(car -> this.modelMapperService.forDto().map(car, GetCarDto.class)).collect(Collectors.toList());
 			
-				return new SuccessDataResult<List<GetCarDto>>(response, Messages.CARLIST);
+				return new SuccessDataResult<>(response, Messages.CARLIST);
 		}
-		return new ErrorDataResult<List<GetCarDto>>(Messages.CARNOTFOUND);
+		return new ErrorDataResult<>(Messages.CARNOTFOUND);
 	}
 
 	
@@ -153,6 +149,7 @@ public class CarManager implements CarService {
 		
 		Car car = carDao.findById(carId);
 		car.setStatus(status);
+		carDao.save(car);
 		
 		new SuccessResult(Messages.CARSTATUS);
 		
@@ -202,13 +199,13 @@ public class CarManager implements CarService {
 		}
 	}
 
-	private void checkIfCarExists(Car car) {
-		
-		if (!Objects.nonNull(carDao.findByAllCar(car.getBrand().getId(), car.getColor().getId(), car.getModelYear(), car.getDailyPrice(), car.getDescription()))) {
-			
-			throw new BusinessException(Messages.CARALREADYEXISTS);
-		}
-	}
+//	private void checkIfCarExists(CreateCarRequest createCarRequest) {
+//		
+//		if (!Objects.nonNull(carDao.findByCar(createCarRequest.getBrandId(), createCarRequest.getColorId(), createCarRequest.getModelYear(), createCarRequest.getDailyPrice(), createCarRequest.getDescription()))) {
+//			
+//			throw new BusinessException(Messages.CARALREADYEXISTS);
+//		}
+//	}
 
 
 }

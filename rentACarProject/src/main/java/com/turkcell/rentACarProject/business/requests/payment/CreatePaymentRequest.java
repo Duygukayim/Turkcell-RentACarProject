@@ -1,26 +1,22 @@
 package com.turkcell.rentACarProject.business.requests.payment;
 
-import javax.validation.constraints.NotNull;
-
 import com.turkcell.rentACarProject.business.requests.cardInfo.CreateCardInfoRequest;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreatePaymentRequest {
 
-	@NotNull
-	private int CarRentalId;
-
-	@NotNull
+    @NotNull
     private CreateCardInfoRequest cardInfo;
 
+    @NotNull
+    @Positive
+    private long carRentalId;
 }
