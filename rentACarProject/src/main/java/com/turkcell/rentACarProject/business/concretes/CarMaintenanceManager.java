@@ -27,15 +27,13 @@ import com.turkcell.rentACarProject.entities.concretes.CarMaintenance;
 @Service
 public class CarMaintenanceManager implements CarMaintenanceService {
 
-	private final CarDao carDao;
 	private final CarService carService;
 	private final CarMaintenanceDao carMaintenanceDao;
 	private final ModelMapperService modelMapperService;
 	
 	@Autowired
-	public CarMaintenanceManager(CarDao carDao, CarService carService, CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService) {
-		
-		this.carDao = carDao;
+	public CarMaintenanceManager(CarService carService, CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService) {
+
 		this.carService = carService;
 		this.carMaintenanceDao = carMaintenanceDao;
 		this.modelMapperService = modelMapperService;
@@ -65,9 +63,10 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	@Override
 	public DataResult<List<GetCarMaintenanceDto>> getByCarId(long id) {
-		
-		Car car = this.carDao.getById(id);
-		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(car.getId());
+
+		checkIfCarIdExists(id);
+
+		List<CarMaintenance> result = this.carMaintenanceDao.findByCar_Id(id);
 		List<GetCarMaintenanceDto> response = result.stream().map(carMaintenance -> this.modelMapperService.forDto().map(carMaintenance, GetCarMaintenanceDto.class)).collect(Collectors.toList());
 		
 		return new SuccessDataResult<>(response, Messages.CARFOUND);
@@ -103,7 +102,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	public Result update(long id, UpdateCarMaintenanceRequest updateCarMaintenanceRequest){
 		
 		checkCarMaintenanceIdExists(id);
-		checkCarStatus(updateCarMaintenanceRequest.getCarId());
 		
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(updateCarMaintenanceRequest, CarMaintenance.class);
         carMaintenance.setId(id);
@@ -123,7 +121,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	private void checkIfCarIdExists(long carId){
 		
-		if(!this.carDao.existsById(carId)) {
+		if(this.carService.getById(carId).getData() == null) {
 			throw new BusinessException(Messages.CARNOTFOUND);
 		}
 	}

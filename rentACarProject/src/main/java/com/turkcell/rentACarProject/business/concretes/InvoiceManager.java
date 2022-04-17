@@ -126,7 +126,8 @@ public class InvoiceManager implements InvoiceService {
 		invoice.setRentDate(carRental.getRentDate());
 		invoice.setReturnDate(carRental.getReturnDate());
 		invoice.setTotalDays((ChronoUnit.DAYS.between(carRental.getRentDate(), carRental.getReturnDate()) + 1)); 
-		invoice.setRentTotalPrice(carRentalService.calTotalPrice(payment.getCarRentalId())); 
+		invoice.setRentTotalPrice(payment.getTotalPayment());
+
 		
 		Customer customer = new Customer();
         customer.setUserId(carRental.getCustomerId());

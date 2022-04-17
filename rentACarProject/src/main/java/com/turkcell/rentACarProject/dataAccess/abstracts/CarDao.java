@@ -13,11 +13,7 @@ public interface CarDao extends JpaRepository<Car, Long> {
 	Car findById(long id);
 
 	List<Car> findByDailyPriceLessThanEqual(double dailyPrice);
-	
-	List<Car> findByBrand_Id(long id);
-	
-	List<Car> findByColor_Id(long id);
-	
-//	Car findByCar(long brandId, long colorId, int modelYear, double dailyPrice, String description);
+
+    Car findByBrandIdAndColorIdAndModelYearAndDailyPriceAndDescription(long brandId, long colorId, int modelYear, double dailyPrice, String description);
 
 }

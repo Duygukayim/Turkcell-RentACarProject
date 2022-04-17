@@ -34,18 +34,16 @@ public class PaymentManager implements PaymentService {
 
 	private final PaymentDao paymentDao;
 	private final InvoiceService invoiceService;
-	private final CarRentalDao carRentalDao;
 	private final CarRentalService carRentalService;
 	private final ModelMapperService modelMapperService;
 	private final CardInfoService cardInfoService;
 	private final PosService posService;
 	
 	@Autowired
-	public PaymentManager(PaymentDao paymentDao, @Lazy InvoiceService invoiceService, CarRentalDao carRentalDao, @Lazy CarRentalService carRentalService, ModelMapperService modelMapperService,CardInfoService cardInfoService, PosService posService) {
+	public PaymentManager(PaymentDao paymentDao, @Lazy InvoiceService invoiceService, CarRentalService carRentalService, ModelMapperService modelMapperService, CardInfoService cardInfoService, PosService posService) {
 		
 		this.paymentDao = paymentDao;
 		this.invoiceService = invoiceService;
-		this.carRentalDao = carRentalDao;
 		this.carRentalService = carRentalService;
 		this.modelMapperService = modelMapperService;
 		this.cardInfoService = cardInfoService;
@@ -138,7 +136,7 @@ public class PaymentManager implements PaymentService {
 	
 	private void checkCarRentalIdExists(long carRentalId) {
 
-		if (!this.carRentalDao.existsById(carRentalId)) {
+		if (this.carRentalService.getById(carRentalId).getData() == null) {
 
 			throw new BusinessException(Messages.CARRENTALNOTFOUND);
 		}

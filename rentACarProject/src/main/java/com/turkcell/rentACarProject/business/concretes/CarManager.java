@@ -1,8 +1,11 @@
 package com.turkcell.rentACarProject.business.concretes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentACarProject.business.abstracts.BrandService;
+import com.turkcell.rentACarProject.business.abstracts.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,16 +35,16 @@ public class CarManager implements CarService {
 
 	private final CarDao carDao;
 	private final ModelMapperService modelMapperService;
-	private final BrandDao brandDao;
-	private final ColorDao colorDao;
+	private final BrandService brandService;
+	private final ColorService colorService;
 
 	@Autowired
-	public CarManager(CarDao carDao, ModelMapperService modelMapperService, BrandDao brandDao, ColorDao colorDao) {
+	public CarManager(CarDao carDao, ModelMapperService modelMapperService, BrandService brandService, ColorService colorService) {
 		
 		this.carDao = carDao;
 		this.modelMapperService = modelMapperService;
-		this.brandDao = brandDao;
-		this.colorDao = colorDao;
+		this.brandService = brandService;
+		this.colorService = colorService;
 	}
 
 	@Override
@@ -70,7 +73,7 @@ public class CarManager implements CarService {
 		checkIfBrandIdExists(createCarRequest.getBrandId());
 		checkIfColorIdExists(createCarRequest.getColorId());
 		checkIfCarDailyPriceLessThanZero(createCarRequest.getDailyPrice());
-//		checkIfCarExists(createCarRequest);
+		checkIfCarExists(createCarRequest);
 		
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		
@@ -99,7 +102,7 @@ public class CarManager implements CarService {
 		checkIfCarDailyPriceLessThanZero(updateCarRequest.getDailyPrice());
 		
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
-		
+
 		car.setStatus(CarStatus.AVAILABLE);
 		car.setId(id);
 		this.carDao.save(car);
@@ -177,7 +180,7 @@ public class CarManager implements CarService {
 
 	private void checkIfBrandIdExists(long brandId) {
 		
-		if(!this.brandDao.existsById(brandId)) {
+		if(this.brandService.getById(brandId).getData() == null) {
 			
 			throw new BusinessException(Messages.BRANDNOTFOUND);
 		}
@@ -185,7 +188,7 @@ public class CarManager implements CarService {
 
 	private void checkIfColorIdExists(long colorId) {
 		
-		if(!this.colorDao.existsById(colorId)) {
+		if(this.colorService.getById(colorId).getData() == null) {
 			
 			throw new BusinessException(Messages.COLORNOTFOUND);
 		}
@@ -199,13 +202,13 @@ public class CarManager implements CarService {
 		}
 	}
 
-//	private void checkIfCarExists(CreateCarRequest createCarRequest) {
-//		
-//		if (!Objects.nonNull(carDao.findByCar(createCarRequest.getBrandId(), createCarRequest.getColorId(), createCarRequest.getModelYear(), createCarRequest.getDailyPrice(), createCarRequest.getDescription()))) {
-//			
-//			throw new BusinessException(Messages.CARALREADYEXISTS);
-//		}
-//	}
+	private void checkIfCarExists(CreateCarRequest createCarRequest) {
+
+		if (Objects.nonNull(carDao.findByBrandIdAndColorIdAndModelYearAndDailyPriceAndDescription(createCarRequest.getBrandId(), createCarRequest.getColorId(), createCarRequest.getModelYear(), createCarRequest.getDailyPrice(), createCarRequest.getDescription()))) {
+
+			throw new BusinessException(Messages.CARALREADYEXISTS);
+		}
+	}
 
 
 }

@@ -30,12 +30,9 @@ import com.turkcell.rentACarProject.entities.concretes.Customer;
 
 @Service
 public class CarRentalManager implements CarRentalService {
-
-	private final CarDao carDao;
-	private final CarService carService;  //hem servis hem Dao kullanımı düzenlenecek
-	private final CityDao cityDao;
+	private final CarService carService;
+	private final CityService cityService;
 	private final CarRentalDao carRentalDao;
-
 	private final CustomerService customerService;
 	private final PaymentService paymentService;
 	private final OrderedAdditionalServiceService orderedAdditionalServiceService;
@@ -43,11 +40,11 @@ public class CarRentalManager implements CarRentalService {
 	
 
 	@Autowired
-	public CarRentalManager(CarDao carDao, CarService carService, CityDao cityDao, CarRentalDao carRentalDao, CustomerService customerService, @Lazy PaymentService paymentService, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
-		
-		this.carDao = carDao;
+	@Lazy
+	public CarRentalManager(CarService carService, CityService cityService, CarRentalDao carRentalDao, CustomerService customerService, PaymentService paymentService, OrderedAdditionalServiceService orderedAdditionalServiceService, ModelMapperService modelMapperService) {
+
 		this.carService = carService;
-		this.cityDao = cityDao;
+		this.cityService = cityService;
 		this.carRentalDao = carRentalDao;
 		this.customerService = customerService;
 		this.paymentService = paymentService;
@@ -69,7 +66,7 @@ public class CarRentalManager implements CarRentalService {
 		
 		checkCarRentalIdExists(id);
 
-		CarRental carRental = carRentalDao.getById(id);
+		CarRental carRental = carRentalDao.findById(id);
 		GetCarRentalDto response = modelMapperService.forDto().map(carRental, GetCarRentalDto.class);
 
 		return new SuccessDataResult<>(response, Messages.CARRENTALFOUND);
@@ -214,7 +211,7 @@ public class CarRentalManager implements CarRentalService {
 			return 1;
 		}
 
-		return Integer.valueOf((int) ChronoUnit.DAYS.between(startDate, endDate));
+		return (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
 	}
 	
 
@@ -247,13 +244,19 @@ public class CarRentalManager implements CarRentalService {
 	}
 	
 	private void calExtraRentedTotal(long id, LocalDate oldReturnDate, LocalDate newReturnDate, long oldReturnCityId, CreatePaymentRequest createPaymentRequest, boolean rememberMe) {
-	     
+
 		CarRental carRental = carRentalDao.findById(id);
+		carRental.setOrderedAdditionalServices(this.orderedAdditionalServiceService.getByCarRentalId(carRental.getId()));
+
+		double orderedDailyPrice = 0;
+		if (carRental.getOrderedAdditionalServices() != null) {
+			orderedDailyPrice = this.orderedAdditionalServiceService.calDailyTotal(carRental.getOrderedAdditionalServices());
+		}
 
 	     double newTotal = (carRental.getCar().getDailyPrice()
-	              + this.orderedAdditionalServiceService.calDailyTotal(carRental.getOrderedAdditionalServices()))
+	              + orderedDailyPrice
 	              * calTotalDaysForRental(oldReturnDate, newReturnDate)
-	              + checkReturnCities(carRental.getRentCity().getId(), oldReturnCityId, carRental.getReturnCity().getId());
+	              + checkReturnCities(carRental.getRentCity().getId(), oldReturnCityId, carRental.getReturnCity().getId()));
 
 	     this.paymentService.addForExtra(createPaymentRequest, rememberMe, newTotal);
 	}
@@ -300,7 +303,7 @@ public class CarRentalManager implements CarRentalService {
 	
 	private void checkIfCarIdExists(long carId) {
 		
-		if (!this.carDao.existsById(carId)) {
+		if (this.carService.getById(carId).getData() == null) {
 			
 			throw new BusinessException(Messages.CARNOTFOUND);
 		}
@@ -308,7 +311,7 @@ public class CarRentalManager implements CarRentalService {
 	
 	private void checkIfCityIdExists(long cityId) {
 		
-		if (!this.cityDao.existsById(cityId)) {
+		if (this.cityService.getById(cityId).getData() == null) {
 			
 			throw new BusinessException(Messages.CITYNOTFOUND);
 		}

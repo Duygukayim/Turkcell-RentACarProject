@@ -15,10 +15,10 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GetPaymentDto {
 	
-	private Long CarRentalId;
+	private long CarRentalId;
 	
 	private double totalPayment;
-	
-	private CardInfo cardInfo;
+
+	private long cardInfoId;
 
 }
