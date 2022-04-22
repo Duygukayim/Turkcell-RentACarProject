@@ -104,11 +104,11 @@ public class InvoiceManager implements InvoiceService {
 		
 		GetCarRentalDto carRentalDto = this.carRentalService.getById(carRentalId).getData();
 		
-		String invoiceNumber = String.valueOf(invoice.getCreateDate().getYear()) +
+		String invoiceNumber = invoice.getCreateDate().getYear() +
 				String.valueOf(invoice.getCreateDate().getMonthValue()) +
-				String.valueOf(invoice.getCreateDate().getDayOfMonth()) + 
-				String.valueOf(carRentalDto.getCustomerId())+
-				String.valueOf(carRentalId);
+				invoice.getCreateDate().getDayOfMonth() +
+				carRentalDto.getCustomerId() +
+				carRentalId;
 		
 		return Integer.valueOf(invoiceNumber);
 	}

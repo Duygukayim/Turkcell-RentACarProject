@@ -189,7 +189,7 @@ public class CarRentalManager implements CarRentalService {
 		
 		calExtraRentedTotal(id, returnDate, updateCarRentalRequest.getReturnDate(), oldReturnCityId, updateCarRentalRequest.getCreatePaymentRequest(), updateCarRentalRequest.isRememberMe());
 		
-		carService.setCarStatus(CarStatus.AVAILABLE, updateCarRentalRequest.getCarId());
+		carService.setCarStatus(CarStatus.AVAILABLE, updateCarRentalRequest.getCarId());  // update sonunda direkt available yapıyor.. yapmasın
 
 		return new SuccessResult(Messages.CARRENTALUPDATE);
 	}
